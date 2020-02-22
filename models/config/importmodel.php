@@ -20,7 +20,7 @@ return [
             'import_file' => [
                 'label' => 'lang:igniter.importexport::default.label_import_file',
                 'type' => 'partial',
-                'path' => '$/igniter/importexport/actions/importexportcontroller/import_file_upload',
+                'path' => '$/igniter/importexport/actions/importcontroller/import_file_upload',
                 'span' => 'left',
             ],
             'encoding' => [
@@ -59,7 +59,7 @@ return [
                 'label' => 'lang:igniter.importexport::default.label_import_columns',
                 'type' => 'partial',
                 'cssClass' => 'mb-0',
-                'path' => '$/igniter/importexport/actions/importexportcontroller/import_columns',
+                'path' => '$/igniter/importexport/actions/importcontroller/import_columns',
                 'emptyMessage' => 'lang:igniter.importexport::default.text_no_import_file',
             ],
         ],

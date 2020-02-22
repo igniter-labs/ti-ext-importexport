@@ -12,8 +12,8 @@ return [
                 ],
             ],
         ],
-        'step_primary' => [
-            'fields' => [
+        'fields' => [
+            'step_primary' => [
                 'label' => 'lang:igniter.importexport::default.text_tab_title_export_primary',
                 'type' => 'section',
             ],
@@ -59,7 +59,7 @@ return [
             'export_columns' => [
                 'label' => 'lang:igniter.importexport::default.label_columns',
                 'type' => 'partial',
-                'path' => '$/igniter/importexport/actions/importexportcontroller/export_columns',
+                'path' => '$/igniter/importexport/actions/exportcontroller/export_columns',
             ],
             'step_secondary' => [
                 'label' => 'lang:igniter.importexport::default.text_tab_title_export_secondary',

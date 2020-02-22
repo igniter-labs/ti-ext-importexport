@@ -11,20 +11,20 @@ use Template;
 class ImportExport extends AdminController
 {
     public $implement = [
-        'Igniter\ImportExport\Actions\ImportExportController',
+        'Igniter\ImportExport\Actions\ImportController',
+        'Igniter\ImportExport\Actions\ExportController',
     ];
 
-    public $importExportConfig = [
-        'import' => [
-            'title' => 'Import Records',
-            'configFile' => '$/igniter/importexport/models/config/importmodel',
-            'redirect' => 'igniter/importexport/importexport/import',
-        ],
-        'export' => [
-            'title' => 'Export Records',
-            'configFile' => '$/igniter/importexport/models/config/exportmodel',
-            'redirect' => 'igniter/importexport/importexport/export',
-        ],
+    public $importConfig = [
+        'title' => 'Import Records',
+        'configFile' => '$/igniter/importexport/models/config/importmodel',
+        'redirect' => 'igniter/importexport/importexport/import',
+    ];
+
+    public $exportConfig = [
+        'title' => 'Export Records',
+        'configFile' => '$/igniter/importexport/models/config/exportmodel',
+        'redirect' => 'igniter/importexport/importexport/export',
     ];
 
     protected $requiredPermissions = 'Igniter.ImportExport.Manage';

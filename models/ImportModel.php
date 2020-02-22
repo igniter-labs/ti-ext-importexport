@@ -131,7 +131,7 @@ abstract class ImportModel extends Model
         if ($options['firstRowTitles'])
             $csvReader->setOffset(1);
 
-        if (!is_null($options['encoding']) AND $csvReader->isActiveStreamFilter()) {
+        if (is_null($options['encoding']) AND $csvReader->isActiveStreamFilter()) {
             $csvReader->appendStreamFilter(sprintf(
                 '%s%s:%s',
                 'igniter.csv.transcode.',
