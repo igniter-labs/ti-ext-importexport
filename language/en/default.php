@@ -1,9 +1,11 @@
 <?php
 
 return [
-    'text_index_title' => 'Import/Export Records',
+    'text_index_title' => 'Import/Export',
+    'text_import_export_title' => 'New Import/Export',
     'text_import_title' => 'Import Records',
     'text_export_title' => 'Export Records',
+    'text_history_title' => 'Import/Export History',
     'text_tab_title_import_primary' => 'Upload a CSV file',
     'text_tab_title_import_columns' => 'Match columns to import',
     'text_tab_title_import_secondary' => 'Set import options',
@@ -11,6 +13,15 @@ return [
     'text_tab_title_export_columns' => 'Columns to export',
     'text_tab_title_export_secondary' => 'Set export options',
     'text_no_import_file' => 'Please upload a valid CSV file.',
+    'text_import_row' => 'Row %s',
+    'text_import_created' => 'Created',
+    'text_import_updated' => 'Updated',
+    'text_import_skipped' => 'Skipped',
+    'text_import_warnings' => 'Warnings',
+    'text_import_errors' => 'Errors',
+    'text_import_skipped_rows' => 'Skipped Rows',
+    'text_import_progress' => 'Import progress',
+    'text_processing' => 'Processing...',
 
     'label_export_record' => 'Choose record to export',
     'label_offset' => 'Offset',
@@ -20,6 +31,7 @@ return [
     'label_escape' => 'Escape Character',
     'label_columns' => 'Columns',
 
+    'label_import_record' => 'Choose record to import',
     'label_import_file' => 'Import file',
     'label_encoding' => 'File encoding',
     'label_import_columns' => 'Import Columns',
@@ -34,7 +46,6 @@ return [
     'error_empty_import_columns' => 'Please specify some columns to import.',
     'error_empty_export_columns' => 'Please specify some columns to export.',
     'error_missing_model' => 'Missing the model property for %s',
-    'error_missing_use_list' => 'Missing controller action ListController with the export "useList" option enabled.',
     'error_mass_assignment' => "Mass assignment failed for Model attribute ':attribute'.",
     'error_empty_data' => 'There was no data supplied to export',
     'error_file_not_found' => 'File not found',

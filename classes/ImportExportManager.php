@@ -74,14 +74,14 @@ class ImportExportManager
     public function registerImportExportsForType($type, $extensionCode, array $definitions)
     {
         $defaultDefinitions = [
-            'title' => null,
+            'label' => null,
             'description' => null,
             'model' => null,
             'configFile' => null,
         ];
 
         foreach ($definitions as $name => $definition) {
-            $name = $extensionCode.'.'.$name;
+            $name = str_replace('.', '-', $extensionCode.'.'.$name);
 
             static::$importExportCache[$type][$name] = array_merge($defaultDefinitions, $definition);
         }

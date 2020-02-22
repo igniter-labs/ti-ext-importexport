@@ -18,6 +18,17 @@ abstract class ImportModel extends Model
     public $mediable = ['import_file'];
 
     /**
+     * @var array Import statistics store.
+     */
+    protected $resultStats = [
+        'updated' => 0,
+        'created' => 0,
+        'errors' => [],
+        'warnings' => [],
+        'skipped' => [],
+    ];
+
+    /**
      * Called when data has being imported.
      * The $results array should be in the format of:
      *
@@ -56,12 +67,7 @@ abstract class ImportModel extends Model
 
     public function getImportFilePath()
     {
-        $file = $this->import_file()->orderBy('id', 'desc')->first();
-
-        if (!$file)
-            return null;
-
-        return $file->getLocalPath();
+        return temp_path().'/ti-import-'.md5(get_class($this)).'.csv';
     }
 
     /**
@@ -106,7 +112,7 @@ abstract class ImportModel extends Model
 
         $options = array_merge($defaultOptions, $options);
 
-        $csvReader = CsvReader::createFromPath($filePath, 'r');
+        $csvReader = CsvReader::createFromPath($filePath, 'r+');
 
         // Filter out empty rows
         $csvReader->addFilter(function (array $row) {
@@ -128,7 +134,7 @@ abstract class ImportModel extends Model
         if (!is_null($options['encoding']) AND $csvReader->isActiveStreamFilter()) {
             $csvReader->appendStreamFilter(sprintf(
                 '%s%s:%s',
-                TranscodeFilter::FILTER_NAME,
+                'igniter.csv.transcode.',
                 strtolower($options['encoding']),
                 'utf-8'
             ));
@@ -155,6 +161,22 @@ abstract class ImportModel extends Model
         }
 
         return $newRow;
+    }
+
+    protected function decodeArrayValue($value, $delimeter = '|')
+    {
+        if (strpos($value, $delimeter) === FALSE) {
+            return [$value];
+        }
+
+        $data = preg_split('~(?<!\\\)'.preg_quote($delimeter, '~').'~', $value);
+        $newData = [];
+
+        foreach ($data as $_value) {
+            $newData[] = str_replace('\\'.$delimeter, $delimeter, $_value);
+        }
+
+        return $newData;
     }
 
     public function getEncodingOptions()
@@ -185,5 +207,48 @@ abstract class ImportModel extends Model
         }, $options);
 
         return array_combine($options, $translated);
+    }
+
+    //
+    // Result logging
+    //
+    public function getResultStats()
+    {
+        $this->resultStats['errorCount'] = count($this->resultStats['errors']);
+        $this->resultStats['warningCount'] = count($this->resultStats['warnings']);
+        $this->resultStats['skippedCount'] = count($this->resultStats['skipped']);
+
+        $this->resultStats['hasMessages'] = (
+            $this->resultStats['errorCount'] > 0 OR
+            $this->resultStats['warningCount'] > 0 OR
+            $this->resultStats['skippedCount'] > 0
+        );
+
+        return (object)$this->resultStats;
+    }
+
+    protected function logUpdated()
+    {
+        $this->resultStats['updated']++;
+    }
+
+    protected function logCreated()
+    {
+        $this->resultStats['created']++;
+    }
+
+    protected function logError($rowIndex, $message)
+    {
+        $this->resultStats['errors'][$rowIndex] = $message;
+    }
+
+    protected function logWarning($rowIndex, $message)
+    {
+        $this->resultStats['warnings'][$rowIndex] = $message;
+    }
+
+    protected function logSkipped($rowIndex, $message)
+    {
+        $this->resultStats['skipped'][$rowIndex] = $message;
     }
 }

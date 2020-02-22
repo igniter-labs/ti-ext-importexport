@@ -1,31 +1,6 @@
 <?php
 
 return [
-//    'list' => [
-//        'filter' => [],
-//        'toolbar' => [
-//            'buttons' => [
-//                'create' => [
-//                    'label' => 'lang:admin::lang.button_new',
-//                    'class' => 'btn btn-primary',
-//                    'href' => 'igniter/importexport/{lower_plural_name}/create'
-//                ],
-//                'delete' => [
-//                    'label' => 'lang:admin::lang.button_delete',
-//                    'class' => 'btn btn-danger',
-//                    'data-request-form' => '#list-form',
-//                    'data-request' => 'onDelete',
-//                    'data-request-data' => "_method:'DELETE'",
-//                    'data-request-confirm' => 'lang:admin::lang.alert_warning_confirm'
-//                ],
-//            ],
-//        ],
-//        'columns' => [
-//            'id' => [
-//                'label' => 'ID'
-//            ]
-//        ],
-//    ],
     'form' => [
         'toolbar' => [
             'buttons' => [
@@ -33,6 +8,7 @@ return [
                     'label' => 'lang:igniter.importexport::default.button_export_records',
                     'class' => 'btn btn-primary',
                     'data-request' => 'onExport',
+                    'data-progress-indicator' => 'igniter.importexport::default.text_processing',
                 ],
             ],
         ],
@@ -87,7 +63,7 @@ return [
             'export_columns' => [
                 'label' => 'lang:igniter.importexport::default.label_columns',
                 'type' => 'partial',
-                'path' => '~/extensions/igniter/importexport/actions/importexportcontroller/export_columns',
+                'path' => '$/igniter/importexport/actions/importexportcontroller/export_columns',
             ],
             'step_secondary' => [
                 'label' => 'lang:igniter.importexport::default.text_tab_title_export_secondary',

@@ -1,31 +1,6 @@
 <?php
 
 return [
-//    'list' => [
-//        'filter' => [],
-//        'toolbar' => [
-//            'buttons' => [
-//                'create' => [
-//                    'label' => 'lang:admin::lang.button_new',
-//                    'class' => 'btn btn-primary',
-//                    'href' => 'igniter/importexport/{lower_plural_name}/create'
-//                ],
-//                'delete' => [
-//                    'label' => 'lang:admin::lang.button_delete',
-//                    'class' => 'btn btn-danger',
-//                    'data-request-form' => '#list-form',
-//                    'data-request' => 'onDelete',
-//                    'data-request-data' => "_method:'DELETE'",
-//                    'data-request-confirm' => 'lang:admin::lang.alert_warning_confirm'
-//                ],
-//            ],
-//        ],
-//        'columns' => [
-//            'id' => [
-//                'label' => 'ID'
-//            ]
-//        ],
-//    ],
     'form' => [
         'toolbar' => [
             'buttons' => [
@@ -33,6 +8,7 @@ return [
                     'label' => 'lang:igniter.importexport::default.button_import_records',
                     'class' => 'btn btn-primary',
                     'data-request' => 'onImport',
+                    'data-progress-indicator' => 'igniter.importexport::default.text_processing',
                 ],
             ],
         ],
@@ -48,7 +24,7 @@ return [
             'import_file' => [
                 'label' => 'lang:igniter.importexport::default.label_import_file',
                 'type' => 'partial',
-                'path' => '~/extensions/igniter/importexport/actions/importexportcontroller/import_file_upload',
+                'path' => '$/igniter/importexport/actions/importexportcontroller/import_file_upload',
                 'span' => 'left',
             ],
             'encoding' => [
@@ -85,27 +61,10 @@ return [
             ],
             'import_columns' => [
                 'label' => 'lang:igniter.importexport::default.label_import_columns',
-                'type' => 'repeater',
-                'showAddButton' => FALSE,
-                'showRemoveButton' => FALSE,
+                'type' => 'partial',
+                'cssClass' => 'mb-0',
+                'path' => '$/igniter/importexport/actions/importexportcontroller/import_columns',
                 'emptyMessage' => 'lang:igniter.importexport::default.text_no_import_file',
-                'form' => [
-                    'fields' => [
-                        'import' => [
-                            'label' => 'lang:igniter.importexport::default.label_import_ignore',
-                            'type' => 'checkbox',
-                            'options' => [],
-                        ],
-                        'file_column' => [
-                            'label' => 'lang:igniter.importexport::default.label_db_columns',
-                            'type' => 'text',
-                        ],
-                        'db_field' => [
-                            'label' => 'lang:igniter.importexport::default.label_file_columns',
-                            'type' => 'text',
-                        ],
-                    ],
-                ],
             ],
         ],
     ],

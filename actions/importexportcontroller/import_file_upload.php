@@ -16,9 +16,10 @@
                 value="<?= $value; ?>"/>
         </div>
         <button
-            type="button"
+            type="submit"
             class="btn btn-primary btn-file-upload hide"
             data-request="onImportUploadFile"
+            data-request-submit="true"
         >
             <i class="fa fa-fw fa-upload"></i>&nbsp;&nbsp;
             <?= lang('igniter.importexport::default.button_upload'); ?>

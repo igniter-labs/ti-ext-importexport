@@ -8,8 +8,11 @@ use AdminAuth;
 use ApplicationException;
 use Exception;
 use Igniter\Flame\Database\Model;
+use Igniter\Flame\Support\Facades\File;
 use Igniter\ImportExport\Classes\ImportExportManager;
 use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Support\Facades\Request;
+use League\Csv\Reader as CsvReader;
 use Redirect;
 use System\Classes\ControllerAction;
 use Template;
@@ -78,8 +81,7 @@ class ImportExportController extends ControllerAction
 
     protected $requiredProperties = ['importExportConfig'];
 
-//    protected $requiredConfig = ['model', 'configFile'];
-    protected $requiredConfig = [];
+    protected $requiredConfig = ['configFile'];
 
     /**
      * Behavior constructor
@@ -136,10 +138,6 @@ class ImportExportController extends ControllerAction
     {
         $this->loadRecordConfig('export', $recordName);
 
-//        $pageTitle = lang($this->getConfig('record[title]', 'igniter.importexport::default.text_export_title'));
-//        Template::setTitle($pageTitle);
-//        Template::setHeading($pageTitle);
-
         return $this->getExportModel()->download($exportName, $outputName);
     }
 
@@ -147,15 +145,63 @@ class ImportExportController extends ControllerAction
     // Imports
     //
 
-    public function onImport()
+    public function onImport($context, $recordName)
     {
-        dd('dd');
+        $partials = [];
+
+        try {
+            $this->loadRecordConfig('import', $recordName);
+            $model = $this->getImportModel();
+
+            $matches = $this->getImportMatchColumns();
+
+            if ($optionData = post('ImportSecondary')) {
+                $model->fill($optionData);
+            }
+
+            $importOptions = $this->getFormatOptionsFromPost();
+
+            $model->import($matches, $importOptions);
+
+            $this->vars['importResults'] = $model->getResultStats();
+            $this->vars['returnUrl'] = $this->getRedirectUrlForType('import');
+
+            $partials['#importContainer'] = $this->importExportMakePartial('import_result');
+        }
+        catch (MassAssignmentException $ex) {
+            $this->controller->handleError(new ApplicationException(lang(
+                'admin::lang.form.mass_assignment_failed',
+                ['attribute' => $ex->getMessage()]
+            )));
+        }
+        catch (Exception $ex) {
+            $this->controller->handleError($ex);
+        }
+
+        return $partials;
     }
 
-    public function onImportUploadFile()
+    public function onImportUploadFile($context, $recordName)
     {
-        
-        dd('dd');
+        if (!Request::hasFile('import_file'))
+            throw new ApplicationException(lang('main::lang.media_manager.alert_file_not_found'));
+
+        $uploadedFile = Request::file('import_file');
+        if (!$uploadedFile->isValid())
+            throw new ApplicationException($uploadedFile->getErrorMessage());
+
+        $path = $uploadedFile->getClientOriginalName();
+        if (!$this->validateImportFile($path))
+            throw new ApplicationException(lang('main::lang.media_manager.alert_invalid_new_file_name'));
+
+        $this->loadRecordConfig('import', $recordName);
+
+        File::put(
+            $this->getImportFilePath(),
+            File::get($uploadedFile->getRealPath())
+        );
+
+        return $this->controller->redirectBack();
     }
 
     public function renderImport()
@@ -169,6 +215,10 @@ class ImportExportController extends ControllerAction
         return implode(PHP_EOL, $import);
     }
 
+    /**
+     * @return \Igniter\ImportExport\Models\ImportModel
+     * @throws \ApplicationException
+     */
     public function getImportModel()
     {
         return $this->getModelForType('import');
@@ -179,7 +229,7 @@ class ImportExportController extends ControllerAction
         if (!$this->getConfig('import'))
             return;
 
-        $model = $this->getExportModel();
+        $model = $this->getImportModel();
 
         $this->importPrimaryFormWidget = $this->makePrimaryFormWidgetForType($model, 'import');
 
@@ -222,18 +272,11 @@ class ImportExportController extends ControllerAction
 
     protected function getImportFileColumns()
     {
-        return;
         if (!$path = $this->getImportFilePath())
             return;
 
         $reader = $this->createCsvReader($path);
         $firstRow = $reader->fetchOne(0);
-
-        if (!post('first_row_titles')) {
-            array_walk($firstRow, function (&$value, $key) {
-                $value = 'Column #'.($key + 1);
-            });
-        }
 
         if (json_encode($firstRow) === FALSE)
             throw new ApplicationException(lang('igniter.importexport::default.encoding_not_supported'));
@@ -243,8 +286,15 @@ class ImportExportController extends ControllerAction
 
     protected function getImportFilePath()
     {
-        return $this->getImportModel()
-                    ->getImportFilePath($this->importPrimaryFormWidget->getSessionKey());
+        return $this->getImportModel()->getImportFilePath();
+    }
+
+    protected function validateImportFile($path)
+    {
+        if (!$nameExt = pathinfo($path, PATHINFO_EXTENSION))
+            return FALSE;
+
+        return $nameExt === 'csv';
     }
 
     //
@@ -306,6 +356,10 @@ class ImportExportController extends ControllerAction
         return implode(PHP_EOL, $import);
     }
 
+    /**
+     * @return \Igniter\ImportExport\Models\ExportModel
+     * @throws \ApplicationException
+     */
     public function getExportModel()
     {
         return $this->getModelForType('export');
@@ -354,28 +408,6 @@ class ImportExportController extends ControllerAction
             throw new ApplicationException(lang('igniter.importexport::default.error_empty_export_columns'));
 
         return $this->exportColumns = $columns;
-    }
-
-    //
-    // ListController
-    //
-
-    protected function useListExportMode()
-    {
-        if (!$useList = $this->getConfig('export[useList]'))
-            return FALSE;
-
-        if (!$this->controller->isClassExtendedWith('Admin\Actions\ListController'))
-            throw new ApplicationException(lang('igniter.importexport::default.error_missing_use_list'));
-
-        $alias = is_array($useList) ? array_get($useList, 'alias') : $useList;
-
-        $this->outputExportFromList($alias);
-    }
-
-    protected function outputExportFromList($alias, array $options = [])
-    {
-        dd('dddd');
     }
 
     //
@@ -492,9 +524,10 @@ class ImportExportController extends ControllerAction
     {
         if (
             (!$configFile = $this->getConfig('record[configFile]')) OR
-            (!$widgetConfig = $this->loadConfig($configFile, [], 'fields'))
+            (!$fields = $this->loadConfig($configFile, [], 'fields'))
         ) return null;
 
+        $widgetConfig['fields'] = $fields;
         $widgetConfig['model'] = $model;
         $widgetConfig['alias'] = $type.'SecondaryForm';
         $widgetConfig['arrayName'] = ucfirst($type).'Secondary';
@@ -522,24 +555,55 @@ class ImportExportController extends ControllerAction
 
     protected function getFormatOptionsFromPost()
     {
-//        $presetMode = post('format_preset');
-
-        $options = [
-//            'delimiter' => null,
-//            'enclosure' => null,
-//            'escape' => null,
-//            'encoding' => null
-        ];
-
-//        if ($presetMode == 'custom') {
         $options['delimiter'] = post('delimiter');
         $options['enclosure'] = post('enclosure');
         $options['escape'] = post('escape');
         $options['encoding'] = post('encoding');
 
-//        }
-
         return $options;
+    }
+
+    protected function createCsvReader($path)
+    {
+        $reader = CsvReader::createFromPath($path, 'r');
+        $options = $this->getFormatOptionsFromPost();
+
+        if ($options['delimiter'] !== null) {
+            $reader->setDelimiter($options['delimiter']);
+        }
+
+        if ($options['enclosure'] !== null) {
+            $reader->setEnclosure($options['enclosure']);
+        }
+
+        if ($options['escape'] !== null) {
+            $reader->setEscape($options['escape']);
+        }
+
+        if (!is_null($options['encoding']) AND $reader->isActiveStreamFilter()) {
+            $reader->appendStreamFilter(sprintf(
+                '%s%s:%s',
+                'igniter.csv.transcode.',
+                strtolower($options['encoding']),
+                'utf-8'
+            ));
+        }
+
+        return $reader;
+    }
+
+    protected function getImportMatchColumns()
+    {
+        if (!$matches = post('match_columns', [])
+            OR !$columns = array_filter(post('import_columns', [])))
+            throw new ApplicationException('Please select columns to import');
+
+        $result = [];
+        foreach ($matches as $index => $column) {
+            $result[$index] = array_get($columns, $index, $column);
+        }
+
+        return $result;
     }
 
     //

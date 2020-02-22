@@ -55,7 +55,7 @@ abstract class ExportModel extends Model
      */
     public function download($name, $outputName = null)
     {
-        if (!preg_match('/^ti-export[0-9a-z]*$/i', $name))
+        if (!preg_match('/^ti-export-[0-9a-z]*$/i', $name))
             throw new ApplicationException(lang('igniter.importexport::default.error_file_not_found'));
 
         $csvPath = temp_path().'/'.$name;
@@ -81,7 +81,7 @@ abstract class ExportModel extends Model
 
         $csvWriter = $this->prepareCsvWriter($options, $columns, $results);
 
-        $csvName = uniqid('ti-export');
+        $csvName = 'ti-export-'.md5(get_class($this));
         $csvPath = temp_path().'/'.$csvName;
         $output = $csvWriter->__toString();
 
@@ -143,12 +143,7 @@ abstract class ExportModel extends Model
 
     protected function getColumnHeaders($columns)
     {
-        $headers = [];
-        foreach ($columns as $column => $label) {
-            $headers[] = lang($label);
-        }
-
-        return $headers;
+        return array_keys($columns);
     }
 
     protected function processExportRow($columns, $record)

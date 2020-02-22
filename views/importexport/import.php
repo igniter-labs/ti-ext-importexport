@@ -3,6 +3,7 @@
         [
             'id' => 'form-widget',
             'role' => 'form',
+            'enctype' => 'multipart/form-data',
             'method' => 'POST',
         ]
     ); ?>

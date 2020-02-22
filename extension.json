@@ -4,6 +4,10 @@
   "description": "Import/Export Menu Items, Orders, Customers from/into any CSV or Microsoft Excel file to TastyIgniter.",
   "version": "0.1.0-beta.2",
   "author": "SamPoyigi",
-  "icon": "fa-file-import",
+  "icon": {
+    "class": "fas fa-file-import",
+    "backgroundColor": "#48B02C",
+    "color": "#FFF"
+  },
   "homepage": "https://github.com/tastyigniter/ti-ext-importexport"
 }
