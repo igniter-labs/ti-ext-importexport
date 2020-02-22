@@ -90,7 +90,7 @@ class ImportExportController extends ControllerAction
     public function __construct($controller)
     {
         $classPath = strtolower(str_replace('\\', '/', get_called_class()));
-        $controller->partialPath[] = '~/extensions/'.$classPath;
+        $controller->partialPath[] = '$/'.$classPath;
 
         parent::__construct($controller);
 

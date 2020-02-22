@@ -12,12 +12,8 @@ return [
                 ],
             ],
         ],
-        'fields' => [
-//            'topbar' => [
-//                'type' => 'partial',
-//                'path' => '~/extensions/igniter/importexport/actions/importexportcontroller/topbar',
-//            ],
-            'step_primary' => [
+        'step_primary' => [
+            'fields' => [
                 'label' => 'lang:igniter.importexport::default.text_tab_title_export_primary',
                 'type' => 'section',
             ],

@@ -13,10 +13,6 @@ return [
             ],
         ],
         'fields' => [
-//            'topbar' => [
-//                'type' => 'partial',
-//                'path' => '~/extensions/igniter/importexport/actions/importexportcontroller/topbar',
-//            ],
             'step_primary' => [
                 'label' => 'lang:igniter.importexport::default.text_tab_title_import_primary',
                 'type' => 'section',

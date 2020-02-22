@@ -17,12 +17,12 @@ class ImportExport extends AdminController
     public $importExportConfig = [
         'import' => [
             'title' => 'Import Records',
-            'configFile' => '~/extensions/igniter/importexport/models/config/importmodel',
+            'configFile' => '$/igniter/importexport/models/config/importmodel',
             'redirect' => 'igniter/importexport/importexport/import',
         ],
         'export' => [
             'title' => 'Export Records',
-            'configFile' => '~/extensions/igniter/importexport/models/config/exportmodel',
+            'configFile' => '$/igniter/importexport/models/config/exportmodel',
             'redirect' => 'igniter/importexport/importexport/export',
         ],
     ];
