@@ -12,7 +12,6 @@ use League\Csv\Reader as CsvReader;
 
 trait ImportExportHelper
 {
-
     public function importExportMakePartial($partial, $params = [])
     {
         $contents = $this->controller->makePartial('import_export_'.$partial, $params + $this->vars, FALSE);
