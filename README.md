@@ -1,4 +1,4 @@
-# This extension is incomplete, still under development and should not be used 'just yet'. :smile:
+# This extension is still under active development and should not be used in production 'just yet'. :smile:
 
 This extension allows you to import or export TastyIgniter menu items with images, orders and customers. It is super simple!
 
