@@ -1,4 +1,6 @@
-<?php namespace Igniter\ImportExport;
+<?php
+
+namespace Igniter\ImportExport;
 
 use System\Classes\BaseExtension;
 
