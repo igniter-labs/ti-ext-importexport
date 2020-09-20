@@ -1,6 +1,6 @@
 <?php
 
-namespace Igniter\ImportExport\Classes;
+namespace IgniterLabs\ImportExport\Classes;
 
 use Igniter\Flame\Traits\Singleton;
 use System\Classes\ExtensionManager;

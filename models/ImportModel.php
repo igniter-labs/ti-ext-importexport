@@ -1,6 +1,6 @@
 <?php
 
-namespace Igniter\ImportExport\Models;
+namespace IgniterLabs\ImportExport\Models;
 
 use Igniter\Flame\Database\Attach\HasMedia;
 use League\Csv\Reader as CsvReader;
@@ -203,7 +203,7 @@ abstract class ImportModel extends Model
         ];
 
         $translated = array_map(function ($option) {
-            return lang('igniter.importexport::default.encodings.'.str_slug($option, '_'));
+            return lang('igniterlabs.importexport::default.encodings.'.str_slug($option, '_'));
         }, $options);
 
         return array_combine($options, $translated);

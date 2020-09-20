@@ -1,6 +1,6 @@
 <?php
 
-namespace Igniter\ImportExport;
+namespace IgniterLabs\ImportExport;
 
 use System\Classes\BaseExtension;
 
@@ -12,7 +12,7 @@ class Extension extends BaseExtension
     public function registerPermissions()
     {
         return [
-            'Igniter.ImportExport.Manage' => [
+            'IgniterLabs.ImportExport.Manage' => [
                 'description' => 'Access import/export tool',
                 'group' => 'module',
             ],
@@ -27,9 +27,9 @@ class Extension extends BaseExtension
                     'importexport' => [
                         'priority' => 200,
                         'class' => 'importexport',
-                        'href' => admin_url('igniter/importexport/importexport'),
+                        'href' => admin_url('igniterlabs/importexport/importexport'),
                         'title' => 'Import/Export',
-                        'permission' => 'Igniter.ImportExport.Manage',
+                        'permission' => 'IgniterLabs.ImportExport.Manage',
                     ],
                 ],
             ],

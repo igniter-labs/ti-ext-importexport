@@ -1,6 +1,6 @@
 <?php
 
-namespace Igniter\ImportExport\Models;
+namespace IgniterLabs\ImportExport\Models;
 
 use ApplicationException;
 use File;
@@ -56,11 +56,11 @@ abstract class ExportModel extends Model
     public function download($name, $outputName = null)
     {
         if (!preg_match('/^ti-export-[0-9a-z]*$/i', $name))
-            throw new ApplicationException(lang('igniter.importexport::default.error_file_not_found'));
+            throw new ApplicationException(lang('igniterlabs.importexport::default.error_file_not_found'));
 
         $csvPath = temp_path().'/'.$name;
         if (!file_exists($csvPath))
-            throw new ApplicationException(lang('igniter.importexport::default.error_file_not_found'));
+            throw new ApplicationException(lang('igniterlabs.importexport::default.error_file_not_found'));
 
         return Response::download($csvPath, $outputName)->deleteFileAfterSend(TRUE);
     }
@@ -75,7 +75,7 @@ abstract class ExportModel extends Model
     protected function processExportData($columns, $results, $options)
     {
         if (!$results)
-            throw new ApplicationException(lang('igniter.importexport::default.error_empty_data'));
+            throw new ApplicationException(lang('igniterlabs.importexport::default.error_empty_data'));
 
         $columns = $this->exportExtendColumns($columns);
 

@@ -1,5 +1,5 @@
 {
-  "name": "igniter/importexport",
+  "name": "igniterlabs/importexport",
   "type": "igniter-extension",
   "keywords": ["tastyigniter", "import", "export"],
   "license": "MIT",

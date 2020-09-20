@@ -1,11 +1,11 @@
 <?php
 
-namespace Igniter\ImportExport\Actions;
+namespace IgniterLabs\ImportExport\Actions;
 
 use ApplicationException;
 use Exception;
 use Igniter\Flame\Database\Model;
-use Igniter\ImportExport\Traits\ImportExportHelper;
+use IgniterLabs\ImportExport\Traits\ImportExportHelper;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use System\Classes\ControllerAction;
 use Template;
@@ -79,7 +79,7 @@ class ExportController extends ControllerAction
 
         $this->loadRecordConfig($context, $recordName);
 
-        $pageTitle = lang($this->getConfig('record[title]', 'igniter.importexport::default.text_export_title'));
+        $pageTitle = lang($this->getConfig('record[title]', 'igniterlabs.importexport::default.text_export_title'));
         Template::setTitle($pageTitle);
         Template::setHeading($pageTitle);
 
@@ -121,7 +121,7 @@ class ExportController extends ControllerAction
             $options = $this->getFormatOptionsFromPost();
 
             $reference = $model->export($columns, $options);
-            $fileUrl = admin_url('igniter/importexport/importexport/download/'.
+            $fileUrl = admin_url('igniterlabs/importexport/importexport/download/'.
                 $recordName.'/'.$reference.'/'.$this->exportFileName
             );
 
@@ -136,7 +136,7 @@ class ExportController extends ControllerAction
         }
         catch (MassAssignmentException $ex) {
             $this->controller->handleError(new ApplicationException(lang(
-                'igniter.importexport::default.error_mass_assignment', $ex->getMessage()
+                'igniterlabs.importexport::default.error_mass_assignment', $ex->getMessage()
             )));
         }
         catch (Exception $ex) {
@@ -149,7 +149,7 @@ class ExportController extends ControllerAction
     }
 
     /**
-     * @return \Igniter\ImportExport\Models\ExportModel
+     * @return \IgniterLabs\ImportExport\Models\ExportModel
      */
     public function getExportModel()
     {
@@ -193,7 +193,7 @@ class ExportController extends ControllerAction
         $columns = $this->makeListColumns($configFile);
 
         if (empty($columns))
-            throw new ApplicationException(lang('igniter.importexport::default.error_empty_export_columns'));
+            throw new ApplicationException(lang('igniterlabs.importexport::default.error_empty_export_columns'));
 
         return $this->exportColumns = $columns;
     }

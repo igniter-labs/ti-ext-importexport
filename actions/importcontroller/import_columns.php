@@ -4,8 +4,8 @@
             <thead>
             <tr>
                 <th class="list-action"></th>
-                <th><?= e(lang('igniter.importexport::default.label_file_columns')) ?></th>
-                <th><?= e(lang('igniter.importexport::default.label_db_columns')) ?></th>
+                <th><?= e(lang('igniterlabs.importexport::default.label_file_columns')) ?></th>
+                <th><?= e(lang('igniterlabs.importexport::default.label_db_columns')) ?></th>
             </tr>
             </thead>
             <tbody>
@@ -41,7 +41,7 @@
                 <?php } ?>
             <?php } else { ?>
                 <tr class="repeater-item-placeholder">
-                    <td colspan="99"><?= lang('igniter.importexport::default.text_no_import_file') ?></td>
+                    <td colspan="99"><?= lang('igniterlabs.importexport::default.text_no_import_file') ?></td>
                 </tr>
             <?php } ?>
             </tbody>

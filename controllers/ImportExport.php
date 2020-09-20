@@ -1,33 +1,33 @@
 <?php
 
-namespace Igniter\ImportExport\Controllers;
+namespace IgniterLabs\ImportExport\Controllers;
 
 use Admin\Classes\AdminController;
 use AdminMenu;
 use Igniter\Flame\Exception\ApplicationException;
-use Igniter\ImportExport\Classes\ImportExportManager;
+use IgniterLabs\ImportExport\Classes\ImportExportManager;
 use Template;
 
 class ImportExport extends AdminController
 {
     public $implement = [
-        'Igniter\ImportExport\Actions\ImportController',
-        'Igniter\ImportExport\Actions\ExportController',
+        'IgniterLabs\ImportExport\Actions\ImportController',
+        'IgniterLabs\ImportExport\Actions\ExportController',
     ];
 
     public $importConfig = [
         'title' => 'Import Records',
-        'configFile' => '$/igniter/importexport/models/config/importmodel',
-        'redirect' => 'igniter/importexport/importexport/import',
+        'configFile' => '$/igniterlabs/importexport/models/config/importmodel',
+        'redirect' => 'igniterlabs/importexport/importexport/import',
     ];
 
     public $exportConfig = [
         'title' => 'Export Records',
-        'configFile' => '$/igniter/importexport/models/config/exportmodel',
-        'redirect' => 'igniter/importexport/importexport/export',
+        'configFile' => '$/igniterlabs/importexport/models/config/exportmodel',
+        'redirect' => 'igniterlabs/importexport/importexport/export',
     ];
 
-    protected $requiredPermissions = 'Igniter.ImportExport.Manage';
+    protected $requiredPermissions = 'IgniterLabs.ImportExport.Manage';
 
     public function __construct()
     {
@@ -38,7 +38,7 @@ class ImportExport extends AdminController
 
     public function index()
     {
-        $pageTitle = lang('igniter.importexport::default.text_index_title');
+        $pageTitle = lang('igniterlabs.importexport::default.text_index_title');
         Template::setTitle($pageTitle);
         Template::setHeading($pageTitle);
     }
@@ -65,6 +65,6 @@ class ImportExport extends AdminController
         if (!$config = ImportExportManager::instance()->getRecordConfig($context, $code))
             throw new ApplicationException($code.' is not a registered import/export template');
 
-        return $this->redirect('igniter/importexport/importexport/'.$context.'/'.$code);
+        return $this->redirect('igniterlabs/importexport/importexport/'.$context.'/'.$code);
     }
 }

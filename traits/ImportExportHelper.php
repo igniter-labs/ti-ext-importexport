@@ -1,12 +1,12 @@
 <?php
 
-namespace Igniter\ImportExport\Traits;
+namespace IgniterLabs\ImportExport\Traits;
 
 use Admin\Facades\Admin;
 use Admin\Facades\AdminAuth;
 use Admin\Widgets\Toolbar;
 use Igniter\Flame\Exception\ApplicationException;
-use Igniter\ImportExport\Classes\ImportExportManager;
+use IgniterLabs\ImportExport\Classes\ImportExportManager;
 use Illuminate\Support\Facades\Redirect;
 use League\Csv\Reader as CsvReader;
 
@@ -29,7 +29,7 @@ trait ImportExportHelper
 
         $modelClass = $this->getConfig('record[model]');
         if (!$modelClass)
-            throw new ApplicationException(sprintf(lang('igniter.importexport::default.error_missing_model'), $type));
+            throw new ApplicationException(sprintf(lang('igniterlabs.importexport::default.error_missing_model'), $type));
 
         return $this->{$type.'Model'} = new $modelClass;
     }

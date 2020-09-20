@@ -1,12 +1,12 @@
 <?php
 
-namespace Igniter\ImportExport\Actions;
+namespace IgniterLabs\ImportExport\Actions;
 
 use ApplicationException;
 use Exception;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Support\Facades\File;
-use Igniter\ImportExport\Traits\ImportExportHelper;
+use IgniterLabs\ImportExport\Traits\ImportExportHelper;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Support\Facades\Request;
 use System\Classes\ControllerAction;
@@ -72,7 +72,7 @@ class ImportController extends ControllerAction
 
         $this->loadRecordConfig($context, $recordName);
 
-        $pageTitle = lang($this->getConfig('record[title]', 'igniter.importexport::default.text_import_title'));
+        $pageTitle = lang($this->getConfig('record[title]', 'igniterlabs.importexport::default.text_import_title'));
         Template::setTitle($pageTitle);
         Template::setHeading($pageTitle);
 
@@ -150,7 +150,7 @@ class ImportController extends ControllerAction
     }
 
     /**
-     * @return \Igniter\ImportExport\Models\ImportModel
+     * @return \IgniterLabs\ImportExport\Models\ImportModel
      */
     public function getImportModel()
     {
@@ -195,7 +195,7 @@ class ImportController extends ControllerAction
         $columns = $this->makeListColumns($configFile);
 
         if (empty($columns))
-            throw new ApplicationException(lang('igniter.importexport::default.error_empty_import_columns'));
+            throw new ApplicationException(lang('igniterlabs.importexport::default.error_empty_import_columns'));
 
         return $this->importColumns = $columns;
     }
@@ -209,7 +209,7 @@ class ImportController extends ControllerAction
         $firstRow = $reader->fetchOne(0);
 
         if (json_encode($firstRow) === FALSE)
-            throw new ApplicationException(lang('igniter.importexport::default.encoding_not_supported'));
+            throw new ApplicationException(lang('igniterlabs.importexport::default.encoding_not_supported'));
 
         return $firstRow;
     }

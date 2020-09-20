@@ -2,27 +2,27 @@
     <div class="form-fields">
         <div class="d-flex flex-row w-100">
             <div class="flex-fill p-4 border">
-                <h4><?= e(lang('igniter.importexport::default.text_import_created')) ?></h4>
+                <h4><?= e(lang('igniterlabs.importexport::default.text_import_created')) ?></h4>
                 <p><?= $importResults->created ?></p>
             </div>
             <div class="flex-fill p-4 border">
-                <h4><?= e(lang('igniter.importexport::default.text_import_updated')) ?></h4>
+                <h4><?= e(lang('igniterlabs.importexport::default.text_import_updated')) ?></h4>
                 <p><?= $importResults->updated ?></p>
             </div>
             <?php if ($importResults->skippedCount) { ?>
                 <div class="flex-fill p-4 border">
-                    <h4><?= e(lang('igniter.importexport::default.text_import_skipped')) ?></h4>
+                    <h4><?= e(lang('igniterlabs.importexport::default.text_import_skipped')) ?></h4>
                     <p><?= $importResults->skippedCount ?></p>
                 </div>
             <?php } ?>
             <?php if ($importResults->warningCount) { ?>
                 <div class="flex-fill p-4 border">
-                    <h4><?= e(lang('igniter.importexport::default.text_import_warnings')) ?></h4>
+                    <h4><?= e(lang('igniterlabs.importexport::default.text_import_warnings')) ?></h4>
                     <p><?= $importResults->warningCount ?></p>
                 </div>
             <?php } ?>
             <div class="flex-fill p-4 border">
-                <h4><?= e(lang('igniter.importexport::default.text_import_errors')) ?></h4>
+                <h4><?= e(lang('igniterlabs.importexport::default.text_import_errors')) ?></h4>
                 <p><?= $importResults->errorCount ?></p>
             </div>
         </div>
@@ -30,9 +30,9 @@
         <?php if ($importResults->hasMessages) { ?>
             <?php
             $tabs = [
-                'skipped' => lang('igniter.importexport::default.text_import_skipped'),
-                'warnings' => lang('igniter.importexport::default.text_import_warnings'),
-                'errors' => lang('igniter.importexport::default.text_import_errors'),
+                'skipped' => lang('igniterlabs.importexport::default.text_import_skipped'),
+                'warnings' => lang('igniterlabs.importexport::default.text_import_warnings'),
+                'errors' => lang('igniterlabs.importexport::default.text_import_errors'),
             ];
 
             if (!$importResults->skippedCount) unset($tabs['skipped']);
@@ -66,7 +66,7 @@
                             <ul class="list-group">
                                 <?php foreach ($importResults->{$code} as $row => $message) { ?>
                                     <li class="list-group-item">
-                                        <strong><?= e(sprintf(lang('igniter.importexport::default.text_import_row'), $row + 2)) ?></strong>
+                                        <strong><?= e(sprintf(lang('igniterlabs.importexport::default.text_import_row'), $row + 2)) ?></strong>
                                         - <?= e($message) ?>
                                     </li>
                                 <?php } ?>

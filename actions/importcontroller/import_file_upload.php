@@ -22,7 +22,7 @@
             data-request-submit="true"
         >
             <i class="fa fa-fw fa-upload"></i>&nbsp;&nbsp;
-            <?= lang('igniter.importexport::default.button_upload'); ?>
+            <?= lang('igniterlabs.importexport::default.button_upload'); ?>
         </button>
     </div>
 </div>
