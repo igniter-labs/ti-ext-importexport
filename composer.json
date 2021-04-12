@@ -1,7 +1,11 @@
 {
   "name": "igniterlabs/importexport",
-  "type": "igniter-extension",
-  "keywords": ["tastyigniter", "import", "export"],
+  "type": "tastyigniter-extension",
+  "keywords": [
+    "tastyigniter",
+    "import",
+    "export"
+  ],
   "license": "MIT",
   "require": {
     "php": ">=7.1",
