@@ -3,8 +3,8 @@
 namespace IgniterLabs\ImportExport\Models;
 
 use Igniter\Flame\Database\Attach\HasMedia;
+use Igniter\Flame\Database\Model;
 use League\Csv\Reader as CsvReader;
-use Model;
 
 /**
  * Import Model

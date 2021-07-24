@@ -2,11 +2,11 @@
 
 namespace IgniterLabs\ImportExport\Models;
 
-use ApplicationException;
-use File;
+use Igniter\Flame\Database\Model;
+use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Flame\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 use League\Csv\Writer as CsvWriter;
-use Model;
-use Response;
 use SplTempFileObject;
 
 /**

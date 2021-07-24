@@ -3,10 +3,10 @@
 namespace IgniterLabs\ImportExport\Controllers;
 
 use Admin\Classes\AdminController;
-use AdminMenu;
+use Admin\Facades\AdminMenu;
+use Admin\Facades\Template;
 use Igniter\Flame\Exception\ApplicationException;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
-use Template;
 
 class ImportExport extends AdminController
 {
