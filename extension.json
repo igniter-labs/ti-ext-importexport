@@ -6,8 +6,8 @@
   "author": "SamPoyigi",
   "icon": {
     "class": "fas fa-file-import",
-    "backgroundColor": "#48B02C",
-    "color": "#FFF"
+    "backgroundColor": "#147EFB",
+    "color": "#FFFFFF"
   },
-  "homepage": "https://tastyigniter.com/marketplace/item/igniter-importexport"
+  "homepage": "https://tastyigniter.com/marketplace/item/igniterlabs-importexport"
 }
