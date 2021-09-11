@@ -5,6 +5,7 @@ namespace IgniterLabs\ImportExport\Models;
 use Igniter\Flame\Database\Attach\HasMedia;
 use Igniter\Flame\Database\Model;
 use League\Csv\Reader as CsvReader;
+use League\Csv\Statement as CsvStatement;
 
 /**
  * Import Model
@@ -92,7 +93,8 @@ abstract class ImportModel extends Model
         $csvReader = $this->prepareCsvReader($options, $filePath, $matches);
 
         $result = [];
-        $contents = $csvReader->fetch();
+        $csvStatement = CsvStatement::create();
+        $contents = $csvStatement->process($csvReader);
         foreach ($contents as $row) {
             $result[] = $this->processImportRow($row, $matches);
         }
@@ -115,9 +117,9 @@ abstract class ImportModel extends Model
         $csvReader = CsvReader::createFromPath($filePath, 'r+');
 
         // Filter out empty rows
-        $csvReader->addFilter(function (array $row) {
-            return count($row) > 1 || reset($row) !== null;
-        });
+//        $csvReader->addFilter(function (array $row) {
+//            return count($row) > 1 || reset($row) !== null;
+//        });
 
         if (!is_null($options['delimiter']))
             $csvReader->setDelimiter($options['delimiter']);
@@ -128,8 +130,8 @@ abstract class ImportModel extends Model
         if (!is_null($options['escape']))
             $csvReader->setEscape($options['escape']);
 
-        if ($options['firstRowTitles'])
-            $csvReader->setOffset(1);
+//        if ($options['firstRowTitles'])
+//            $csvReader->setOffset(1);
 
         if (is_null($options['encoding']) AND $csvReader->isActiveStreamFilter()) {
             $csvReader->appendStreamFilter(sprintf(
@@ -163,17 +165,17 @@ abstract class ImportModel extends Model
         return $newRow;
     }
 
-    protected function decodeArrayValue($value, $delimeter = '|')
+    protected function decodeArrayValue($value, $delimiter = '|')
     {
-        if (strpos($value, $delimeter) === FALSE) {
+        if (strpos($value, $delimiter) === FALSE) {
             return [$value];
         }
 
-        $data = preg_split('~(?<!\\\)'.preg_quote($delimeter, '~').'~', $value);
+        $data = preg_split('~(?<!\\\)'.preg_quote($delimiter, '~').'~', $value);
         $newData = [];
 
         foreach ($data as $_value) {
-            $newData[] = str_replace('\\'.$delimeter, $delimeter, $_value);
+            $newData[] = str_replace('\\'.$delimiter, $delimiter, $_value);
         }
 
         return $newData;

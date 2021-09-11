@@ -1,4 +1,4 @@
-{!! form_open() !!}
+{!! form_open([]) !!}
 <input type="hidden" name="context" value="{{ $context }}">
 <div class="modal-header">
     <h4 class="modal-title">@lang('igniterlabs.importexport::default.text_'.$context.'_title')</h4>
