@@ -4,6 +4,11 @@ return [
     'form' => [
         'toolbar' => [
             'buttons' => [
+                'back' => [
+                    'label' => 'lang:admin::lang.button_icon_back',
+                    'class' => 'btn btn-default',
+                    'href' => 'igniterlabs/importexport/importexport',
+                ],
                 'importRecords' => [
                     'label' => 'lang:igniterlabs.importexport::default.button_import_records',
                     'class' => 'btn btn-primary',

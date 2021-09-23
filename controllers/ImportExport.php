@@ -61,7 +61,9 @@ class ImportExport extends AdminController
         if (!in_array($context, ['import', 'export']))
             throw new ApplicationException('Invalid type specified');
 
-        $code = post('code');
+        if (!strlen($code = post('code')))
+            throw new ApplicationException('You must choose a type to import');
+
         if (!$config = ImportExportManager::instance()->getRecordConfig($context, $code))
             throw new ApplicationException($code.' is not a registered import/export template');
 

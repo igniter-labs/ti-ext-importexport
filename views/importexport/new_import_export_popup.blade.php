@@ -1,4 +1,7 @@
-{!! form_open([]) !!}
+{!! form_open([
+    'role' => 'form',
+    'data-request' => 'onLoadForm',
+]) !!}
 <input type="hidden" name="context" value="{{ $context }}">
 <div class="modal-header">
     <h4 class="modal-title">@lang('igniterlabs.importexport::default.text_'.$context.'_title')</h4>
@@ -24,9 +27,8 @@
         data-dismiss="modal"
     >@lang('admin::lang.button_close')</button>
     <button
-        type="button"
+        type="submit"
         class="btn btn-primary"
-        data-request="onLoadForm"
     >@lang('admin::lang.button_continue')</button>
 </div>
 {!! form_close() !!}

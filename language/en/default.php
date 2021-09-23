@@ -22,6 +22,7 @@ return [
     'text_import_skipped_rows' => 'Skipped Rows',
     'text_import_progress' => 'Import progress',
     'text_processing' => 'Processing...',
+    'text_uploading' => 'Uploading...',
 
     'label_export_record' => 'Choose record to export',
     'label_offset' => 'Offset',
@@ -42,6 +43,8 @@ return [
     'button_import_records' => 'Import Records',
     'button_export_records' => 'Export Records',
     'button_upload' => 'Upload CSV',
+    'button_choose' => 'Choose',
+    'button_change' => 'Change',
 
     'error_empty_import_columns' => 'Please specify some columns to import.',
     'error_empty_export_columns' => 'Please specify some columns to export.',

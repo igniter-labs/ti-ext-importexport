@@ -6,10 +6,9 @@ use Admin\Facades\Template;
 use Exception;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Exception\ApplicationException;
-use Igniter\Flame\Support\Facades\File;
 use IgniterLabs\ImportExport\Traits\ImportExportHelper;
 use Illuminate\Database\Eloquent\MassAssignmentException;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\File;
 use System\Classes\ControllerAction;
 
 class ImportController extends ControllerAction
@@ -108,6 +107,8 @@ class ImportController extends ControllerAction
 
             $model->import($matches, $importOptions);
 
+            File::delete($this->getImportFilePath());
+
             $this->vars['importResults'] = $model->getResultStats();
             $this->vars['returnUrl'] = $this->getRedirectUrl();
 
@@ -128,23 +129,27 @@ class ImportController extends ControllerAction
 
     public function import_onImportUploadFile($context, $recordName)
     {
-        if (!Request::hasFile('import_file'))
-            throw new ApplicationException(lang('main::lang.media_manager.alert_file_not_found'));
+        try {
+            if (!request()->hasFile('import_file'))
+                throw new ApplicationException('You must upload a file to import');
 
-        $uploadedFile = Request::file('import_file');
-        if (!$uploadedFile->isValid())
-            throw new ApplicationException($uploadedFile->getErrorMessage());
+            $uploadedFile = request()->file('import_file');
+            if (!$uploadedFile->isValid())
+                throw new ApplicationException($uploadedFile->getErrorMessage());
 
-        $path = $uploadedFile->getClientOriginalName();
-        if (!$this->validateImportFile($path))
-            throw new ApplicationException(lang('main::lang.media_manager.alert_invalid_new_file_name'));
+            if (!in_array($uploadedFile->getMimeType(), ['csv', 'text/csv', 'text/plain']))
+                throw new ApplicationException('you must upload a valida csv file');
 
-        $this->loadRecordConfig($context, $recordName);
+            $this->loadRecordConfig($context, $recordName);
 
-        File::put(
-            $this->getImportFilePath(),
-            File::get($uploadedFile->getRealPath())
-        );
+            File::put(
+                $this->getImportFilePath(),
+                File::get($uploadedFile->getRealPath())
+            );
+        }
+        catch (Exception $ex) {
+            flash()->error($ex->getMessage());
+        }
 
         return $this->controller->redirectBack();
     }
@@ -202,9 +207,10 @@ class ImportController extends ControllerAction
 
     protected function getImportFileColumns()
     {
-        if (!$path = $this->getImportFilePath())
+        if (!$this->importFilePathExists())
             return;
 
+        $path = $this->getImportFilePath();
         $reader = $this->createCsvReader($path);
         $firstRow = $reader->fetchOne(0);
 
@@ -219,12 +225,10 @@ class ImportController extends ControllerAction
         return $this->getImportModel()->getImportFilePath();
     }
 
-    protected function validateImportFile($path)
+    protected function importFilePathExists()
     {
-        if (!$nameExt = pathinfo($path, PATHINFO_EXTENSION))
-            return FALSE;
-
-        return $nameExt === 'csv';
+        return File::exists($path = $this->getImportFilePath())
+            ? $path : null;
     }
 
     //
