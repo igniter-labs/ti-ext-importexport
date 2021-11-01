@@ -133,7 +133,7 @@ abstract class ImportModel extends Model
 //        if ($options['firstRowTitles'])
 //            $csvReader->setOffset(1);
 
-        if (is_null($options['encoding']) AND $csvReader->isActiveStreamFilter()) {
+        if (is_null($options['encoding']) && $csvReader->isActiveStreamFilter()) {
             $csvReader->appendStreamFilter(sprintf(
                 '%s%s:%s',
                 'igniter.csv.transcode.',
@@ -221,8 +221,8 @@ abstract class ImportModel extends Model
         $this->resultStats['skippedCount'] = count($this->resultStats['skipped']);
 
         $this->resultStats['hasMessages'] = (
-            $this->resultStats['errorCount'] > 0 OR
-            $this->resultStats['warningCount'] > 0 OR
+            $this->resultStats['errorCount'] > 0 ||
+            $this->resultStats['warningCount'] > 0 ||
             $this->resultStats['skippedCount'] > 0
         );
 

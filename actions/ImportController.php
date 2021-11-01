@@ -170,7 +170,7 @@ class ImportController extends ControllerAction
 
         $this->importSecondaryFormWidget = $this->makeSecondaryFormWidgetForType($model, 'import');
 
-        if (!$this->importSecondaryFormWidget AND $this->importPrimaryFormWidget) {
+        if (!$this->importSecondaryFormWidget && $this->importPrimaryFormWidget) {
             $stepSection = $this->importPrimaryFormWidget->getField('step_secondary');
             $stepSection->hidden = TRUE;
         }
