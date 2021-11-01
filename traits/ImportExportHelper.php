@@ -57,7 +57,7 @@ trait ImportExportHelper
     {
         $permissions = (array)$this->getConfig('record[permissions]');
 
-        if ($permissions AND !AdminAuth::getUser()->hasPermission($permissions)) {
+        if ($permissions && !AdminAuth::getUser()->hasPermission($permissions)) {
             return Redirect::back(302, [], Admin::url('dashboard'));
         }
     }
@@ -98,7 +98,7 @@ trait ImportExportHelper
 
         $widget->bindToController();
 
-        if (isset($modelConfig['toolbar']) AND isset($this->controller->widgets['toolbar'])) {
+        if (isset($modelConfig['toolbar']) && isset($this->controller->widgets['toolbar'])) {
             $toolbarWidget = $this->controller->widgets['toolbar'];
             if ($toolbarWidget instanceof Toolbar) {
                 $toolbarWidget->addButtons(array_get($modelConfig['toolbar'], 'buttons', []));
@@ -121,7 +121,7 @@ trait ImportExportHelper
     protected function makeSecondaryFormWidgetForType($model, $type)
     {
         if (
-            (!$configFile = $this->getConfig('record[configFile]')) OR
+            (!$configFile = $this->getConfig('record[configFile]')) ||
             (!$fields = $this->loadConfig($configFile, [], 'fields'))
         ) return null;
 
@@ -178,7 +178,7 @@ trait ImportExportHelper
             $reader->setEscape($options['escape']);
         }
 
-        if (!is_null($options['encoding']) AND $reader->isActiveStreamFilter()) {
+        if (!is_null($options['encoding']) && $reader->isActiveStreamFilter()) {
             $reader->appendStreamFilter(sprintf(
                 '%s%s:%s',
                 'igniter.csv.transcode.',
@@ -193,7 +193,7 @@ trait ImportExportHelper
     protected function getImportMatchColumns()
     {
         if (!$matches = post('match_columns', [])
-            OR !$columns = array_filter(post('import_columns', [])))
+            || !$columns = array_filter(post('import_columns', [])))
             throw new ApplicationException('Please select columns to import');
 
         $result = [];

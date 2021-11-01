@@ -164,7 +164,7 @@ class ExportController extends ControllerAction
 
         $this->exportSecondaryFormWidget = $this->makeSecondaryFormWidgetForType($model, 'export');
 
-        if (!$this->exportSecondaryFormWidget AND $this->exportPrimaryFormWidget) {
+        if (!$this->exportSecondaryFormWidget && $this->exportPrimaryFormWidget) {
             $stepSection = $this->exportPrimaryFormWidget->getField('step_secondary');
             $stepSection->hidden = TRUE;
         }
