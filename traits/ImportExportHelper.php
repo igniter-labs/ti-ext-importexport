@@ -192,8 +192,9 @@ trait ImportExportHelper
 
     protected function getImportMatchColumns()
     {
-        if (!$matches = post('match_columns', [])
-            || !$columns = array_filter(post('import_columns', [])))
+        $matches = post('match_columns', []);
+        $columns = array_filter(post('import_columns', []));
+        if (!$matches || !$columns)
             throw new ApplicationException('Please select columns to import');
 
         $result = [];
