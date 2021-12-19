@@ -1,14 +1,31 @@
 {
-  "name": "igniterlabs/importexport",
+  "name": "igniterlabs/ti-ext-importexport",
   "type": "tastyigniter-extension",
+  "description": "Import/Export Menu Items, Orders, Customers from/into any CSV or Microsoft Excel file to TastyIgniter.",
   "keywords": [
     "tastyigniter",
     "import",
     "export"
   ],
   "license": "MIT",
+  "authors": [
+    {
+      "name": "Igniter Labs Team"
+    }
+  ],
   "require": {
     "league/csv": "~9.1"
   },
-  "minimum-stability": "dev"
+  "extra": {
+    "tastyigniter-extension": {
+      "code": "igniterlabs.importexport",
+      "name": "Import & Export Tool",
+      "icon": {
+        "class": "fas fa-file-import",
+        "backgroundColor": "#147EFB",
+        "color": "#FFFFFF"
+      },
+      "homepage": "https://tastyigniter.com/marketplace/item/igniterlabs-importexport"
+    }
+  }
 }
