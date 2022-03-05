@@ -82,7 +82,7 @@ trait ImportExportHelper
         $widgetConfig['alias'] = $type.'PrimaryForm';
         $widgetConfig['cssClass'] = $type.'-primary-form';
 
-        $widget = $this->makeWidget('Admin\Widgets\Form', $widgetConfig);
+        $widget = $this->makeWidget(\Admin\Widgets\Form::class, $widgetConfig);
 
         $widget->bindEvent('form.extendFieldsBefore', function () use ($type, $widget) {
             $this->controller->{$type.'FormExtendFieldsBefore'}($widget);
@@ -131,7 +131,7 @@ trait ImportExportHelper
         $widgetConfig['arrayName'] = ucfirst($type).'Secondary';
         $widgetConfig['cssClass'] = $type.'-secondary-form';
 
-        $widget = $this->makeWidget('Admin\Widgets\Form', $widgetConfig);
+        $widget = $this->makeWidget(\Admin\Widgets\Form::class, $widgetConfig);
 
         $widget->bindToController();
 
