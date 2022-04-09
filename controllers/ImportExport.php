@@ -11,8 +11,8 @@ use IgniterLabs\ImportExport\Classes\ImportExportManager;
 class ImportExport extends AdminController
 {
     public $implement = [
-        'IgniterLabs\ImportExport\Actions\ImportController',
-        'IgniterLabs\ImportExport\Actions\ExportController',
+        \IgniterLabs\ImportExport\Actions\ImportController::class,
+        \IgniterLabs\ImportExport\Actions\ExportController::class,
     ];
 
     public $importConfig = [
