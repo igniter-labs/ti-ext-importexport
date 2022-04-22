@@ -143,7 +143,12 @@ abstract class ExportModel extends Model
 
     protected function getColumnHeaders($columns)
     {
-        return array_keys($columns);
+        $headers = [];
+        foreach ($columns as $key => $label) {
+            $headers[] = lang($label);
+        }
+
+        return $headers;
     }
 
     protected function processExportRow($columns, $record)
