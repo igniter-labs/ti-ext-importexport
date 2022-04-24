@@ -62,7 +62,7 @@ abstract class ExportModel extends Model
         if (!file_exists($csvPath))
             throw new ApplicationException(lang('igniterlabs.importexport::default.error_file_not_found'));
 
-        return Response::download($csvPath, $outputName)->deleteFileAfterSend(TRUE);
+        return Response::download($csvPath, $outputName)->deleteFileAfterSend(true);
     }
 
     /**
@@ -103,8 +103,8 @@ abstract class ExportModel extends Model
     protected function prepareCsvWriter($options, $columns, $results)
     {
         $defaultOptions = [
-            'firstRowTitles' => TRUE,
-            'useOutput' => FALSE,
+            'firstRowTitles' => true,
+            'useOutput' => false,
             'fileName' => 'export.csv',
             'delimiter' => null,
             'enclosure' => null,
@@ -143,7 +143,12 @@ abstract class ExportModel extends Model
 
     protected function getColumnHeaders($columns)
     {
-        return array_keys($columns);
+        $headers = [];
+        foreach ($columns as $label) {
+            $headers[] = lang($label);
+        }
+
+        return $headers;
     }
 
     protected function processExportRow($columns, $record)
