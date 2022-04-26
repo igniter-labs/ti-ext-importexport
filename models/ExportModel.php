@@ -83,7 +83,7 @@ abstract class ExportModel extends Model
 
         $csvName = 'ti-export-'.md5(get_class($this));
         $csvPath = temp_path().'/'.$csvName;
-        $output = $csvWriter->__toString();
+        $output = $csvWriter->toString();
 
         File::put($csvPath, $output);
 
