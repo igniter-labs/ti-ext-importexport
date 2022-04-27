@@ -113,7 +113,7 @@ class ExportController extends ControllerAction
 
             $model = $this->getExportModel();
 
-            if ($secondaryData = post('Secondary')) {
+            if ($secondaryData = post('ExportSecondary')) {
                 $model->fill($secondaryData);
             }
 
