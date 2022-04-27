@@ -5,12 +5,12 @@
 <input type="hidden" name="context" value="{{ $context }}">
 <div class="modal-header">
     <h4 class="modal-title">@lang('igniterlabs.importexport::default.text_'.$context.'_title')</h4>
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
 </div>
 <div class="modal-body">
     <div class="form-group">
-        <label class="control-label">@lang('igniterlabs.importexport::default.label_'.$context.'_record')</label>
-        <select class="form-control" name="code">
+        <label class="form-label">@lang('igniterlabs.importexport::default.label_'.$context.'_record')</label>
+        <select class="form-select" name="code">
             <option value="">@lang('admin::lang.text_select')</option>
             @foreach ($importExports as $code => $config)
                 <option
@@ -24,7 +24,7 @@
     <button
         type="button"
         class="btn btn-default"
-        data-dismiss="modal"
+        data-bs-dismiss="modal"
     >@lang('admin::lang.button_close')</button>
     <button
         type="submit"

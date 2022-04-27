@@ -13,23 +13,23 @@
                 @foreach ($importFileColumns as $index => $fileColumn)
                     <tr>
                         <td class="list-action">
-                            <div class="custom-control custom-checkbox">
+                            <div class="form-check">
                                 <input
                                     type="checkbox"
                                     id="checkbox_{{ $index }}"
-                                    class="custom-control-input"
+                                    class="form-check-input"
                                     name="match_columns[{{ $index }}]"
                                     value="{{ $fileColumn }}"
                                     checked="checked"
                                 />
-                                <label class="custom-control-label" for="checkbox_{{ $index }}"></label>
+                                <label class="form-check-label" for="checkbox_{{ $index }}"></label>
                             </div>
                         </td>
                         <td>{{ $fileColumn }}</td>
                         <td>
                             <select
                                 name="import_columns[{{ $index }}]"
-                                class="form-control"
+                                class="form-select"
                             >
                                 <option value="">@lang('admin::lang.text_please_select')</option>
                                 @foreach ($importColumns as $column => $columnName)

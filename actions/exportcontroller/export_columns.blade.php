@@ -18,7 +18,7 @@
 
                 @foreach ($exportColumns as $key => $column)
                     @php $checkboxId = 'checkbox_'.$field->getId().'_'.$loop->index; @endphp
-                    <div class="custom-control custom-checkbox mb-2">
+                    <div class="form-check mb-2">
                         <input
                             type="hidden"
                             name="{{ $field->arrayName }}export_columns[]"
@@ -27,12 +27,12 @@
                         <input
                             type="checkbox"
                             id="{{ $checkboxId }}"
-                            class="custom-control-input"
+                            class="form-check-input"
                             name="{{ $field->getName() }}visible_columns[]"
                             value="1"
                             checked="checked"
                         />
-                        <label class="custom-control-label" for="{{ $checkboxId }}">
+                        <label class="form-check-label" for="{{ $checkboxId }}">
                             @lang($column)
                         </label>
                     </div>
