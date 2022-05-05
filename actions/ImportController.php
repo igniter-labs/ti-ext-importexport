@@ -172,7 +172,7 @@ class ImportController extends ControllerAction
 
         if (!$this->importSecondaryFormWidget && $this->importPrimaryFormWidget) {
             $stepSection = $this->importPrimaryFormWidget->getField('step_secondary');
-            $stepSection->hidden = TRUE;
+            $stepSection->hidden = true;
         }
 
         $this->prepareImportVars();
@@ -214,7 +214,7 @@ class ImportController extends ControllerAction
         $reader = $this->createCsvReader($path);
         $firstRow = $reader->fetchOne(0);
 
-        if (json_encode($firstRow) === FALSE)
+        if (json_encode($firstRow) === false)
             throw new ApplicationException(lang('igniterlabs.importexport::default.encoding_not_supported'));
 
         return $firstRow;

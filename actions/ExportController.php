@@ -166,7 +166,7 @@ class ExportController extends ControllerAction
 
         if (!$this->exportSecondaryFormWidget && $this->exportPrimaryFormWidget) {
             $stepSection = $this->exportPrimaryFormWidget->getField('step_secondary');
-            $stepSection->hidden = TRUE;
+            $stepSection->hidden = true;
         }
 
         $this->prepareExportVars();

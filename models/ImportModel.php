@@ -105,7 +105,7 @@ abstract class ImportModel extends Model
     protected function prepareCsvReader($options, $filePath)
     {
         $defaultOptions = [
-            'firstRowTitles' => TRUE,
+            'firstRowTitles' => true,
             'delimiter' => null,
             'enclosure' => null,
             'escape' => null,
@@ -167,7 +167,7 @@ abstract class ImportModel extends Model
 
     protected function decodeArrayValue($value, $delimiter = '|')
     {
-        if (strpos($value, $delimiter) === FALSE) {
+        if (strpos($value, $delimiter) === false) {
             return [$value];
         }
 
