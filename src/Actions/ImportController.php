@@ -2,21 +2,21 @@
 
 namespace IgniterLabs\ImportExport\Actions;
 
-use Admin\Facades\Template;
 use Exception;
+use Igniter\Admin\Facades\Template;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Exception\ApplicationException;
+use Igniter\System\Classes\ControllerAction;
 use IgniterLabs\ImportExport\Traits\ImportExportHelper;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Support\Facades\File;
-use System\Classes\ControllerAction;
 
 class ImportController extends ControllerAction
 {
     use ImportExportHelper;
 
     /**
-     * @var \Admin\Classes\AdminController Reference to the back end controller.
+     * @var \Igniter\Admin\Classes\AdminController Reference to the back end controller.
      */
     protected $controller;
 
@@ -31,17 +31,17 @@ class ImportController extends ControllerAction
     public $importColumns;
 
     /**
-     * @var \Admin\Classes\BaseWidget Reference to the toolbar widget objects.
+     * @var \Igniter\Admin\Classes\BaseWidget Reference to the toolbar widget objects.
      */
     protected $importToolbarWidget;
 
     /**
-     * @var \Admin\Widgets\Form Reference to the widget used for uploading import file.
+     * @var \Igniter\Admin\Widgets\Form Reference to the widget used for uploading import file.
      */
     protected $importPrimaryFormWidget;
 
     /**
-     * @var \Admin\Widgets\Form Reference to the widget used for specifying import options.
+     * @var \Igniter\Admin\Widgets\Form Reference to the widget used for specifying import options.
      */
     protected $importSecondaryFormWidget;
 
@@ -51,7 +51,7 @@ class ImportController extends ControllerAction
 
     /**
      * Behavior constructor
-     * @param \Admin\Classes\AdminController $controller
+     * @param \Igniter\Admin\Classes\AdminController $controller
      */
     public function __construct($controller)
     {
@@ -238,7 +238,7 @@ class ImportController extends ControllerAction
     /**
      * Called before the form fields are defined.
      *
-     * @param \Admin\Widgets\Form $host The hosting form widget
+     * @param \Igniter\Admin\Widgets\Form $host The hosting form widget
      *
      * @return void
      */
@@ -249,7 +249,7 @@ class ImportController extends ControllerAction
     /**
      * Called after the form fields are defined.
      *
-     * @param \Admin\Widgets\Form $host The hosting form widget
+     * @param \Igniter\Admin\Widgets\Form $host The hosting form widget
      * @param $fields
      *
      * @return void

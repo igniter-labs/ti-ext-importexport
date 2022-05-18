@@ -3,7 +3,7 @@
 namespace IgniterLabs\ImportExport\Classes;
 
 use Igniter\Flame\Traits\Singleton;
-use System\Classes\ExtensionManager;
+use Igniter\System\Classes\ExtensionManager;
 
 /**
  * ImportExport Manager

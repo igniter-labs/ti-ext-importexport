@@ -16,6 +16,11 @@
   "require": {
     "league/csv": "~9.1"
   },
+  "autoload": {
+    "psr-4": {
+      "IgniterLabs\\ImportExport\\": "src/"
+    }
+  },
   "extra": {
     "tastyigniter-extension": {
       "code": "igniterlabs.importexport",

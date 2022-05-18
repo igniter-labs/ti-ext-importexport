@@ -2,9 +2,9 @@
 
 namespace IgniterLabs\ImportExport\Traits;
 
-use Admin\Facades\Admin;
-use Admin\Facades\AdminAuth;
-use Admin\Widgets\Toolbar;
+use Igniter\Admin\Facades\Admin;
+use Igniter\Admin\Facades\AdminAuth;
+use Igniter\Admin\Widgets\Toolbar;
 use Igniter\Flame\Exception\ApplicationException;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
 use Illuminate\Support\Facades\Redirect;
@@ -82,7 +82,7 @@ trait ImportExportHelper
         $widgetConfig['alias'] = $type.'PrimaryForm';
         $widgetConfig['cssClass'] = $type.'-primary-form';
 
-        $widget = $this->makeWidget(\Admin\Widgets\Form::class, $widgetConfig);
+        $widget = $this->makeWidget(\Igniter\Admin\Widgets\Form::class, $widgetConfig);
 
         $widget->bindEvent('form.extendFieldsBefore', function () use ($type, $widget) {
             $this->controller->{$type.'FormExtendFieldsBefore'}($widget);
@@ -131,7 +131,7 @@ trait ImportExportHelper
         $widgetConfig['arrayName'] = ucfirst($type).'Secondary';
         $widgetConfig['cssClass'] = $type.'-secondary-form';
 
-        $widget = $this->makeWidget(\Admin\Widgets\Form::class, $widgetConfig);
+        $widget = $this->makeWidget(\Igniter\Admin\Widgets\Form::class, $widgetConfig);
 
         $widget->bindToController();
 

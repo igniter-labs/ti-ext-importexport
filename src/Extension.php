@@ -2,7 +2,7 @@
 
 namespace IgniterLabs\ImportExport;
 
-use System\Classes\BaseExtension;
+use Igniter\System\Classes\BaseExtension;
 
 /**
  * ImportExport Extension Information File
