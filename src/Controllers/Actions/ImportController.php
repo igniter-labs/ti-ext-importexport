@@ -1,6 +1,6 @@
 <?php
 
-namespace IgniterLabs\ImportExport\Actions;
+namespace IgniterLabs\ImportExport\Controllers\Actions;
 
 use Exception;
 use Igniter\Admin\Facades\Template;
