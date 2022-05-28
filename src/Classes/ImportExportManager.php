@@ -50,7 +50,7 @@ class ImportExportManager
         if (!self::$importExportCache)
             self::$importExportCache = [];
 
-        $registeredResources = ExtensionManager::instance()->getRegistrationMethodValues('registerImportExport');
+        $registeredResources = resolve(ExtensionManager::class)->getRegistrationMethodValues('registerImportExport');
         foreach ($registeredResources as $extensionCode => $records) {
             $this->registerImportExports($extensionCode, $records);
         }
