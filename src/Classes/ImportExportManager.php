@@ -2,7 +2,6 @@
 
 namespace IgniterLabs\ImportExport\Classes;
 
-use Igniter\Flame\Traits\Singleton;
 use Igniter\System\Classes\ExtensionManager;
 
 /**
@@ -10,8 +9,6 @@ use Igniter\System\Classes\ExtensionManager;
  */
 class ImportExportManager
 {
-    use Singleton;
-
     protected static $importExportCache;
 
     public function getRecordConfig($type, $name, $default = null)

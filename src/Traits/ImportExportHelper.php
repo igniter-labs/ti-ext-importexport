@@ -113,7 +113,7 @@ trait ImportExportHelper
     protected function loadRecordConfig($type, $recordName)
     {
         $config = $this->getConfig();
-        $config['record'] = ImportExportManager::instance()->getRecordConfig($type, $recordName);
+        $config['record'] = resolve(ImportExportManager::class)->getRecordConfig($type, $recordName);
 
         $this->setConfig($config);
     }

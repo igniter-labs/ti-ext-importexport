@@ -3,12 +3,18 @@
 namespace IgniterLabs\ImportExport;
 
 use Igniter\System\Classes\BaseExtension;
+use IgniterLabs\ImportExport\Classes\ImportExportManager;
 
 /**
  * ImportExport Extension Information File
  */
 class Extension extends BaseExtension
 {
+    public function register()
+    {
+        $this->app->singleton(ImportExportManager::class);
+    }
+
     public function registerPermissions()
     {
         return [
