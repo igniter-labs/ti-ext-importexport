@@ -14,7 +14,6 @@
     }
   ],
   "require": {
-    "tastyigniter/flame": "v4.x-dev",
     "league/csv": "~9.1"
   },
   "autoload": {
