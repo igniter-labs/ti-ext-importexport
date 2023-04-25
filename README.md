@@ -17,4 +17,4 @@ In the admin user interface you can import/export menu items, orders or customer
 
 ### License
 
-[The MIT License (MIT)](https://tastyigniter.com/licence/)
+[The MIT License (MIT)](https://tastyigniter.com/license/)
