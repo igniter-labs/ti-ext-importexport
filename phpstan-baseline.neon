@@ -1,0 +1,536 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Class Igniter\\\\System\\\\Classes\\\\ExtensionManager not found\\.$#"
+			count: 1
+			path: src/Classes/ImportExportManager.php
+
+		-
+			message: "#^Function array_get not found\\.$#"
+			count: 2
+			path: src/Classes/ImportExportManager.php
+
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/ImportExportManager.php
+
+		-
+			message: "#^Access to an undefined property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:\\$vars\\.$#"
+			count: 3
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Access to property \\$exportConfig on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Access to property \\$partialPath on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Access to property \\$vars on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Access to property \\$widgets on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:getConfig\\(\\)\\.$#"
+			count: 10
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:loadConfig\\(\\)\\.$#"
+			count: 3
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:makePartial\\(\\)\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:makeWidget\\(\\)\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:setConfig\\(\\)\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Models\\\\ExportModel\\:\\:fill\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:appendStreamFilter\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:isActiveStreamFilter\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to method addButtons\\(\\) on an unknown class Igniter\\\\Admin\\\\Widgets\\\\Toolbar\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to method handleError\\(\\) on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to method makePartial\\(\\) on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to method refresh\\(\\) on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to method render\\(\\) on an unknown class Igniter\\\\Admin\\\\Classes\\\\BaseWidget\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to static method getUser\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\AdminAuth\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to static method setHeading\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\Template\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to static method setTitle\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\Template\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Call to static method url\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\Admin\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Class Igniter\\\\Admin\\\\Widgets\\\\Form not found\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Class Igniter\\\\Admin\\\\Widgets\\\\Toolbar not found\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Function admin_url not found\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Function array_except not found\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Function array_get not found\\.$#"
+			count: 4
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Function flash not found\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Function lang not found\\.$#"
+			count: 3
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Function post not found\\.$#"
+			count: 8
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:__construct\\(\\) calls parent\\:\\:__construct\\(\\) but IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController does not extend any class\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Instantiated class Igniter\\\\Flame\\\\Exception\\\\ApplicationException not found\\.$#"
+			count: 3
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Parameter \\$controller of method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:__construct\\(\\) has invalid type Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Parameter \\$host of method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:exportFormExtendFields\\(\\) has invalid type Igniter\\\\Admin\\\\Widgets\\\\Form\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Parameter \\$host of method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:exportFormExtendFieldsBefore\\(\\) has invalid type Igniter\\\\Admin\\\\Widgets\\\\Form\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:\\$controller has unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:\\$exportModel has unknown class Igniter\\\\Flame\\\\Database\\\\Model as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:\\$exportPrimaryFormWidget has unknown class Igniter\\\\Admin\\\\Widgets\\\\Form as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:\\$exportSecondaryFormWidget has unknown class Igniter\\\\Admin\\\\Widgets\\\\Form as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ExportController\\:\\:\\$exportToolbarWidget has unknown class Igniter\\\\Admin\\\\Classes\\\\BaseWidget as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ExportController.php
+
+		-
+			message: "#^Access to an undefined property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:\\$vars\\.$#"
+			count: 3
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Access to property \\$importConfig on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Access to property \\$partialPath on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Access to property \\$vars on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Access to property \\$widgets on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:getConfig\\(\\)\\.$#"
+			count: 9
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:getExportColumns\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:loadConfig\\(\\)\\.$#"
+			count: 3
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:makePartial\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:makeWidget\\(\\)\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:setConfig\\(\\)\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Models\\\\ImportModel\\:\\:fill\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:appendStreamFilter\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:isActiveStreamFilter\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to method addButtons\\(\\) on an unknown class Igniter\\\\Admin\\\\Widgets\\\\Toolbar\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to method handleError\\(\\) on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to method makePartial\\(\\) on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to method redirectBack\\(\\) on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to method refresh\\(\\) on an unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to method render\\(\\) on an unknown class Igniter\\\\Admin\\\\Classes\\\\BaseWidget\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to static method getUser\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\AdminAuth\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to static method setHeading\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\Template\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to static method setTitle\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\Template\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Call to static method url\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\Admin\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Class Igniter\\\\Admin\\\\Widgets\\\\Form not found\\.$#"
+			count: 2
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Class Igniter\\\\Admin\\\\Widgets\\\\Toolbar not found\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Function array_except not found\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Function array_get not found\\.$#"
+			count: 4
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Function flash not found\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Function lang not found\\.$#"
+			count: 4
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Function post not found\\.$#"
+			count: 8
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:__construct\\(\\) calls parent\\:\\:__construct\\(\\) but IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController does not extend any class\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Instantiated class Igniter\\\\Flame\\\\Exception\\\\ApplicationException not found\\.$#"
+			count: 7
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Parameter \\$controller of method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:__construct\\(\\) has invalid type Igniter\\\\Admin\\\\Classes\\\\AdminController\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Parameter \\$host of method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:importFormExtendFields\\(\\) has invalid type Igniter\\\\Admin\\\\Widgets\\\\Form\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Parameter \\$host of method IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:importFormExtendFieldsBefore\\(\\) has invalid type Igniter\\\\Admin\\\\Widgets\\\\Form\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:\\$controller has unknown class Igniter\\\\Admin\\\\Classes\\\\AdminController as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:\\$importModel has unknown class Igniter\\\\Flame\\\\Database\\\\Model as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:\\$importPrimaryFormWidget has unknown class Igniter\\\\Admin\\\\Widgets\\\\Form as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:\\$importSecondaryFormWidget has unknown class Igniter\\\\Admin\\\\Widgets\\\\Form as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Property IgniterLabs\\\\ImportExport\\\\Controllers\\\\Actions\\\\ImportController\\:\\:\\$importToolbarWidget has unknown class Igniter\\\\Admin\\\\Classes\\\\BaseWidget as its type\\.$#"
+			count: 1
+			path: src/Controllers/Actions/ImportController.php
+
+		-
+			message: "#^Access to an undefined property IgniterLabs\\\\ImportExport\\\\Controllers\\\\ImportExport\\:\\:\\$vars\\.$#"
+			count: 1
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\ImportExport\\:\\:makePartial\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Controllers\\\\ImportExport\\:\\:redirect\\(\\)\\.$#"
+			count: 1
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^Call to static method setContext\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\AdminMenu\\.$#"
+			count: 1
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^Call to static method setHeading\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\Template\\.$#"
+			count: 1
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^Call to static method setTitle\\(\\) on an unknown class Igniter\\\\Admin\\\\Facades\\\\Template\\.$#"
+			count: 1
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^Function lang not found\\.$#"
+			count: 1
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^Function post not found\\.$#"
+			count: 3
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^IgniterLabs\\\\ImportExport\\\\Controllers\\\\ImportExport\\:\\:__construct\\(\\) calls parent\\:\\:__construct\\(\\) but IgniterLabs\\\\ImportExport\\\\Controllers\\\\ImportExport does not extend any class\\.$#"
+			count: 1
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^Instantiated class Igniter\\\\Flame\\\\Exception\\\\ApplicationException not found\\.$#"
+			count: 4
+			path: src/Controllers/ImportExport.php
+
+		-
+			message: "#^Access to an undefined property IgniterLabs\\\\ImportExport\\\\Extension\\:\\:\\$app\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
+			message: "#^Function admin_url not found\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
+			message: "#^Function array_get not found\\.$#"
+			count: 1
+			path: src/Models/ExportModel.php
+
+		-
+			message: "#^Function lang not found\\.$#"
+			count: 4
+			path: src/Models/ExportModel.php
+
+		-
+			message: "#^Function temp_path not found\\.$#"
+			count: 2
+			path: src/Models/ExportModel.php
+
+		-
+			message: "#^Instantiated class Igniter\\\\Flame\\\\Exception\\\\ApplicationException not found\\.$#"
+			count: 3
+			path: src/Models/ExportModel.php
+
+		-
+			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:appendStreamFilter\\(\\)\\.$#"
+			count: 1
+			path: src/Models/ImportModel.php
+
+		-
+			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:isActiveStreamFilter\\(\\)\\.$#"
+			count: 1
+			path: src/Models/ImportModel.php
+
+		-
+			message: "#^Function array_get not found\\.$#"
+			count: 1
+			path: src/Models/ImportModel.php
+
+		-
+			message: "#^Function lang not found\\.$#"
+			count: 1
+			path: src/Models/ImportModel.php
+
+		-
+			message: "#^Function str_slug not found\\.$#"
+			count: 1
+			path: src/Models/ImportModel.php
+
+		-
+			message: "#^Function temp_path not found\\.$#"
+			count: 1
+			path: src/Models/ImportModel.php
+
+		-
+			message: "#^Method IgniterLabs\\\\ImportExport\\\\Models\\\\ImportModel\\:\\:prepareCsvReader\\(\\) invoked with 3 parameters, 2 required\\.$#"
+			count: 1
+			path: src/Models/ImportModel.php
