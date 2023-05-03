@@ -32,5 +32,18 @@
       },
       "homepage": "https://tastyigniter.com/marketplace/item/igniterlabs-importexport"
     }
+  },
+  "require-dev": {
+    "laravel/pint": "^1.2",
+    "nunomaduro/larastan": "^2.4.0",
+    "orchestra/testbench": "^8.5",
+    "pestphp/pest-plugin-laravel": "^2.0",
+    "pestphp/pest": "^2.5"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    },
+    "sort-packages": true
   }
 }
