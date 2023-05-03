@@ -38,7 +38,6 @@ abstract class ImportModel extends Model
      *        'db_name2' => 'Another value'
      *    ],
      *    [...]
-     * @param $results
      */
     abstract public function importData($results);
 
@@ -54,9 +53,7 @@ abstract class ImportModel extends Model
      *
      * The key (0, 1) is the column index in the CSV and the value
      * is another array of target database column names.
-     * @param $matches
      * @param array $options
-     * @return
      */
     public function import($matches, $options = [])
     {
@@ -83,9 +80,6 @@ abstract class ImportModel extends Model
      *   [first_name => John, last_name => Doe],
      *   [...]
      *
-     * @param $filePath
-     * @param $matches
-     * @param $options
      * @return array
      */
     protected function processImportData($filePath, $matches, $options)
@@ -117,21 +111,24 @@ abstract class ImportModel extends Model
         $csvReader = CsvReader::createFromPath($filePath, 'r+');
 
         // Filter out empty rows
-//        $csvReader->addFilter(function (array $row) {
-//            return count($row) > 1 || reset($row) !== null;
-//        });
+        //        $csvReader->addFilter(function (array $row) {
+        //            return count($row) > 1 || reset($row) !== null;
+        //        });
 
-        if (!is_null($options['delimiter']))
+        if (!is_null($options['delimiter'])) {
             $csvReader->setDelimiter($options['delimiter']);
+        }
 
-        if (!is_null($options['enclosure']))
+        if (!is_null($options['enclosure'])) {
             $csvReader->setEnclosure($options['enclosure']);
+        }
 
-        if (!is_null($options['escape']))
+        if (!is_null($options['escape'])) {
             $csvReader->setEscape($options['escape']);
+        }
 
-//        if ($options['firstRowTitles'])
-//            $csvReader->setOffset(1);
+        //        if ($options['firstRowTitles'])
+        //            $csvReader->setOffset(1);
 
         if (is_null($options['encoding']) && $csvReader->isActiveStreamFilter()) {
             $csvReader->appendStreamFilter(sprintf(
@@ -147,8 +144,6 @@ abstract class ImportModel extends Model
 
     /**
      * Converts a single row of CSV data to the column map.
-     * @param $rowData
-     * @param $matches
      * @return array
      */
     protected function processImportRow($rowData, $matches)

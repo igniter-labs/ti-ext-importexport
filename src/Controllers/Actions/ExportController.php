@@ -68,14 +68,16 @@ class ExportController extends ControllerAction
         $this->setConfig($controller->exportConfig, $this->requiredConfig);
 
         // Override config
-        if ($exportFileName = $this->getConfig('fileName'))
+        if ($exportFileName = $this->getConfig('fileName')) {
             $this->exportFileName = $exportFileName;
+        }
     }
 
     public function export($context, $recordName = null)
     {
-        if ($redirect = $this->checkPermissions())
+        if ($redirect = $this->checkPermissions()) {
             return $redirect;
+        }
 
         $this->loadRecordConfig($context, $recordName);
 
@@ -133,13 +135,11 @@ class ExportController extends ControllerAction
             )->important();
 
             $partials['@#exportContainer'] = $this->importExportMakePartial('export_result');
-        }
-        catch (MassAssignmentException $ex) {
+        } catch (MassAssignmentException $ex) {
             $this->controller->handleError(new ApplicationException(lang(
                 'igniterlabs.importexport::default.error_mass_assignment', $ex->getMessage()
             )));
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
 
@@ -186,14 +186,16 @@ class ExportController extends ControllerAction
 
     protected function getExportColumns()
     {
-        if (!is_null($this->exportColumns))
+        if (!is_null($this->exportColumns)) {
             return $this->exportColumns;
+        }
 
         $configFile = $this->getConfig('record[configFile]');
         $columns = $this->makeListColumns($configFile);
 
-        if (empty($columns))
+        if (empty($columns)) {
             throw new ApplicationException(lang('igniterlabs.importexport::default.error_empty_export_columns'));
+        }
 
         return $this->exportColumns = $columns;
     }
@@ -218,7 +220,6 @@ class ExportController extends ControllerAction
      *
      * @param \Igniter\Admin\Widgets\Form $host The hosting form widget
      *
-     * @param $fields
      * @return void
      */
     public function exportFormExtendFields($host, $fields)

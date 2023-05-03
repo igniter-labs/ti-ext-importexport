@@ -24,12 +24,14 @@ trait ImportExportHelper
 
     protected function getModelForType($type)
     {
-        if (!is_null($this->{$type.'Model'}))
+        if (!is_null($this->{$type.'Model'})) {
             return $this->{$type.'Model'};
+        }
 
         $modelClass = $this->getConfig('record[model]');
-        if (!$modelClass)
+        if (!$modelClass) {
             throw new ApplicationException(sprintf(lang('igniterlabs.importexport::default.error_missing_model'), $type));
+        }
 
         return $this->{$type.'Model'} = new $modelClass;
     }
@@ -37,15 +39,15 @@ trait ImportExportHelper
     protected function makeListColumns($configFile)
     {
         $columns = $this->loadConfig($configFile, [], 'columns');
-        if (!is_array($columns))
+        if (!is_array($columns)) {
             return null;
+        }
 
         $result = [];
         foreach ($columns as $attribute => $column) {
             if (is_array($column)) {
                 $result[$attribute] = array_get($column, 'label', $attribute);
-            }
-            else {
+            } else {
                 $result[$attribute] = $column ?: $attribute;
             }
         }
@@ -123,7 +125,9 @@ trait ImportExportHelper
         if (
             (!$configFile = $this->getConfig('record[configFile]')) ||
             (!$fields = $this->loadConfig($configFile, [], 'fields'))
-        ) return null;
+        ) {
+            return null;
+        }
 
         $widgetConfig['fields'] = $fields;
         $widgetConfig['model'] = $model;
@@ -194,8 +198,9 @@ trait ImportExportHelper
     {
         $matches = post('match_columns', []);
         $columns = array_filter(post('import_columns', []));
-        if (!$matches || !$columns)
+        if (!$matches || !$columns) {
             throw new ApplicationException('Please select columns to import');
+        }
 
         $result = [];
         foreach ($matches as $index => $column) {

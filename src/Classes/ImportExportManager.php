@@ -44,8 +44,9 @@ class ImportExportManager
      */
     public function loadImportExports()
     {
-        if (!self::$importExportCache)
+        if (!self::$importExportCache) {
             self::$importExportCache = [];
+        }
 
         $registeredResources = resolve(ExtensionManager::class)->getRegistrationMethodValues('registerImportExport');
         foreach ($registeredResources as $extensionCode => $records) {
@@ -55,14 +56,13 @@ class ImportExportManager
 
     /**
      * Registers the import/exports.
-     * @param $extensionCode
-     * @param array $definitions
      */
     public function registerImportExports($extensionCode, array $definitions)
     {
         foreach ($definitions as $type => $definition) {
-            if (!in_array($type, ['import', 'export']))
+            if (!in_array($type, ['import', 'export'])) {
                 continue;
+            }
 
             $this->registerImportExportsForType($type, $extensionCode, $definition);
         }

@@ -46,8 +46,9 @@ class ImportExport extends AdminController
     public function index_onLoadPopup()
     {
         $context = post('context');
-        if (!in_array($context, ['import', 'export']))
+        if (!in_array($context, ['import', 'export'])) {
             throw new ApplicationException('Invalid type specified');
+        }
 
         $this->vars['context'] = $context;
         $this->vars['importExports'] = resolve(ImportExportManager::class)->listImportExportsForType($context);
@@ -58,14 +59,17 @@ class ImportExport extends AdminController
     public function index_onLoadForm()
     {
         $context = post('context');
-        if (!in_array($context, ['import', 'export']))
+        if (!in_array($context, ['import', 'export'])) {
             throw new ApplicationException('Invalid type specified');
+        }
 
-        if (!strlen($code = post('code')))
+        if (!strlen($code = post('code'))) {
             throw new ApplicationException('You must choose a type to import');
+        }
 
-        if (!$config = resolve(ImportExportManager::class)->getRecordConfig($context, $code))
+        if (!$config = resolve(ImportExportManager::class)->getRecordConfig($context, $code)) {
             throw new ApplicationException($code.' is not a registered import/export template');
+        }
 
         return $this->redirect('igniterlabs/importexport/importexport/'.$context.'/'.$code);
     }

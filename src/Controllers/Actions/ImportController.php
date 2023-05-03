@@ -66,8 +66,9 @@ class ImportController extends ControllerAction
 
     public function import($context, $recordName = null)
     {
-        if ($redirect = $this->checkPermissions())
+        if ($redirect = $this->checkPermissions()) {
             return $redirect;
+        }
 
         $this->loadRecordConfig($context, $recordName);
 
@@ -113,14 +114,12 @@ class ImportController extends ControllerAction
             $this->vars['returnUrl'] = $this->getRedirectUrl();
 
             $partials['#importContainer'] = $this->importExportMakePartial('import_result');
-        }
-        catch (MassAssignmentException $ex) {
+        } catch (MassAssignmentException $ex) {
             $this->controller->handleError(new ApplicationException(lang(
                 'admin::lang.form.mass_assignment_failed',
                 ['attribute' => $ex->getMessage()]
             )));
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
 
@@ -130,15 +129,18 @@ class ImportController extends ControllerAction
     public function import_onImportUploadFile($context, $recordName)
     {
         try {
-            if (!request()->hasFile('import_file'))
+            if (!request()->hasFile('import_file')) {
                 throw new ApplicationException('You must upload a file to import');
+            }
 
             $uploadedFile = request()->file('import_file');
-            if (!$uploadedFile->isValid())
+            if (!$uploadedFile->isValid()) {
                 throw new ApplicationException($uploadedFile->getErrorMessage());
+            }
 
-            if (!in_array($uploadedFile->getMimeType(), ['csv', 'text/csv', 'text/plain']))
+            if (!in_array($uploadedFile->getMimeType(), ['csv', 'text/csv', 'text/plain'])) {
                 throw new ApplicationException('you must upload a valida csv file');
+            }
 
             $this->loadRecordConfig($context, $recordName);
 
@@ -146,8 +148,7 @@ class ImportController extends ControllerAction
                 $this->getImportFilePath(),
                 File::get($uploadedFile->getRealPath())
             );
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             flash()->error($ex->getMessage());
         }
 
@@ -193,29 +194,33 @@ class ImportController extends ControllerAction
 
     protected function getImportColumns()
     {
-        if (!is_null($this->importColumns))
+        if (!is_null($this->importColumns)) {
             return $this->importColumns;
+        }
 
         $configFile = $this->getConfig('record[configFile]');
         $columns = $this->makeListColumns($configFile);
 
-        if (empty($columns))
+        if (empty($columns)) {
             throw new ApplicationException(lang('igniterlabs.importexport::default.error_empty_import_columns'));
+        }
 
         return $this->importColumns = $columns;
     }
 
     protected function getImportFileColumns()
     {
-        if (!$this->importFilePathExists())
+        if (!$this->importFilePathExists()) {
             return;
+        }
 
         $path = $this->getImportFilePath();
         $reader = $this->createCsvReader($path);
         $firstRow = $reader->fetchOne(0);
 
-        if (json_encode($firstRow) === false)
+        if (json_encode($firstRow) === false) {
             throw new ApplicationException(lang('igniterlabs.importexport::default.encoding_not_supported'));
+        }
 
         return $firstRow;
     }
@@ -250,7 +255,6 @@ class ImportController extends ControllerAction
      * Called after the form fields are defined.
      *
      * @param \Igniter\Admin\Widgets\Form $host The hosting form widget
-     * @param $fields
      *
      * @return void
      */

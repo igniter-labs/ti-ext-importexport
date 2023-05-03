@@ -23,7 +23,6 @@ abstract class ExportModel extends Model
      *       'db_column_name2' => 'Another label',
      *   ],
      *   [...]
-     * @param $columns
      */
     abstract public function exportData($columns);
 
@@ -36,8 +35,6 @@ abstract class ExportModel extends Model
      *       'db_column_name2' => 'Another label',
      *       ...
      *   ]
-     * @param $columns
-     * @param $options
      * @return string
      */
     public function export($columns, $options)
@@ -49,33 +46,32 @@ abstract class ExportModel extends Model
 
     /**
      * Download a previously compiled export file.
-     * @param $name
      * @param null $outputName
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function download($name, $outputName = null)
     {
-        if (!preg_match('/^ti-export-[0-9a-z]*$/i', $name))
+        if (!preg_match('/^ti-export-[0-9a-z]*$/i', $name)) {
             throw new ApplicationException(lang('igniterlabs.importexport::default.error_file_not_found'));
+        }
 
         $csvPath = temp_path().'/'.$name;
-        if (!file_exists($csvPath))
+        if (!file_exists($csvPath)) {
             throw new ApplicationException(lang('igniterlabs.importexport::default.error_file_not_found'));
+        }
 
         return Response::download($csvPath, $outputName)->deleteFileAfterSend(true);
     }
 
     /**
      * Converts a data collection to a CSV file.
-     * @param $columns
-     * @param $results
-     * @param $options
      * @return string
      */
     protected function processExportData($columns, $results, $options)
     {
-        if (!$results)
+        if (!$results) {
             throw new ApplicationException(lang('igniterlabs.importexport::default.error_empty_data'));
+        }
 
         $columns = $this->exportExtendColumns($columns);
 
@@ -92,7 +88,6 @@ abstract class ExportModel extends Model
 
     /**
      * Used to override column definitions at export time.
-     * @param $columns
      * @return array
      */
     protected function exportExtendColumns($columns)
@@ -117,26 +112,31 @@ abstract class ExportModel extends Model
 
         $csvWriter->setOutputBOM(CsvWriter::BOM_UTF8);
 
-        if (!is_null($options['delimiter']))
+        if (!is_null($options['delimiter'])) {
             $csvWriter->setDelimiter($options['delimiter']);
+        }
 
-        if (!is_null($options['enclosure']))
+        if (!is_null($options['enclosure'])) {
             $csvWriter->setEnclosure($options['enclosure']);
+        }
 
-        if (!is_null($options['escape']))
+        if (!is_null($options['escape'])) {
             $csvWriter->setEscape($options['escape']);
+        }
 
         // Insert headers
-        if ($options['firstRowTitles'])
+        if ($options['firstRowTitles']) {
             $csvWriter->insertOne($this->getColumnHeaders($columns));
+        }
 
         // Insert records
         foreach ($results as $result) {
             $csvWriter->insertOne($this->processExportRow($columns, $result));
         }
 
-        if ($options['useOutput'])
+        if ($options['useOutput']) {
             $csvWriter->output($options['fileName']);
+        }
 
         return $csvWriter;
     }
@@ -164,7 +164,6 @@ abstract class ExportModel extends Model
     /**
      * Implodes a single dimension array using pipes (|)
      * Multi dimensional arrays are not allowed.
-     * @param $data
      * @param string $delimiter
      * @return string
      */
@@ -174,8 +173,7 @@ abstract class ExportModel extends Model
         foreach ($data as $value) {
             if (is_array($value)) {
                 $newData[] = 'Array';
-            }
-            else {
+            } else {
                 $newData[] = str_replace($delimiter, '\\'.$delimiter, $value);
             }
         }
