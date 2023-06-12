@@ -33,7 +33,7 @@ class Extension extends BaseExtension
                     'importexport' => [
                         'priority' => 200,
                         'class' => 'importexport',
-                        'href' => admin_url('igniterlabs/importexport/importexport'),
+                        'href' => admin_url('igniterlabs/importexport/import_export'),
                         'title' => 'Import/Export',
                         'permission' => 'IgniterLabs.ImportExport.Manage',
                     ],

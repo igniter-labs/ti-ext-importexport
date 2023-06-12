@@ -2,10 +2,9 @@
 
 namespace IgniterLabs\ImportExport\Traits;
 
-use Igniter\Admin\Facades\Admin;
-use Igniter\Admin\Facades\AdminAuth;
 use Igniter\Admin\Widgets\Toolbar;
 use Igniter\Flame\Exception\ApplicationException;
+use Igniter\User\Facades\AdminAuth;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
 use Illuminate\Support\Facades\Redirect;
 use League\Csv\Reader as CsvReader;
@@ -60,7 +59,7 @@ trait ImportExportHelper
         $permissions = (array)$this->getConfig('record[permissions]');
 
         if ($permissions && !AdminAuth::getUser()->hasPermission($permissions)) {
-            return Redirect::back(302, [], Admin::url('dashboard'));
+            return Redirect::back(302, [], AdminHelper::url('dashboard'));
         }
     }
 
@@ -69,7 +68,7 @@ trait ImportExportHelper
         $redirect = $this->getConfig('redirect');
 
         if (!is_null($redirect)) {
-            return $redirect ? Admin::url($redirect) : 'javascript:;';
+            return $redirect ? AdminHelper::url($redirect) : 'javascript:;';
         }
 
         return $this->controller->refresh();

@@ -1,6 +1,6 @@
 <?php
 
-namespace IgniterLabs\ImportExport\Controllers;
+namespace IgniterLabs\ImportExport\Http\Controllers;
 
 use Igniter\Admin\Classes\AdminController;
 use Igniter\Admin\Facades\AdminMenu;
