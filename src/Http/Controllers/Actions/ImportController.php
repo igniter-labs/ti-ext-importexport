@@ -2,7 +2,6 @@
 
 namespace IgniterLabs\ImportExport\Controllers\Actions;
 
-use Exception;
 use Igniter\Admin\Facades\Template;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Exception\ApplicationException;
@@ -115,12 +114,10 @@ class ImportController extends ControllerAction
 
             $partials['#importContainer'] = $this->importExportMakePartial('import_result');
         } catch (MassAssignmentException $ex) {
-            $this->controller->handleError(new ApplicationException(lang(
+            throw new ApplicationException(lang(
                 'admin::lang.form.mass_assignment_failed',
                 ['attribute' => $ex->getMessage()]
-            )));
-        } catch (Exception $ex) {
-            $this->controller->handleError($ex);
+            ));
         }
 
         return $partials;
@@ -128,29 +125,25 @@ class ImportController extends ControllerAction
 
     public function import_onImportUploadFile($context, $recordName)
     {
-        try {
-            if (!request()->hasFile('import_file')) {
-                throw new ApplicationException('You must upload a file to import');
-            }
-
-            $uploadedFile = request()->file('import_file');
-            if (!$uploadedFile->isValid()) {
-                throw new ApplicationException($uploadedFile->getErrorMessage());
-            }
-
-            if (!in_array($uploadedFile->getMimeType(), ['csv', 'text/csv', 'text/plain'])) {
-                throw new ApplicationException('you must upload a valida csv file');
-            }
-
-            $this->loadRecordConfig($context, $recordName);
-
-            File::put(
-                $this->getImportFilePath(),
-                File::get($uploadedFile->getRealPath())
-            );
-        } catch (Exception $ex) {
-            flash()->error($ex->getMessage());
+        if (!request()->hasFile('import_file')) {
+            throw new ApplicationException('You must upload a file to import');
         }
+
+        $uploadedFile = request()->file('import_file');
+        if (!$uploadedFile->isValid()) {
+            throw new ApplicationException($uploadedFile->getErrorMessage());
+        }
+
+        if (!in_array($uploadedFile->getMimeType(), ['csv', 'text/csv', 'text/plain'])) {
+            throw new ApplicationException('you must upload a valida csv file');
+        }
+
+        $this->loadRecordConfig($context, $recordName);
+
+        File::put(
+            $this->getImportFilePath(),
+            File::get($uploadedFile->getRealPath())
+        );
 
         return $this->controller->redirectBack();
     }

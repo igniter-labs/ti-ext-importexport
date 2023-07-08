@@ -2,7 +2,6 @@
 
 namespace IgniterLabs\ImportExport\Controllers\Actions;
 
-use Exception;
 use Igniter\Admin\Facades\Template;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Exception\ApplicationException;
@@ -136,11 +135,7 @@ class ExportController extends ControllerAction
 
             $partials['@#exportContainer'] = $this->importExportMakePartial('export_result');
         } catch (MassAssignmentException $ex) {
-            $this->controller->handleError(new ApplicationException(lang(
-                'igniterlabs.importexport::default.error_mass_assignment', $ex->getMessage()
-            )));
-        } catch (Exception $ex) {
-            $this->controller->handleError($ex);
+            throw new ApplicationException($ex->getMessage());
         }
 
         $partials['#notification'] = $this->makePartial('flash');
