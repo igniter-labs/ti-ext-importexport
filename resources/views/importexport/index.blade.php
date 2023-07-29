@@ -1,6 +1,6 @@
 <div class="row-fluid">
     <div class="form-widget mt-4">
-        <div class="form-fields">
+        <div class="form-fields p-3">
             <div class="form-group section-field span-full">
                 <div class="field-section">
                     <h5 class="text-muted">@lang('igniterlabs.importexport::default.text_import_export_title')</h5>
@@ -25,7 +25,6 @@
                 ><i class="fa fa-download"></i> @lang('igniterlabs.importexport::default.button_export_records')
                 </a>
             </div>
-
             <div
                 class="modal slideInDown fade"
                 id="importExportModal"
@@ -45,8 +44,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-fields">
+
             <div class="form-group section-field span-full">
                 <div class="field-section">
                     <h5 class="text-muted">@lang('igniterlabs.importexport::default.text_history_title')</h5>
