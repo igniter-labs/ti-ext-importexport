@@ -4,7 +4,7 @@ namespace IgniterLabs\ImportExport\Controllers\Actions;
 
 use Igniter\Admin\Facades\Template;
 use Igniter\Flame\Database\Model;
-use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Flame\Exception\FlashException;
 use Igniter\System\Classes\ControllerAction;
 use IgniterLabs\ImportExport\Traits\ImportExportHelper;
 use Illuminate\Database\Eloquent\MassAssignmentException;
@@ -114,7 +114,7 @@ class ImportController extends ControllerAction
 
             $partials['#importContainer'] = $this->importExportMakePartial('import_result');
         } catch (MassAssignmentException $ex) {
-            throw new ApplicationException(lang(
+            throw new FlashException(lang(
                 'admin::lang.form.mass_assignment_failed',
                 ['attribute' => $ex->getMessage()]
             ));
@@ -126,16 +126,16 @@ class ImportController extends ControllerAction
     public function import_onImportUploadFile($context, $recordName)
     {
         if (!request()->hasFile('import_file')) {
-            throw new ApplicationException('You must upload a file to import');
+            throw new FlashException('You must upload a file to import');
         }
 
         $uploadedFile = request()->file('import_file');
         if (!$uploadedFile->isValid()) {
-            throw new ApplicationException($uploadedFile->getErrorMessage());
+            throw new FlashException($uploadedFile->getErrorMessage());
         }
 
         if (!in_array($uploadedFile->getMimeType(), ['csv', 'text/csv', 'text/plain'])) {
-            throw new ApplicationException('you must upload a valida csv file');
+            throw new FlashException('you must upload a valida csv file');
         }
 
         $this->loadRecordConfig($context, $recordName);
@@ -195,7 +195,7 @@ class ImportController extends ControllerAction
         $columns = $this->makeListColumns($configFile);
 
         if (empty($columns)) {
-            throw new ApplicationException(lang('igniterlabs.importexport::default.error_empty_import_columns'));
+            throw new FlashException(lang('igniterlabs.importexport::default.error_empty_import_columns'));
         }
 
         return $this->importColumns = $columns;
@@ -212,7 +212,7 @@ class ImportController extends ControllerAction
         $firstRow = $reader->fetchOne(0);
 
         if (json_encode($firstRow) === false) {
-            throw new ApplicationException(lang('igniterlabs.importexport::default.encoding_not_supported'));
+            throw new FlashException(lang('igniterlabs.importexport::default.encoding_not_supported'));
         }
 
         return $firstRow;

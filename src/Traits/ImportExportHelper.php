@@ -3,7 +3,7 @@
 namespace IgniterLabs\ImportExport\Traits;
 
 use Igniter\Admin\Widgets\Toolbar;
-use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Flame\Exception\FlashException;
 use Igniter\User\Facades\AdminAuth;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
 use Illuminate\Support\Facades\Redirect;
@@ -27,9 +27,8 @@ trait ImportExportHelper
             return $this->{$type.'Model'};
         }
 
-        $modelClass = $this->getConfig('record[model]');
-        if (!$modelClass) {
-            throw new ApplicationException(sprintf(lang('igniterlabs.importexport::default.error_missing_model'), $type));
+        if (!$modelClass = $this->getConfig('record[model]')) {
+            throw new FlashException(sprintf(lang('igniterlabs.importexport::default.error_missing_model'), $type));
         }
 
         return $this->{$type.'Model'} = new $modelClass;
@@ -198,7 +197,7 @@ trait ImportExportHelper
         $matches = post('match_columns', []);
         $columns = array_filter(post('import_columns', []));
         if (!$matches || !$columns) {
-            throw new ApplicationException('Please select columns to import');
+            throw new FlashException('Please select columns to import');
         }
 
         $result = [];

@@ -3,7 +3,7 @@
 namespace IgniterLabs\ImportExport\Models;
 
 use Igniter\Flame\Database\Model;
-use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Flame\Exception\FlashException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use League\Csv\Writer as CsvWriter;
@@ -52,12 +52,12 @@ abstract class ExportModel extends Model
     public function download($name, $outputName = null)
     {
         if (!preg_match('/^ti-export-[0-9a-z]*$/i', $name)) {
-            throw new ApplicationException(lang('igniterlabs.importexport::default.error_file_not_found'));
+            throw new FlashException(lang('igniterlabs.importexport::default.error_file_not_found'));
         }
 
         $csvPath = temp_path().'/'.$name;
         if (!file_exists($csvPath)) {
-            throw new ApplicationException(lang('igniterlabs.importexport::default.error_file_not_found'));
+            throw new FlashException(lang('igniterlabs.importexport::default.error_file_not_found'));
         }
 
         return Response::download($csvPath, $outputName)->deleteFileAfterSend(true);
@@ -70,7 +70,7 @@ abstract class ExportModel extends Model
     protected function processExportData($columns, $results, $options)
     {
         if (!$results) {
-            throw new ApplicationException(lang('igniterlabs.importexport::default.error_empty_data'));
+            throw new FlashException(lang('igniterlabs.importexport::default.error_empty_data'));
         }
 
         $columns = $this->exportExtendColumns($columns);

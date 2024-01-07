@@ -5,7 +5,7 @@ namespace IgniterLabs\ImportExport\Http\Controllers;
 use Igniter\Admin\Classes\AdminController;
 use Igniter\Admin\Facades\AdminMenu;
 use Igniter\Admin\Facades\Template;
-use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Flame\Exception\FlashException;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
 
 class ImportExport extends AdminController
@@ -46,9 +46,7 @@ class ImportExport extends AdminController
     public function index_onLoadPopup()
     {
         $context = post('context');
-        if (!in_array($context, ['import', 'export'])) {
-            throw new ApplicationException('Invalid type specified');
-        }
+        throw_if(!in_array($context, ['import', 'export']), FlashException::error('Invalid type specified'));
 
         $this->vars['context'] = $context;
         $this->vars['importExports'] = resolve(ImportExportManager::class)->listImportExportsForType($context);
@@ -59,17 +57,13 @@ class ImportExport extends AdminController
     public function index_onLoadForm()
     {
         $context = post('context');
-        if (!in_array($context, ['import', 'export'])) {
-            throw new ApplicationException('Invalid type specified');
-        }
+        throw_unless(in_array($context, ['import', 'export']), FlashException::error('Invalid type specified'));
 
-        if (!strlen($code = post('code'))) {
-            throw new ApplicationException('You must choose a type to import');
-        }
+        throw_unless(strlen($code = post('code')), FlashException::error('You must choose a type to import'));
 
-        if (!$config = resolve(ImportExportManager::class)->getRecordConfig($context, $code)) {
-            throw new ApplicationException($code.' is not a registered import/export template');
-        }
+        throw_unless(resolve(ImportExportManager::class)->getRecordConfig($context, $code),
+            FlashException::error($code.' is not a registered import/export template')
+        );
 
         return $this->redirect('igniterlabs/importexport/importexport/'.$context.'/'.$code);
     }

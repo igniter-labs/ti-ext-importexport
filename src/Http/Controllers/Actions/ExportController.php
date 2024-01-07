@@ -4,7 +4,7 @@ namespace IgniterLabs\ImportExport\Controllers\Actions;
 
 use Igniter\Admin\Facades\Template;
 use Igniter\Flame\Database\Model;
-use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Flame\Exception\FlashException;
 use Igniter\System\Classes\ControllerAction;
 use IgniterLabs\ImportExport\Traits\ImportExportHelper;
 use Illuminate\Database\Eloquent\MassAssignmentException;
@@ -135,7 +135,7 @@ class ExportController extends ControllerAction
 
             $partials['@#exportContainer'] = $this->importExportMakePartial('export_result');
         } catch (MassAssignmentException $ex) {
-            throw new ApplicationException($ex->getMessage());
+            throw new FlashException($ex->getMessage());
         }
 
         $partials['#notification'] = $this->makePartial('flash');
@@ -188,9 +188,9 @@ class ExportController extends ControllerAction
         $configFile = $this->getConfig('record[configFile]');
         $columns = $this->makeListColumns($configFile);
 
-        if (empty($columns)) {
-            throw new ApplicationException(lang('igniterlabs.importexport::default.error_empty_export_columns'));
-        }
+        throw_if(empty($columns),
+            FlashException::error(lang('igniterlabs.importexport::default.error_empty_export_columns'))
+        );
 
         return $this->exportColumns = $columns;
     }
