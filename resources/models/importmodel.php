@@ -20,7 +20,7 @@ return [
             'import_file' => [
                 'label' => 'lang:igniterlabs.importexport::default.label_import_file',
                 'type' => 'partial',
-                'path' => '$/igniterlabs/importexport/actions/importcontroller/import_file_upload',
+                'path' => 'igniterlabs.importexport::import_file_upload',
                 'span' => 'left',
             ],
             'encoding' => [
@@ -59,7 +59,7 @@ return [
                 'label' => 'lang:igniterlabs.importexport::default.label_import_columns',
                 'type' => 'partial',
                 'cssClass' => 'mb-0',
-                'path' => '$/igniterlabs/importexport/actions/importcontroller/import_columns',
+                'path' => 'igniterlabs.importexport::import_columns',
                 'emptyMessage' => 'lang:igniterlabs.importexport::default.text_no_import_file',
             ],
         ],

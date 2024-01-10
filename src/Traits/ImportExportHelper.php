@@ -13,12 +13,7 @@ trait ImportExportHelper
 {
     public function importExportMakePartial($partial, $params = [])
     {
-        $contents = $this->controller->makePartial('import_export_'.$partial, $params + $this->vars, false);
-        if (!$contents) {
-            $contents = $this->makePartial($partial, $params);
-        }
-
-        return $contents;
+        return $this->controller->makePartial($partial, $params + $this->vars, false);
     }
 
     protected function getModelForType($type)

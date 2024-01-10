@@ -1,6 +1,6 @@
 <?php
 
-namespace IgniterLabs\ImportExport\Controllers\Actions;
+namespace IgniterLabs\ImportExport\Http\Actions;
 
 use Igniter\Admin\Facades\Template;
 use Igniter\Flame\Database\Model;

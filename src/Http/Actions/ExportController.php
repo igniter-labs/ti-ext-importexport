@@ -1,6 +1,6 @@
 <?php
 
-namespace IgniterLabs\ImportExport\Controllers\Actions;
+namespace IgniterLabs\ImportExport\Http\Actions;
 
 use Igniter\Admin\Facades\Template;
 use Igniter\Flame\Database\Model;
@@ -122,7 +122,7 @@ class ExportController extends ControllerAction
             $options = $this->getFormatOptionsFromPost();
 
             $reference = $model->export($columns, $options);
-            $fileUrl = admin_url('igniterlabs/importexport/importexport/download/'.
+            $fileUrl = admin_url('igniterlabs/importexport/import_export/download/'.
                 $recordName.'/'.$reference.'/'.$this->exportFileName
             );
 

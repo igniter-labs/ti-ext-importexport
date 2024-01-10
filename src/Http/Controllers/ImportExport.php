@@ -11,20 +11,20 @@ use IgniterLabs\ImportExport\Classes\ImportExportManager;
 class ImportExport extends AdminController
 {
     public $implement = [
-        \IgniterLabs\ImportExport\Controllers\Actions\ImportController::class,
-        \IgniterLabs\ImportExport\Controllers\Actions\ExportController::class,
+        \IgniterLabs\ImportExport\Http\Actions\ImportController::class,
+        \IgniterLabs\ImportExport\Http\Actions\ExportController::class,
     ];
 
     public $importConfig = [
         'title' => 'Import Records',
-        'configFile' => '$/igniterlabs/importexport/models/config/importmodel',
-        'redirect' => 'igniterlabs/importexport/importexport/import',
+        'configFile' => 'importmodel',
+        'redirect' => 'igniterlabs/importexport/import_export/import',
     ];
 
     public $exportConfig = [
         'title' => 'Export Records',
-        'configFile' => '$/igniterlabs/importexport/models/config/exportmodel',
-        'redirect' => 'igniterlabs/importexport/importexport/export',
+        'configFile' => 'exportmodel',
+        'redirect' => 'igniterlabs/importexport/import_export/export',
     ];
 
     protected $requiredPermissions = 'IgniterLabs.ImportExport.Manage';
@@ -65,6 +65,6 @@ class ImportExport extends AdminController
             FlashException::error($code.' is not a registered import/export template')
         );
 
-        return $this->redirect('igniterlabs/importexport/importexport/'.$context.'/'.$code);
+        return $this->redirect('igniterlabs/importexport/import_export/'.$context.'/'.$code);
     }
 }
