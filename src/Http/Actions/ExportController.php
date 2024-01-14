@@ -48,7 +48,7 @@ class ExportController extends ControllerAction
      */
     protected $exportSecondaryFormWidget;
 
-    protected $requiredProperties = ['exportConfig'];
+    protected array $requiredProperties = ['exportConfig'];
 
     protected $requiredConfig = ['configFile'];
 

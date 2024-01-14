@@ -10,7 +10,7 @@ use IgniterLabs\ImportExport\Classes\ImportExportManager;
 
 class ImportExport extends AdminController
 {
-    public $implement = [
+    public array $implement = [
         \IgniterLabs\ImportExport\Http\Actions\ImportController::class,
         \IgniterLabs\ImportExport\Http\Actions\ExportController::class,
     ];
@@ -27,7 +27,7 @@ class ImportExport extends AdminController
         'redirect' => 'igniterlabs/importexport/import_export/export',
     ];
 
-    protected $requiredPermissions = 'IgniterLabs.ImportExport.Manage';
+    protected null|string|array $requiredPermissions = 'IgniterLabs.ImportExport.Manage';
 
     public function __construct()
     {

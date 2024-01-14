@@ -44,7 +44,7 @@ class ImportController extends ControllerAction
      */
     protected $importSecondaryFormWidget;
 
-    protected $requiredProperties = ['importConfig'];
+    protected array $requiredProperties = ['importConfig'];
 
     protected $requiredConfig = ['configFile'];
 

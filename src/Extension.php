@@ -15,7 +15,7 @@ class Extension extends BaseExtension
         $this->app->singleton(ImportExportManager::class);
     }
 
-    public function registerPermissions()
+    public function registerPermissions(): array
     {
         return [
             'IgniterLabs.ImportExport.Manage' => [
@@ -25,7 +25,7 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerNavigation()
+    public function registerNavigation(): array
     {
         return [
             'tools' => [
