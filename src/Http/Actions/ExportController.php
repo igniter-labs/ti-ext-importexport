@@ -189,7 +189,7 @@ class ExportController extends ControllerAction
         $columns = $this->makeListColumns($configFile);
 
         throw_if(empty($columns),
-            FlashException::error(lang('igniterlabs.importexport::default.error_empty_export_columns'))
+            new FlashException(lang('igniterlabs.importexport::default.error_empty_export_columns'))
         );
 
         return $this->exportColumns = $columns;
