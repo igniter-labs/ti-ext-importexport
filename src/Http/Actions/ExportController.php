@@ -14,11 +14,6 @@ class ExportController extends ControllerAction
     use ImportExportHelper;
 
     /**
-     * @var \Igniter\Admin\Classes\AdminController Reference to the back end controller.
-     */
-    protected ?\Igniter\Admin\Classes\AdminController $controller;
-
-    /**
      * @var Model Export model
      */
     public $exportModel;

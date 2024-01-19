@@ -14,9 +14,6 @@ class ImportController extends ControllerAction
 {
     use ImportExportHelper;
 
-    /** Reference to the back end controller. */
-    protected ?\Igniter\Admin\Classes\AdminController $controller;
-
     /**
      * @var Model Import model
      */
