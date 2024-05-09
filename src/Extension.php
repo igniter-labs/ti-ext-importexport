@@ -20,7 +20,7 @@ class Extension extends BaseExtension
         return [
             'IgniterLabs.ImportExport.Manage' => [
                 'description' => 'Access import/export tool',
-                'group' => 'advanced',
+                'group' => 'igniter::system.permissions.name',
             ],
         ];
     }
