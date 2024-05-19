@@ -199,7 +199,7 @@ abstract class ImportModel extends Model
             'Windows-1252',
         ];
 
-        $translated = array_map(function ($option) {
+        $translated = array_map(function($option) {
             return lang('igniterlabs.importexport::default.encodings.'.str_slug($option, '_'));
         }, $options);
 

@@ -79,15 +79,15 @@ trait ImportExportHelper
 
         $widget = $this->makeWidget(\Igniter\Admin\Widgets\Form::class, $widgetConfig);
 
-        $widget->bindEvent('form.extendFieldsBefore', function () use ($type, $widget) {
+        $widget->bindEvent('form.extendFieldsBefore', function() use ($type, $widget) {
             $this->controller->{$type.'FormExtendFieldsBefore'}($widget);
         });
 
-        $widget->bindEvent('form.extendFields', function ($fields) use ($type, $widget) {
+        $widget->bindEvent('form.extendFields', function($fields) use ($type, $widget) {
             $this->controller->{$type.'FormExtendFields'}($widget, $fields);
         });
 
-        $widget->bindEvent('form.beforeRefresh', function ($holder) {
+        $widget->bindEvent('form.beforeRefresh', function($holder) {
             $holder->data = [];
         });
 
