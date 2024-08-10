@@ -14,7 +14,7 @@
     "export"
   ],
   "require": {
-    "tastyigniter/core": "dev-master",
+    "tastyigniter/core": "^v4.0@beta",
     "league/csv": "~9.1"
   },
   "require-dev": {
