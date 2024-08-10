@@ -201,9 +201,7 @@ class ExportController extends ControllerAction
      *
      * @return void
      */
-    public function exportFormExtendFieldsBefore($host)
-    {
-    }
+    public function exportFormExtendFieldsBefore($host) {}
 
     /**
      * Called after the form fields are defined.
@@ -212,7 +210,5 @@ class ExportController extends ControllerAction
      *
      * @return void
      */
-    public function exportFormExtendFields($host, $fields)
-    {
-    }
+    public function exportFormExtendFields($host, $fields) {}
 }

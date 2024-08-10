@@ -235,9 +235,7 @@ class ImportController extends ControllerAction
      *
      * @return void
      */
-    public function importFormExtendFieldsBefore($host)
-    {
-    }
+    public function importFormExtendFieldsBefore($host) {}
 
     /**
      * Called after the form fields are defined.
@@ -246,7 +244,5 @@ class ImportController extends ControllerAction
      *
      * @return void
      */
-    public function importFormExtendFields($host, $fields)
-    {
-    }
+    public function importFormExtendFields($host, $fields) {}
 }
