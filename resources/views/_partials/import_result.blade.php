@@ -1,29 +1,29 @@
 <div class="form-widget">
-    <div class="form-fields">
+    <div class="p-3">
         <div class="d-flex flex-row w-100">
-            <div class="flex-fill p-4 border">
-                <h4>@lang('igniterlabs.importexport::default.text_import_created')</h4>
-                <p>{{ $importResults->created }}</p>
+            <div class="card flex-fill p-4 border">
+                <h6>@lang('igniterlabs.importexport::default.text_import_created')</h6>
+                <h3>{{ $importResults->created }}</h3>
             </div>
-            <div class="flex-fill p-4 border">
-                <h4>@lang('igniterlabs.importexport::default.text_import_updated')</h4>
-                <p>{{ $importResults->updated }}</p>
+            <div class="card flex-fill p-4 border">
+                <h6>@lang('igniterlabs.importexport::default.text_import_updated')</h6>
+                <h3>{{ $importResults->updated }}</h3>
             </div>
             @if ($importResults->skippedCount)
-                <div class="flex-fill p-4 border">
-                    <h4>@lang('igniterlabs.importexport::default.text_import_skipped')</h4>
-                    <p>{{ $importResults->skippedCount }}</p>
+                <div class="card flex-fill p-4 border">
+                    <h6>@lang('igniterlabs.importexport::default.text_import_skipped')</h6>
+                    <h3>{{ $importResults->skippedCount }}</h3>
                 </div>
             @endif
             @if ($importResults->warningCount)
-                <div class="flex-fill p-4 border">
-                    <h4>@lang('igniterlabs.importexport::default.text_import_warnings')</h4>
-                    <p>{{ $importResults->warningCount }}</p>
+                <div class="card flex-fill p-4 border">
+                    <h6>@lang('igniterlabs.importexport::default.text_import_warnings')</h6>
+                    <h3>{{ $importResults->warningCount }}</h3>
                 </div>
             @endif
-            <div class="flex-fill p-4 border">
-                <h4>@lang('igniterlabs.importexport::default.text_import_errors')</h4>
-                <p>{{ $importResults->errorCount }}</p>
+            <div class="card flex-fill p-4 border">
+                <h6>@lang('igniterlabs.importexport::default.text_import_errors')</h6>
+                <h3>{{ $importResults->errorCount }}</h3>
             </div>
         </div>
 

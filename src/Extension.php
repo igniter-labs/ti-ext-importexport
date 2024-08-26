@@ -10,10 +10,9 @@ use IgniterLabs\ImportExport\Classes\ImportExportManager;
  */
 class Extension extends BaseExtension
 {
-    public function register()
-    {
-        $this->app->singleton(ImportExportManager::class);
-    }
+    public array $singletons = [
+        ImportExportManager::class,
+    ];
 
     public function registerPermissions(): array
     {

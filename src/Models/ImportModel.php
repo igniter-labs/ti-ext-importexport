@@ -130,14 +130,14 @@ abstract class ImportModel extends Model
         //        if ($options['firstRowTitles'])
         //            $csvReader->setOffset(1);
 
-        if (is_null($options['encoding']) && $csvReader->isActiveStreamFilter()) {
-            $csvReader->appendStreamFilter(sprintf(
-                '%s%s:%s',
-                'igniter.csv.transcode.',
-                strtolower($options['encoding']),
-                'utf-8'
-            ));
-        }
+//        if (is_null($options['encoding']) && $csvReader->isActiveStreamFilter()) {
+//            $csvReader->appendStreamFilter(sprintf(
+//                '%s%s:%s',
+//                'igniter.csv.transcode.',
+//                strtolower($options['encoding']),
+//                'utf-8'
+//            ));
+//        }
 
         return $csvReader;
     }
@@ -162,7 +162,7 @@ abstract class ImportModel extends Model
 
     protected function decodeArrayValue($value, $delimiter = '|')
     {
-        if (strpos($value, $delimiter) === false) {
+        if (!str_contains($value, $delimiter)) {
             return [$value];
         }
 

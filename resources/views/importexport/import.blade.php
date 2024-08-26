@@ -6,7 +6,9 @@
         'method' => 'POST',
     ]) !!}
 
-    {!! $this->renderImport() !!}
+    <div id="importContainer">
+        {!! $this->renderImport() !!}
+    </div>
 
     {!! form_close() !!}
 </div>

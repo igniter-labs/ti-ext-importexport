@@ -59,7 +59,7 @@ return [
             'export_columns' => [
                 'label' => 'lang:igniterlabs.importexport::default.label_columns',
                 'type' => 'partial',
-                'path' => '$/igniterlabs/importexport/actions/exportcontroller/export_columns',
+                'path' => 'igniterlabs.importexport::export_columns',
             ],
             'step_secondary' => [
                 'label' => 'lang:igniterlabs.importexport::default.text_tab_title_export_secondary',
