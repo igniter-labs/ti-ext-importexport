@@ -176,14 +176,14 @@ trait ImportExportHelper
             $reader->setEscape($options['escape']);
         }
 
-//        if (!is_null($options['encoding']) && $reader->isActiveStreamFilter()) {
-//            $reader->appendStreamFilter(sprintf(
-//                '%s%s:%s',
-//                'igniter.csv.transcode.',
-//                strtolower($options['encoding']),
-//                'utf-8'
-//            ));
-//        }
+        //        if (!is_null($options['encoding']) && $reader->isActiveStreamFilter()) {
+        //            $reader->appendStreamFilter(sprintf(
+        //                '%s%s:%s',
+        //                'igniter.csv.transcode.',
+        //                strtolower($options['encoding']),
+        //                'utf-8'
+        //            ));
+        //        }
 
         return $reader;
     }
