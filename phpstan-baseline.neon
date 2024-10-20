@@ -11,16 +11,6 @@ parameters:
 			path: src/Http/Actions/ExportController.php
 
 		-
-			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:appendStreamFilter\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ExportController.php
-
-		-
-			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:isActiveStreamFilter\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ExportController.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\Template\\:\\:setHeading\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Actions/ExportController.php
@@ -33,11 +23,6 @@ parameters:
 		-
 			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\AdminAuth\\:\\:getUser\\(\\)\\.$#"
 			count: 1
-			path: src/Http/Actions/ExportController.php
-
-		-
-			message: "#^Call to static method url\\(\\) on an unknown class IgniterLabs\\\\ImportExport\\\\Traits\\\\AdminHelper\\.$#"
-			count: 2
 			path: src/Http/Actions/ExportController.php
 
 		-
@@ -51,16 +36,6 @@ parameters:
 			path: src/Http/Actions/ImportController.php
 
 		-
-			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:appendStreamFilter\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ImportController.php
-
-		-
-			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:isActiveStreamFilter\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ImportController.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\Template\\:\\:setHeading\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Actions/ImportController.php
@@ -73,11 +48,6 @@ parameters:
 		-
 			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\AdminAuth\\:\\:getUser\\(\\)\\.$#"
 			count: 1
-			path: src/Http/Actions/ImportController.php
-
-		-
-			message: "#^Call to static method url\\(\\) on an unknown class IgniterLabs\\\\ImportExport\\\\Traits\\\\AdminHelper\\.$#"
-			count: 2
 			path: src/Http/Actions/ImportController.php
 
 		-
@@ -94,16 +64,6 @@ parameters:
 			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\Template\\:\\:setTitle\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/ImportExport.php
-
-		-
-			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:appendStreamFilter\\(\\)\\.$#"
-			count: 1
-			path: src/Models/ImportModel.php
-
-		-
-			message: "#^Call to an undefined method League\\\\Csv\\\\Reader\\:\\:isActiveStreamFilter\\(\\)\\.$#"
-			count: 1
-			path: src/Models/ImportModel.php
 
 		-
 			message: "#^Method IgniterLabs\\\\ImportExport\\\\Models\\\\ImportModel\\:\\:prepareCsvReader\\(\\) invoked with 3 parameters, 2 required\\.$#"
