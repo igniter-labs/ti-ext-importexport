@@ -1,4 +1,4 @@
-name: :package_name CI Pipeline
+name: Import Export CI Pipeline
 
 on: [ push, pull_request, workflow_dispatch ]
 
