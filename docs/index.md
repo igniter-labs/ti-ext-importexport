@@ -19,9 +19,21 @@ This extension allows you to import or export TastyIgniter records, such as menu
 - Implement import/export history
 - Import/Export customers, reservations and orders
 
-## Documentation
+## Installation
 
-More documentation can be found on [here](https://github.com/igniter-labs/ti-ext-importexport/blob/master/docs/index.md).
+You can install the extension via composer using the following command:
+
+```bash
+composer require igniterlabs/ti-ext-importexport:"^4.0" -W
+```
+
+## Getting started
+
+In the admin area, you can import or export records. Navigate to the _Tools > Import/Export_ admin pages.
+
+## Usage
+
+### Defining import/export classes
 
 ## Changelog
 
