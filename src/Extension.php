@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IgniterLabs\ImportExport;
 
 use Igniter\System\Classes\BaseExtension;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
+use Override;
 
 /**
  * ImportExport Extension Information File
@@ -14,6 +17,7 @@ class Extension extends BaseExtension
         ImportExportManager::class,
     ];
 
+    #[Override]
     public function registerPermissions(): array
     {
         return [
@@ -24,6 +28,7 @@ class Extension extends BaseExtension
         ];
     }
 
+    #[Override]
     public function registerNavigation(): array
     {
         return [

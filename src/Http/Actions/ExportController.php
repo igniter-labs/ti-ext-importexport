@@ -1,11 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IgniterLabs\ImportExport\Http\Actions;
 
+use Igniter\Admin\Classes\AdminController;
+use Igniter\Admin\Classes\BaseWidget;
 use Igniter\Admin\Facades\Template;
+use Igniter\Admin\Widgets\Form;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Exception\FlashException;
 use Igniter\System\Classes\ControllerAction;
+use IgniterLabs\ImportExport\Models\ExportModel;
 use IgniterLabs\ImportExport\Traits\ImportExportHelper;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 
@@ -29,17 +35,17 @@ class ExportController extends ControllerAction
     protected $exportFileName = 'export.csv';
 
     /**
-     * @var \Igniter\Admin\Classes\BaseWidget Reference to the toolbar widget objects.
+     * @var BaseWidget Reference to the toolbar widget objects.
      */
     protected $exportToolbarWidget;
 
     /**
-     * @var \Igniter\Admin\Widgets\Form Reference to the widget used for standard export options.
+     * @var Form Reference to the widget used for standard export options.
      */
     protected $exportPrimaryFormWidget;
 
     /**
-     * @var \Igniter\Admin\Widgets\Form Reference to the widget used for custom export options.
+     * @var Form Reference to the widget used for custom export options.
      */
     protected $exportSecondaryFormWidget;
 
@@ -49,11 +55,11 @@ class ExportController extends ControllerAction
 
     /**
      * Behavior constructor
-     * @param \Igniter\Admin\Classes\AdminController $controller
+     * @param AdminController $controller
      */
     public function __construct($controller)
     {
-        $classPath = strtolower(str_replace('\\', '/', get_called_class()));
+        $classPath = strtolower(str_replace('\\', '/', static::class));
         $controller->partialPath[] = '$/'.$classPath;
 
         parent::__construct($controller);
@@ -139,7 +145,7 @@ class ExportController extends ControllerAction
     }
 
     /**
-     * @return \IgniterLabs\ImportExport\Models\ExportModel
+     * @return ExportModel
      */
     public function getExportModel()
     {
@@ -193,11 +199,10 @@ class ExportController extends ControllerAction
     //
     //
     //
-
     /**
      * Called before the form fields are defined.
      *
-     * @param \Igniter\Admin\Widgets\Form $host The hosting form widget
+     * @param Form $host The hosting form widget
      *
      * @return void
      */
@@ -206,7 +211,7 @@ class ExportController extends ControllerAction
     /**
      * Called after the form fields are defined.
      *
-     * @param \Igniter\Admin\Widgets\Form $host The hosting form widget
+     * @param Form $host The hosting form widget
      *
      * @return void
      */

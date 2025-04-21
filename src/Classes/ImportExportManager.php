@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IgniterLabs\ImportExport\Classes;
 
 use Igniter\System\Classes\ExtensionManager;

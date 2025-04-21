@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IgniterLabs\ImportExport\Traits;
 
 use Igniter\Admin\Helpers\AdminHelper;
+use Igniter\Admin\Widgets\Form;
 use Igniter\Admin\Widgets\Toolbar;
 use Igniter\Flame\Exception\FlashException;
 use Igniter\User\Facades\AdminAuth;
@@ -78,17 +81,17 @@ trait ImportExportHelper
         $widgetConfig['alias'] = $type.'PrimaryForm';
         $widgetConfig['cssClass'] = $type.'-primary-form';
 
-        $widget = $this->makeWidget(\Igniter\Admin\Widgets\Form::class, $widgetConfig);
+        $widget = $this->makeWidget(Form::class, $widgetConfig);
 
-        $widget->bindEvent('form.extendFieldsBefore', function() use ($type, $widget) {
+        $widget->bindEvent('form.extendFieldsBefore', function() use ($type, $widget): void {
             $this->controller->{$type.'FormExtendFieldsBefore'}($widget);
         });
 
-        $widget->bindEvent('form.extendFields', function($fields) use ($type, $widget) {
+        $widget->bindEvent('form.extendFields', function($fields) use ($type, $widget): void {
             $this->controller->{$type.'FormExtendFields'}($widget, $fields);
         });
 
-        $widget->bindEvent('form.beforeRefresh', function($holder) {
+        $widget->bindEvent('form.beforeRefresh', function($holder): void {
             $holder->data = [];
         });
 
@@ -126,10 +129,10 @@ trait ImportExportHelper
         $widgetConfig['fields'] = $fields;
         $widgetConfig['model'] = $model;
         $widgetConfig['alias'] = $type.'SecondaryForm';
-        $widgetConfig['arrayName'] = ucfirst($type).'Secondary';
+        $widgetConfig['arrayName'] = ucfirst((string) $type).'Secondary';
         $widgetConfig['cssClass'] = $type.'-secondary-form';
 
-        $widget = $this->makeWidget(\Igniter\Admin\Widgets\Form::class, $widgetConfig);
+        $widget = $this->makeWidget(Form::class, $widgetConfig);
 
         $widget->bindToController();
 

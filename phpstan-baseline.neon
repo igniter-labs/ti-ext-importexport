@@ -1,71 +1,25 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
 			count: 1
 			path: src/Classes/ImportExportManager.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Classes\\\\AdminController\\:\\:\\$exportConfig\\.$#"
+			message: '#^Access to an undefined property Igniter\\Admin\\Classes\\AdminController\:\:\$exportConfig\.$#'
+			identifier: property.notFound
 			count: 1
 			path: src/Http/Actions/ExportController.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\Template\\:\\:setHeading\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ExportController.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\Template\\:\\:setTitle\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ExportController.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\AdminAuth\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ExportController.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Classes\\\\AdminController\\:\\:\\$importConfig\\.$#"
+			message: '#^Access to an undefined property Igniter\\Admin\\Classes\\AdminController\:\:\$importConfig\.$#'
+			identifier: property.notFound
 			count: 1
 			path: src/Http/Actions/ImportController.php
 
 		-
-			message: "#^Call to an undefined method IgniterLabs\\\\ImportExport\\\\Http\\\\Actions\\\\ImportController\\:\\:getExportColumns\\(\\)\\.$#"
+			message: '#^Call to an undefined method IgniterLabs\\ImportExport\\Http\\Actions\\ImportController\:\:getExportColumns\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: src/Http/Actions/ImportController.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\Template\\:\\:setHeading\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ImportController.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\Template\\:\\:setTitle\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ImportController.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\AdminAuth\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Actions/ImportController.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\AdminMenu\\:\\:setContext\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/ImportExport.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\Template\\:\\:setHeading\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/ImportExport.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\Template\\:\\:setTitle\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/ImportExport.php
-
-		-
-			message: "#^Method IgniterLabs\\\\ImportExport\\\\Models\\\\ImportModel\\:\\:prepareCsvReader\\(\\) invoked with 3 parameters, 2 required\\.$#"
-			count: 1
-			path: src/Models/ImportModel.php

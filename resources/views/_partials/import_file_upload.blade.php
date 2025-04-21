@@ -1,3 +1,8 @@
+<?php
+
+declare(strict_types=1);
+
+?>
 <div class="progress-indicator-container">
     <div class="input-group">
         <input
@@ -33,3 +38,4 @@
         </button>
     </div>
 </div>
+<?php 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'text_index_title' => 'Import/Export',
     'text_import_export_title' => 'New Import/Export',

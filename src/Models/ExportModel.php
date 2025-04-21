@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IgniterLabs\ImportExport\Models;
 
 use Igniter\Flame\Database\Model;
@@ -8,6 +10,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use League\Csv\Writer as CsvWriter;
 use SplTempFileObject;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Export Model
@@ -47,11 +50,11 @@ abstract class ExportModel extends Model
     /**
      * Download a previously compiled export file.
      * @param null $outputName
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return BinaryFileResponse
      */
     public function download($name, $outputName = null)
     {
-        if (!preg_match('/^ti-export-[0-9a-z]*$/i', $name)) {
+        if (!preg_match('/^ti-export-[0-9a-z]*$/i', (string) $name)) {
             throw new FlashException(lang('igniterlabs.importexport::default.error_file_not_found'));
         }
 
@@ -77,7 +80,7 @@ abstract class ExportModel extends Model
 
         $csvWriter = $this->prepareCsvWriter($options, $columns, $results);
 
-        $csvName = 'ti-export-'.md5(get_class($this));
+        $csvName = 'ti-export-'.md5(static::class);
         $csvPath = temp_path().'/'.$csvName;
         $output = $csvWriter->toString();
 

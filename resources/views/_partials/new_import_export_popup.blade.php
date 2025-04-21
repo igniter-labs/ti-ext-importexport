@@ -1,3 +1,8 @@
+<?php
+
+declare(strict_types=1);
+
+?>
 {!! form_open([
     'role' => 'form',
     'data-request' => 'onLoadForm',
@@ -32,3 +37,4 @@
     >@lang('admin::lang.button_continue')</button>
 </div>
 {!! form_close() !!}
+<?php 

@@ -1,11 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IgniterLabs\ImportExport\Http\Actions;
 
+use Igniter\Admin\Classes\AdminController;
+use Igniter\Admin\Classes\BaseWidget;
 use Igniter\Admin\Facades\Template;
+use Igniter\Admin\Widgets\Form;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Exception\FlashException;
 use Igniter\System\Classes\ControllerAction;
+use IgniterLabs\ImportExport\Models\ImportModel;
 use IgniterLabs\ImportExport\Traits\ImportExportHelper;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Support\Facades\File;
@@ -25,17 +31,17 @@ class ImportController extends ControllerAction
     public $importColumns;
 
     /**
-     * @var \Igniter\Admin\Classes\BaseWidget Reference to the toolbar widget objects.
+     * @var BaseWidget Reference to the toolbar widget objects.
      */
     protected $importToolbarWidget;
 
     /**
-     * @var \Igniter\Admin\Widgets\Form Reference to the widget used for uploading import file.
+     * @var Form Reference to the widget used for uploading import file.
      */
     protected $importPrimaryFormWidget;
 
     /**
-     * @var \Igniter\Admin\Widgets\Form Reference to the widget used for specifying import options.
+     * @var Form Reference to the widget used for specifying import options.
      */
     protected $importSecondaryFormWidget;
 
@@ -45,11 +51,11 @@ class ImportController extends ControllerAction
 
     /**
      * Behavior constructor
-     * @param \Igniter\Admin\Classes\AdminController $controller
+     * @param AdminController $controller
      */
     public function __construct($controller)
     {
-        $classPath = strtolower(str_replace('\\', '/', get_called_class()));
+        $classPath = strtolower(str_replace('\\', '/', static::class));
         $controller->partialPath[] = '$/'.$classPath;
 
         parent::__construct($controller);
@@ -144,7 +150,7 @@ class ImportController extends ControllerAction
     }
 
     /**
-     * @return \IgniterLabs\ImportExport\Models\ImportModel
+     * @return ImportModel
      */
     public function getImportModel()
     {
@@ -227,11 +233,10 @@ class ImportController extends ControllerAction
     //
     //
     //
-
     /**
      * Called before the form fields are defined.
      *
-     * @param \Igniter\Admin\Widgets\Form $host The hosting form widget
+     * @param Form $host The hosting form widget
      *
      * @return void
      */
@@ -240,7 +245,7 @@ class ImportController extends ControllerAction
     /**
      * Called after the form fields are defined.
      *
-     * @param \Igniter\Admin\Widgets\Form $host The hosting form widget
+     * @param Form $host The hosting form widget
      *
      * @return void
      */

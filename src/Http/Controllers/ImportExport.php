@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IgniterLabs\ImportExport\Http\Controllers;
 
 use Igniter\Admin\Classes\AdminController;
@@ -7,12 +9,14 @@ use Igniter\Admin\Facades\AdminMenu;
 use Igniter\Admin\Facades\Template;
 use Igniter\Flame\Exception\FlashException;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
+use IgniterLabs\ImportExport\Http\Actions\ExportController;
+use IgniterLabs\ImportExport\Http\Actions\ImportController;
 
 class ImportExport extends AdminController
 {
     public array $implement = [
-        \IgniterLabs\ImportExport\Http\Actions\ImportController::class,
-        \IgniterLabs\ImportExport\Http\Actions\ExportController::class,
+        ImportController::class,
+        ExportController::class,
     ];
 
     public $importConfig = [
@@ -59,7 +63,7 @@ class ImportExport extends AdminController
         $context = post('context');
         throw_unless(in_array($context, ['import', 'export']), new FlashException('Invalid type specified'));
 
-        throw_unless(strlen($code = post('code')), new FlashException('You must choose a type to import'));
+        throw_unless(strlen((string) $code = post('code')), new FlashException('You must choose a type to import'));
 
         throw_unless(resolve(ImportExportManager::class)->getRecordConfig($context, $code),
             new FlashException($code.' is not a registered import/export template')

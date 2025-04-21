@@ -1,3 +1,8 @@
+<?php
+
+declare(strict_types=1);
+
+?>
 @php
     $fieldOptions = []; //$field->options();
     $checkedValues = (array)$field->value;
@@ -44,3 +49,4 @@
     @endif
 
 </div>
+<?php 

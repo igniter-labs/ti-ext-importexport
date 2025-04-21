@@ -1,3 +1,8 @@
+<?php
+
+declare(strict_types=1);
+
+?>
 <div class="container-fluid mt-4">
     <div class="form-fields p-2">
         <div class="form-group section-field span-full">
@@ -55,3 +60,4 @@
         </div>
     </div>
 </div>
+<?php 

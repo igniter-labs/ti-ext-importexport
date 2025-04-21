@@ -1,3 +1,8 @@
+<?php
+
+declare(strict_types=1);
+
+?>
 <div class="panel panel-light mb-0">
     <div class="table-responsive mb-0">
         <table class="table mb-0">
@@ -48,3 +53,4 @@
         </table>
     </div>
 </div>
+<?php 

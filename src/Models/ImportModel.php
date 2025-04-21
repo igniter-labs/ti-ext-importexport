@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IgniterLabs\ImportExport\Models;
 
 use Igniter\Flame\Database\Attach\HasMedia;
@@ -65,7 +67,7 @@ abstract class ImportModel extends Model
 
     public function getImportFilePath()
     {
-        return temp_path().'/ti-import-'.md5(get_class($this)).'.csv';
+        return temp_path().'/ti-import-'.md5(static::class).'.csv';
     }
 
     /**
@@ -84,7 +86,7 @@ abstract class ImportModel extends Model
      */
     protected function processImportData($filePath, $matches, $options)
     {
-        $csvReader = $this->prepareCsvReader($options, $filePath, $matches);
+        $csvReader = $this->prepareCsvReader($options, $filePath);
 
         $result = [];
         $csvStatement = CsvStatement::create();
@@ -162,11 +164,11 @@ abstract class ImportModel extends Model
 
     protected function decodeArrayValue($value, $delimiter = '|')
     {
-        if (!str_contains($value, $delimiter)) {
+        if (!str_contains((string) $value, (string) $delimiter)) {
             return [$value];
         }
 
-        $data = preg_split('~(?<!\\\)'.preg_quote($delimiter, '~').'~', $value);
+        $data = preg_split('~(?<!\\\)'.preg_quote((string) $delimiter, '~').'~', (string) $value);
         $newData = [];
 
         foreach ($data as $_value) {
@@ -199,9 +201,7 @@ abstract class ImportModel extends Model
             'Windows-1252',
         ];
 
-        $translated = array_map(function($option) {
-            return lang('igniterlabs.importexport::default.encodings.'.str_slug($option, '_'));
-        }, $options);
+        $translated = array_map(fn($option) => lang('igniterlabs.importexport::default.encodings.'.str_slug($option, '_')), $options);
 
         return array_combine($options, $translated);
     }
