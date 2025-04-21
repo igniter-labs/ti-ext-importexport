@@ -24,7 +24,7 @@ This extension allows you to import or export TastyIgniter records, such as menu
 You can install the extension via composer using the following command:
 
 ```bash
-composer require igniterlabs/ti-ext-importexport:"^4.0" -W
+composer require igniterlabs/ti-ext-importexport -W
 ```
 
 ## Getting started
