@@ -51,13 +51,13 @@ return [
                 'cssClass' => 'flex-width',
                 'default' => '\\',
             ],
-            'skip_first_row' => [
-                'label' => 'lang:igniterlabs.importexport::default.label_skip_first_row',
+            'first_row_titles' => [
+                'label' => 'lang:igniterlabs.importexport::default.label_include_headers',
                 'type' => 'switch',
                 'cssClass' => 'flex-width',
-                'comment' => 'lang:igniterlabs.importexport::default.help_skip_first_row',
+                'comment' => 'lang:igniterlabs.importexport::default.help_include_headers',
                 'span' => 'left',
-                'default' => 1,
+                'default' => 0,
             ],
             'step_columns' => [
                 'label' => 'lang:igniterlabs.importexport::default.text_tab_title_import_columns',

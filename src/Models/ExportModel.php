@@ -98,7 +98,6 @@ abstract class ExportModel extends Model
     protected function prepareCsvWriter($options, $columns, $results)
     {
         $defaultOptions = [
-            'firstRowTitles' => true,
             'useOutput' => false,
             'fileName' => 'export.csv',
             'delimiter' => null,
@@ -125,7 +124,7 @@ abstract class ExportModel extends Model
         }
 
         // Insert headers
-        if ($options['firstRowTitles']) {
+        if ($options['first_row_titles']) {
             $csvWriter->insertOne($this->getColumnHeaders($columns));
         }
 
@@ -135,7 +134,7 @@ abstract class ExportModel extends Model
         }
 
         if ($options['useOutput']) {
-            $csvWriter->output($options['fileName']);
+            $csvWriter->download($options['fileName']);
         }
 
         return $csvWriter;

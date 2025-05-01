@@ -90,7 +90,7 @@ abstract class ImportModel extends Model
         $csvStatement = CsvStatement::create();
         $contents = $csvStatement->process($csvReader);
         foreach ($contents as $key => $row) {
-            if($options['skip_first_row'] && $key === 0)
+            if(!$options['first_row_titles'] && $key === 0)
                 continue;
 
             $result[] = $this->processImportRow($row, $matches);
@@ -102,7 +102,7 @@ abstract class ImportModel extends Model
     protected function prepareCsvReader($options, $filePath)
     {
         $defaultOptions = [
-            'firstRowTitles' => true,
+            'first_row_titles' => true,
             'delimiter' => null,
             'enclosure' => null,
             'escape' => null,
@@ -130,7 +130,7 @@ abstract class ImportModel extends Model
             $csvReader->setEscape($options['escape']);
         }
 
-        //        if ($options['firstRowTitles'])
+        //        if ($options['first_row_titles'])
         //            $csvReader->setOffset(1);
 
         //        if (is_null($options['encoding']) && $csvReader->isActiveStreamFilter()) {

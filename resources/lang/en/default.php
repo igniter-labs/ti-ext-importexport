@@ -31,7 +31,7 @@ return [
     'label_enclosure' => 'Enclosure Character',
     'label_escape' => 'Escape Character',
     'label_columns' => 'Columns',
-    'label_skip_first_row' => 'Skip first row',
+    'label_include_headers' => 'Include headers',
 
     'label_import_record' => 'Choose record to import',
     'label_import_file' => 'Import file',
@@ -58,7 +58,7 @@ return [
     'help_limit' => 'Number of records to export. If no value is given all records are exported.',
     'help_delimiter' => 'The character used to separate each field',
     'help_enclosure' => 'The character used to enclose each field',
-    'help_skip_first_row' => 'Disabling this will import the header row',
+    'help_include_headers' => 'Enabling this will import the first/header row',
 
     'encodings' => [
         'utf_8' => 'UTF-8',
