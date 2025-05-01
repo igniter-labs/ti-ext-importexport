@@ -155,6 +155,7 @@ trait ImportExportHelper
         $options['enclosure'] = post('enclosure');
         $options['escape'] = post('escape');
         $options['encoding'] = post('encoding');
+        $options['skip_first_row'] = post('skip_first_row');
 
         return $options;
     }

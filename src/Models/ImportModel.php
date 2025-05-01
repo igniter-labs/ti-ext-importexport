@@ -89,7 +89,10 @@ abstract class ImportModel extends Model
         $result = [];
         $csvStatement = CsvStatement::create();
         $contents = $csvStatement->process($csvReader);
-        foreach ($contents as $row) {
+        foreach ($contents as $key => $row) {
+            if($options['skip_first_row'] && $key === 0)
+                continue;
+
             $result[] = $this->processImportRow($row, $matches);
         }
 

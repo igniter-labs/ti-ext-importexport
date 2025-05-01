@@ -51,6 +51,14 @@ return [
                 'cssClass' => 'flex-width',
                 'default' => '\\',
             ],
+            'skip_first_row' => [
+                'label' => 'lang:igniterlabs.importexport::default.label_skip_first_row',
+                'type' => 'switch',
+                'cssClass' => 'flex-width',
+                'comment' => 'lang:igniterlabs.importexport::default.help_skip_first_row',
+                'span' => 'left',
+                'default' => 1,
+            ],
             'step_columns' => [
                 'label' => 'lang:igniterlabs.importexport::default.text_tab_title_import_columns',
                 'type' => 'section',
