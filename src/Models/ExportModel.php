@@ -98,6 +98,7 @@ abstract class ExportModel extends Model
     protected function prepareCsvWriter($options, $columns, $results)
     {
         $defaultOptions = [
+            'firstRowTitles' => true,
             'useOutput' => false,
             'fileName' => 'export.csv',
             'delimiter' => null,
