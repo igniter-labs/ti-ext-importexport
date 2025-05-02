@@ -91,7 +91,10 @@ abstract class ImportModel extends Model
         $result = [];
         $csvStatement = CsvStatement::create();
         $contents = $csvStatement->process($csvReader);
-        foreach ($contents as $row) {
+        foreach ($contents as $key => $row) {
+            if($key === 0) // skip header row
+                continue;
+
             $result[] = $this->processImportRow($row, $matches);
         }
 
@@ -101,7 +104,6 @@ abstract class ImportModel extends Model
     protected function prepareCsvReader($options, $filePath)
     {
         $defaultOptions = [
-            'firstRowTitles' => true,
             'delimiter' => null,
             'enclosure' => null,
             'escape' => null,

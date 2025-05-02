@@ -138,7 +138,7 @@ abstract class ExportModel extends Model
         }
 
         if ($options['useOutput']) {
-            $csvWriter->output($options['fileName']);
+            $csvWriter->download($options['fileName']);
         }
 
         return $csvWriter;
