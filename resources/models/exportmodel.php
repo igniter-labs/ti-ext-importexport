@@ -52,13 +52,6 @@ return [
                 'cssClass' => 'flex-width',
                 'default' => '\\',
             ],
-            'first_row_titles' => [
-                'label' => 'lang:igniterlabs.importexport::default.label_include_headers',
-                'type' => 'switch',
-                'cssClass' => 'flex-width',
-                'span' => 'left',
-                'default' => 1,
-            ],
             'step_columns' => [
                 'label' => 'lang:igniterlabs.importexport::default.text_tab_title_export_columns',
                 'type' => 'section',

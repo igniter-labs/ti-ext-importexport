@@ -124,7 +124,7 @@ abstract class ExportModel extends Model
         }
 
         // Insert headers
-        if ($options['first_row_titles']) {
+        if ($options['firstRowTitles']) {
             $csvWriter->insertOne($this->getColumnHeaders($columns));
         }
 
