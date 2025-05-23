@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__.'/resources',
         __DIR__.'/src',
         __DIR__.'/tests',
     ])
@@ -18,8 +18,12 @@ return RectorConfig::configure()
     ])
     ->withSkip([
         ReturnNeverTypeRector::class,
+        CatchExceptionNameMatchingTypeRector::class,
     ])
     ->withPhpSets(php83: true)
-    ->withTypeCoverageLevel(0)
-    ->withDeadCodeLevel(0)
-    ->withCodeQualityLevel(0);
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        codingStyle: true,
+        typeDeclarations: true,
+    );

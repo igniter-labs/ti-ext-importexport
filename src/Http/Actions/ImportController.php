@@ -4,21 +4,25 @@ declare(strict_types=1);
 
 namespace IgniterLabs\ImportExport\Http\Actions;
 
-use Igniter\Admin\Classes\AdminController;
 use Igniter\Admin\Classes\BaseWidget;
 use Igniter\Admin\Facades\Template;
+use Igniter\Admin\Traits\ValidatesForm;
 use Igniter\Admin\Widgets\Form;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Exception\FlashException;
+use Igniter\Flame\Support\Facades\File;
 use Igniter\System\Classes\ControllerAction;
+use IgniterLabs\ImportExport\Http\Controllers\ImportExport;
+use IgniterLabs\ImportExport\Models\History;
 use IgniterLabs\ImportExport\Models\ImportModel;
 use IgniterLabs\ImportExport\Traits\ImportExportHelper;
-use Illuminate\Database\Eloquent\MassAssignmentException;
-use Illuminate\Support\Facades\File;
+use League\Csv\Reader as CsvReader;
+use Throwable;
 
 class ImportController extends ControllerAction
 {
     use ImportExportHelper;
+    use ValidatesForm;
 
     /**
      * @var Model Import model
@@ -51,7 +55,7 @@ class ImportController extends ControllerAction
 
     /**
      * Behavior constructor
-     * @param AdminController $controller
+     * @param ImportExport $controller
      */
     public function __construct($controller)
     {
@@ -64,22 +68,36 @@ class ImportController extends ControllerAction
         $this->setConfig($controller->importConfig, $this->requiredConfig);
     }
 
-    public function import($context, $recordName = null)
+    public function import(string $context, string $recordName, string $historyUuid)
     {
-        if ($redirect = $this->checkPermissions()) {
+        $this->loadRecordConfig($context, $recordName);
+
+        if (!is_null($redirect = $this->checkPermissions())) {
+            flash()->error(lang('igniter::admin.alert_user_restricted'));
+
             return $redirect;
         }
 
-        $this->loadRecordConfig($context, $recordName);
+        /** @var History|null $history */
+        $history = History::query()->where('uuid', $historyUuid)->where('code', $recordName)->first();
+        if (!$history || !$history->csvExists()) {
+            flash()->error(lang('igniterlabs.importexport::default.error_invalid_import_file'));
+
+            return $this->getRedirectUrl();
+        }
 
         $pageTitle = lang($this->getConfig('record[title]', 'igniterlabs.importexport::default.text_import_title'));
         Template::setTitle($pageTitle);
         Template::setHeading($pageTitle);
 
         $this->initImportForms();
+
+        $this->prepareImportVars($history);
+
+        return null;
     }
 
-    public function renderImport()
+    public function renderImport(): string
     {
         if (!is_null($this->importToolbarWidget)) {
             $import[] = $this->importToolbarWidget->render();
@@ -90,63 +108,111 @@ class ImportController extends ControllerAction
         return implode(PHP_EOL, $import);
     }
 
-    public function import_onImport($context, $recordName)
+    public function onLoadImportForm()
     {
-        $partials = [];
-
         try {
-            $this->loadRecordConfig($context, $recordName);
-            $model = $this->getImportModel();
+            $validated = request()->validate([
+                'code' => ['required', 'string'],
+                'import_file' => ['required', 'file', 'mimes:csv,txt'],
+            ], [
+                'code.required' => 'You must choose a record type to import',
+                'import_file.required' => 'You must upload a file to import',
+                'import_file.file' => 'You must upload a valid csv file',
+                'import_file.mimes' => 'You must upload a valid csv file',
+            ]);
 
-            $matches = $this->getImportMatchColumns();
+            $this->loadRecordConfig('import', $recordName = $validated['code']);
 
-            if ($optionData = post('ImportSecondary')) {
-                $model->fill($optionData);
+            throw_unless($this->getConfig('record'), new FlashException($recordName.' is not a registered import template'));
+
+            if (!is_null($redirect = $this->checkPermissions())) {
+                flash()->error(lang('igniter::admin.alert_user_restricted'));
+
+                return $redirect;
             }
 
-            $importOptions = $this->getFormatOptionsFromPost();
+            /** @var History $history */
+            $history = History::create([
+                'user_id' => $this->controller->getUser()->getKey(),
+                'type' => 'import',
+                'code' => $recordName,
+                'status' => 'pending',
+            ]);
 
-            $model->import($matches, $importOptions);
+            $csvPath = $history->getCsvPath();
+            if (!File::exists($directory = dirname((string)$csvPath))) {
+                File::makeDirectory($directory, 0755, true);
+            }
 
-            File::delete($this->getImportFilePath());
+            $uploadedFile = request()->file('import_file');
+            File::put($csvPath, File::get($uploadedFile->getRealPath()));
 
-            $this->vars['importResults'] = $model->getResultStats();
-            $this->vars['returnUrl'] = $this->getRedirectUrl();
+            return $this->controller->redirect('igniterlabs/importexport/import_export/import/'.$recordName.'/'.$history->uuid);
+        } catch (Throwable $ex) {
+            flash()->error($ex->getMessage())->important();
 
-            $partials['#importContainer'] = $this->importExportMakePartial('import_result');
-        } catch (MassAssignmentException $ex) {
-            throw new FlashException(lang(
-                'admin::lang.form.mass_assignment_failed',
-                ['attribute' => $ex->getMessage()]
-            ));
+            return $this->getRedirectUrl();
         }
-
-        return $partials;
     }
 
-    public function import_onImportUploadFile($context, $recordName)
+    public function import_onDeleteImportFile($context, $recordName, $historyUuid)
     {
-        if (!request()->hasFile('import_file')) {
-            throw new FlashException('You must upload a file to import');
-        }
-
-        $uploadedFile = request()->file('import_file');
-        if (!$uploadedFile->isValid()) {
-            throw new FlashException($uploadedFile->getErrorMessage());
-        }
-
-        if (!in_array($uploadedFile->getMimeType(), ['csv', 'text/csv', 'text/plain'])) {
-            throw new FlashException('you must upload a valida csv file');
-        }
-
-        $this->loadRecordConfig($context, $recordName);
-
-        File::put(
-            $this->getImportFilePath(),
-            File::get($uploadedFile->getRealPath())
+        throw_unless(
+            $history = History::query()->where('uuid', $historyUuid)->where('code', $recordName)->first(),
+            new FlashException(lang('igniterlabs.importexport::default.error_invalid_import_file')),
         );
 
-        return $this->controller->redirectBack();
+        $history->delete();
+
+        return $this->getRedirectUrl();
+    }
+
+    public function import_onImport($context, $recordName, $historyUuid)
+    {
+        $this->loadRecordConfig($context, $recordName);
+
+        throw_if($this->checkPermissions(), new FlashException(lang('igniter::admin.alert_user_restricted')));
+
+        $validated = request()->validate([
+            'delimiter' => ['required', 'string'],
+            'enclosure' => ['required', 'string'],
+            'escape' => ['required', 'string'],
+            'ImportSecondary' => ['nullable', 'array'],
+            'match_columns' => ['required', 'array'],
+            'match_columns.*' => ['required', 'string'],
+            'import_columns' => ['required', 'array'],
+            'import_columns.*' => ['required', 'string'],
+        ]);
+
+        throw_unless(
+            /** @var History|null $history */
+            $history = History::query()->where('uuid', $historyUuid)->where('code', $recordName)->first(),
+            new FlashException(lang('igniterlabs.importexport::default.error_invalid_import_file')),
+        );
+
+        $model = $this->getImportModel();
+
+        $history->update(['status' => 'processing', 'attempted_data' => $validated]);
+
+        if ($optionData = array_get($validated, 'ImportSecondary')) {
+            $model->fill($optionData);
+        }
+
+        throw_unless(
+            $importColumns = $this->processImportColumnsFromRequest($validated),
+            new FlashException(lang('igniterlabs.importexport::default.error_empty_import_columns')),
+        );
+
+        $importOptions = array_except($validated, ['ImportSecondary', 'match_columns', 'import_columns']);
+        $model->import($importColumns, $importOptions, $history->getCsvPath());
+
+        $history->markCompleted([
+            'error_message' => $this->buildImportResultMessage($model->getResultStats()),
+        ]);
+
+        File::delete($history->getCsvPath());
+
+        return $this->getRedirectUrl();
     }
 
     /**
@@ -154,7 +220,7 @@ class ImportController extends ControllerAction
      */
     public function getImportModel()
     {
-        return $this->getModelForType('import');
+        return $this->importModel ??= new ($this->getModelForType('import'));
     }
 
     protected function initImportForms()
@@ -164,23 +230,17 @@ class ImportController extends ControllerAction
         $this->importPrimaryFormWidget = $this->makePrimaryFormWidgetForType($model, 'import');
 
         $this->importSecondaryFormWidget = $this->makeSecondaryFormWidgetForType($model, 'import');
-
-        if (!$this->importSecondaryFormWidget && $this->importPrimaryFormWidget) {
-            $stepSection = $this->importPrimaryFormWidget->getField('step_secondary');
-            $stepSection->hidden = true;
-        }
-
-        $this->prepareImportVars();
     }
 
-    protected function prepareImportVars()
+    protected function prepareImportVars(History $history)
     {
         $this->vars['recordTitle'] = $this->getConfig('record[title]', 'Unknown Title');
         $this->vars['recordDescription'] = $this->getConfig('record[description]', 'Unknown description');
         $this->vars['importPrimaryFormWidget'] = $this->importPrimaryFormWidget;
         $this->vars['importSecondaryFormWidget'] = $this->importSecondaryFormWidget;
-        $this->vars['importColumns'] = $this->getImportColumns();
-        $this->vars['importFileColumns'] = $this->getImportFileColumns();
+        $this->vars['importColumns'] = $importColumns = $this->getImportColumns();
+        $this->vars['importFileUuid'] = $history->uuid;
+        $this->vars['importFileColumns'] = $this->getImportFileColumns($history, $importColumns);
 
         // Make these variables available to widgets
         $this->controller->vars += $this->vars;
@@ -188,46 +248,40 @@ class ImportController extends ControllerAction
 
     protected function getImportColumns()
     {
-        if (!is_null($this->importColumns)) {
-            return $this->importColumns;
+        if (is_null($this->importColumns)) {
+            $configFile = $this->getConfig('record[configFile]');
+            $columns = $this->makeListColumns($configFile);
+
+            throw_unless($columns,
+                new FlashException(lang('igniterlabs.importexport::default.error_empty_import_columns')),
+            );
+
+            $this->importColumns = collect($columns)->map(fn($label): string => lang($label))->all();
         }
 
-        $configFile = $this->getConfig('record[configFile]');
-        $columns = $this->makeListColumns($configFile);
-
-        if (empty($columns)) {
-            throw new FlashException(lang('igniterlabs.importexport::default.error_empty_import_columns'));
-        }
-
-        return $this->importColumns = $columns;
+        return $this->importColumns;
     }
 
-    protected function getImportFileColumns()
+    protected function getImportFileColumns(History $history, array $importColumns): array
     {
-        if (!$this->importFilePathExists()) {
-            return;
-        }
+        $reader = CsvReader::createFromPath($history->getCsvPath(), 'r');
+        $firstRow = $reader->nth(0);
 
-        $path = $this->getImportFilePath();
-        $reader = $this->createCsvReader($path);
-        $firstRow = $reader->fetchOne(0);
-
-        if (json_encode($firstRow) === false) {
-            throw new FlashException(lang('igniterlabs.importexport::default.encoding_not_supported'));
-        }
-
-        return $firstRow;
+        return array_diff($firstRow, array_values($importColumns)) === []
+            ? $firstRow
+            : throw new FlashException(lang('igniterlabs.importexport::default.error_missing_csv_headers'));
     }
 
-    protected function getImportFilePath()
+    protected function processImportColumnsFromRequest(array $request): array
     {
-        return $this->getImportModel()->getImportFilePath();
-    }
+        $definitions = $this->getImportColumns();
+        $dbColumns = array_filter(array_get($request, 'import_columns', []));
 
-    protected function importFilePathExists()
-    {
-        return File::exists($path = $this->getImportFilePath())
-            ? $path : null;
+        return collect(array_get($request, 'match_columns', []))
+            ->filter(fn($fileColumn): bool => in_array($fileColumn, $definitions))
+            ->mapWithKeys(fn($fileColumn, $index) => [$index => [array_get($dbColumns, $index), $fileColumn]])
+            ->filter()
+            ->all();
     }
 
     //
@@ -250,4 +304,22 @@ class ImportController extends ControllerAction
      * @return void
      */
     public function importFormExtendFields($host, $fields) {}
+
+    protected function buildImportResultMessage(array $importResults): string
+    {
+        $importResults = (object)$importResults;
+
+        $resultMessage = implode(PHP_EOL, array_filter([
+            sprintf(lang('igniterlabs.importexport::default.text_import_created'), $importResults->created),
+            sprintf(lang('igniterlabs.importexport::default.text_import_updated'), $importResults->updated),
+            sprintf(lang('igniterlabs.importexport::default.text_import_errors'), $importResults->errorCount),
+        ]));
+
+        if ($importResults->errorCount) {
+            $resultMessage .= PHP_EOL;
+            $resultMessage .= collect($importResults->errors)->map(fn($message, $row): string => sprintf(lang('igniterlabs.importexport::default.text_import_row'), $row, $message))->implode(PHP_EOL);
+        }
+
+        return $resultMessage;
+    }
 }

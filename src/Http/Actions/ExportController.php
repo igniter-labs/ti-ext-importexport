@@ -4,20 +4,27 @@ declare(strict_types=1);
 
 namespace IgniterLabs\ImportExport\Http\Actions;
 
-use Igniter\Admin\Classes\AdminController;
+use Exception;
 use Igniter\Admin\Classes\BaseWidget;
 use Igniter\Admin\Facades\Template;
+use Igniter\Admin\Traits\ValidatesForm;
 use Igniter\Admin\Widgets\Form;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Exception\FlashException;
+use Igniter\Flame\Support\Facades\File;
 use Igniter\System\Classes\ControllerAction;
+use IgniterLabs\ImportExport\Http\Controllers\ImportExport;
 use IgniterLabs\ImportExport\Models\ExportModel;
+use IgniterLabs\ImportExport\Models\History;
 use IgniterLabs\ImportExport\Traits\ImportExportHelper;
-use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Response;
+use Throwable;
 
 class ExportController extends ControllerAction
 {
     use ImportExportHelper;
+    use ValidatesForm;
 
     /**
      * @var Model Export model
@@ -55,7 +62,7 @@ class ExportController extends ControllerAction
 
     /**
      * Behavior constructor
-     * @param AdminController $controller
+     * @param ImportExport $controller
      */
     public function __construct($controller)
     {
@@ -66,36 +73,68 @@ class ExportController extends ControllerAction
 
         // Build configuration
         $this->setConfig($controller->exportConfig, $this->requiredConfig);
-
-        // Override config
-        if ($exportFileName = $this->getConfig('fileName')) {
-            $this->exportFileName = $exportFileName;
-        }
     }
 
-    public function export($context, $recordName = null)
+    public function export($context, $recordName = null): ?RedirectResponse
     {
-        if ($redirect = $this->checkPermissions()) {
+        $this->loadRecordConfig($context, $recordName);
+
+        if (($redirect = $this->checkPermissions()) instanceof RedirectResponse) {
+            flash()->error(lang('igniter::admin.alert_user_restricted'));
+
             return $redirect;
         }
-
-        $this->loadRecordConfig($context, $recordName);
 
         $pageTitle = lang($this->getConfig('record[title]', 'igniterlabs.importexport::default.text_export_title'));
         Template::setTitle($pageTitle);
         Template::setHeading($pageTitle);
 
         $this->initExportForms();
+
+        return null;
     }
 
-    public function download($context, $recordName = null, $exportName = null, $outputName = null)
+    public function download($context, $recordName = null, $exportName = null)
     {
         $this->loadRecordConfig('export', $recordName);
 
-        return $this->getExportModel()->download($exportName, $outputName);
+        if (($redirect = $this->checkPermissions()) instanceof RedirectResponse) {
+            flash()->error(lang('igniter::admin.alert_user_restricted'));
+
+            return $redirect;
+        }
+
+        try {
+            // Validate the export name
+            $this->getExportModel();
+
+            $history = History::query()
+                ->where('type', 'export')
+                ->where('code', $recordName)
+                ->where('uuid', str_before($exportName, '.csv'))
+                ->where('status', 'completed')
+                ->first();
+
+            throw_unless($history, new FlashException(lang('igniterlabs.importexport::default.error_export_not_found')));
+
+            $csvPath = $history->getCsvPath();
+
+            throw_unless(File::exists($csvPath),
+                new FlashException(lang('igniterlabs.importexport::default.error_file_not_found')),
+            );
+
+            return Response::download(
+                $csvPath,
+                sprintf('%s-%s.csv', str_after($recordName, 'importexport-'), date('Y-m-d_H-i-s')),
+            );
+        } catch (Throwable $ex) {
+            flash()->error($ex->getMessage())->important();
+
+            return $this->controller->refresh();
+        }
     }
 
-    public function renderExport()
+    public function renderExport(): string
     {
         if (!is_null($this->exportToolbarWidget)) {
             $import[] = $this->exportToolbarWidget->render();
@@ -106,42 +145,78 @@ class ExportController extends ControllerAction
         return implode(PHP_EOL, $import);
     }
 
+    public function onLoadExportForm()
+    {
+        throw_unless(strlen((string)$recordName = post('code')), new FlashException('You must choose a record type to export'));
+
+        $this->loadRecordConfig('export', $recordName);
+
+        throw_unless($this->getConfig('record'), new FlashException($recordName.' is not a registered export template'));
+
+        if (($redirect = $this->checkPermissions()) instanceof RedirectResponse) {
+            flash()->error(lang('igniter::admin.alert_user_restricted'));
+
+            return $redirect;
+        }
+
+        return $this->controller->redirect('igniterlabs/importexport/import_export/export/'.$recordName);
+    }
+
     public function export_onExport($context, $recordName)
     {
-        $partials = [];
+        $this->loadRecordConfig($context, $recordName);
+
+        throw_if($this->checkPermissions(), new FlashException(lang('igniter::admin.alert_user_restricted')));
+
+        $validated = request()->validate([
+            'offset' => ['nullable', 'integer'],
+            'limit' => ['nullable', 'integer'],
+            'delimiter' => ['string'],
+            'enclosure' => ['string'],
+            'escape' => ['string'],
+            'ExportSecondary' => ['nullable', 'array'],
+            'export_columns' => ['required', 'array'],
+            'export_columns.*' => ['required', 'string'],
+        ]);
+
+        /** @var History $history */
+        $history = History::create([
+            'user_id' => $this->controller->getUser()->getKey(),
+            'type' => $context,
+            'code' => $recordName,
+            'status' => 'pending',
+            'attempted_data' => $validated,
+        ]);
 
         try {
-            $this->loadRecordConfig($context, $recordName);
-
             $model = $this->getExportModel();
 
-            if ($secondaryData = post('ExportSecondary')) {
+            if ($secondaryData = array_get($validated, 'ExportSecondary')) {
                 $model->fill($secondaryData);
             }
 
-            $columns = $this->processExportColumnsFromPost();
-            $options = $this->getFormatOptionsFromPost();
+            $exportColumns = $this->processExportColumnsFromRequest($validated);
+            $exportOptions = array_except($validated, ['ExportSecondary', 'export_columns', 'visible_columns']);
 
-            $reference = $model->export($columns, $options);
-            $fileUrl = admin_url('igniterlabs/importexport/import_export/download/'.
-                $recordName.'/'.$reference.'/'.$this->exportFileName
-            );
+            $csvWriter = $model->export($exportColumns, $exportOptions);
 
-            $this->vars['fileUrl'] = $fileUrl;
-            $this->vars['returnUrl'] = $this->getRedirectUrl();
+            $csvPath = $history->getCsvPath();
+            if (!File::exists($directory = dirname((string)$csvPath))) {
+                File::makeDirectory($directory, 0755, true);
+            }
 
-            flash()->success(
-                'File export process completed! The browser will now redirect to the file download.'
-            )->important();
+            File::put($csvPath, $csvWriter->toString());
 
-            $partials['@#exportContainer'] = $this->importExportMakePartial('export_result');
-        } catch (MassAssignmentException $ex) {
-            throw new FlashException($ex->getMessage());
+            $history->markCompleted();
+
+            flash()->success(lang('igniterlabs.importexport::default.alert_export_success'))->important();
+
+            return $this->getRedirectUrl();
+        } catch (Exception $ex) {
+            $history->delete();
+
+            throw $ex;
         }
-
-        $partials['#notification'] = $this->makePartial('flash');
-
-        return $partials;
     }
 
     /**
@@ -149,7 +224,7 @@ class ExportController extends ControllerAction
      */
     public function getExportModel()
     {
-        return $this->getModelForType('export');
+        return $this->exportModel ??= new ($this->getModelForType('export'));
     }
 
     protected function initExportForms()
@@ -160,9 +235,9 @@ class ExportController extends ControllerAction
 
         $this->exportSecondaryFormWidget = $this->makeSecondaryFormWidgetForType($model, 'export');
 
-        if (!$this->exportSecondaryFormWidget && $this->exportPrimaryFormWidget) {
-            $stepSection = $this->exportPrimaryFormWidget->getField('step_secondary');
-            $stepSection->hidden = true;
+        $stepSectionField = $this->exportPrimaryFormWidget->getField('step_secondary');
+        if (!$this->exportSecondaryFormWidget && $stepSectionField) {
+            $stepSectionField->hidden = true;
         }
 
         $this->prepareExportVars();
@@ -182,18 +257,27 @@ class ExportController extends ControllerAction
 
     protected function getExportColumns()
     {
-        if (!is_null($this->exportColumns)) {
-            return $this->exportColumns;
+        if (is_null($this->exportColumns)) {
+            $configFile = $this->getConfig('record[configFile]');
+            $columns = $this->makeListColumns($configFile);
+
+            throw_unless($columns,
+                new FlashException(lang('igniterlabs.importexport::default.error_empty_export_columns')),
+            );
+
+            $this->exportColumns = collect($columns)->map(fn($label): string => lang($label))->all();
         }
 
-        $configFile = $this->getConfig('record[configFile]');
-        $columns = $this->makeListColumns($configFile);
+        return $this->exportColumns;
+    }
 
-        throw_if(empty($columns),
-            new FlashException(lang('igniterlabs.importexport::default.error_empty_export_columns'))
-        );
+    protected function processExportColumnsFromRequest(array $request): array
+    {
+        $definitions = $this->getExportColumns();
 
-        return $this->exportColumns = $columns;
+        return collect(array_get($request, 'export_columns', []))
+            ->mapWithKeys(fn($exportColumn) => [$exportColumn => array_get($definitions, $exportColumn, '???')])
+            ->all();
     }
 
     //

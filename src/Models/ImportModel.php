@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace IgniterLabs\ImportExport\Models;
 
-use Igniter\Flame\Database\Attach\HasMedia;
 use Igniter\Flame\Database\Model;
 use League\Csv\Reader as CsvReader;
 use League\Csv\Statement as CsvStatement;
@@ -14,11 +13,7 @@ use League\Csv\Statement as CsvStatement;
  */
 abstract class ImportModel extends Model
 {
-    use HasMedia;
-
     protected $guarded = [];
-
-    public $mediable = ['import_file'];
 
     /**
      * @var array Import statistics store.
@@ -26,9 +21,8 @@ abstract class ImportModel extends Model
     protected $resultStats = [
         'updated' => 0,
         'created' => 0,
+        'errorCount' => 0,
         'errors' => [],
-        'warnings' => [],
-        'skipped' => [],
     ];
 
     /**
@@ -45,79 +39,43 @@ abstract class ImportModel extends Model
 
     /**
      * Import data based on column names matching header indexes in the CSV.
-     * The $matches array should be in the format of:
-     *
-     *    [
-     *        0 => [db_column_name1, db_column_name2],
-     *        1 => [db_column_name3],
-     *        ...
-     *    ]
-     *
-     * The key (0, 1) is the column index in the CSV and the value
-     * is another array of target database column names.
-     * @param array $options
      */
-    public function import($matches, $options = [])
+    public function import($columns, $options = [], ?string $importCsvFile = null)
     {
-        $path = $this->getImportFilePath();
-        $data = $this->processImportData($path, $matches, $options);
+        $data = $this->processImportData($importCsvFile, $columns, $options);
 
         return $this->importData($data);
     }
 
-    public function getImportFilePath()
-    {
-        return temp_path().'/ti-import-'.md5(static::class).'.csv';
-    }
-
     /**
      * Converts column index to database column map to an array containing
-     * database column names and values pulled from the CSV file. Eg:
-     *
-     *   [0 => [first_name], 1 => [last_name]]
-     *
-     * Will return:
-     *
-     *   [first_name => Chef, last_name => Sam],
-     *   [first_name => John, last_name => Doe],
-     *   [...]
-     *
-     * @return array
+     * database column names and values pulled from the CSV file.
      */
-    protected function processImportData($filePath, $matches, $options)
+    protected function processImportData(string $filePath, $columns, $options)
     {
         $csvReader = $this->prepareCsvReader($options, $filePath);
 
         $result = [];
-        $csvStatement = CsvStatement::create();
+        $csvStatement = new CsvStatement;
         $contents = $csvStatement->process($csvReader);
-        foreach ($contents as $key => $row) {
-            if($key === 0) // skip header row
-                continue;
-
-            $result[] = $this->processImportRow($row, $matches);
+        foreach ($contents as $row) {
+            $result[] = $this->processImportRow($row, $columns);
         }
 
         return $result;
     }
 
-    protected function prepareCsvReader($options, $filePath)
+    protected function prepareCsvReader($options, string $filePath)
     {
         $defaultOptions = [
             'delimiter' => null,
             'enclosure' => null,
             'escape' => null,
-            'encoding' => null,
         ];
 
         $options = array_merge($defaultOptions, $options);
 
         $csvReader = CsvReader::createFromPath($filePath, 'r+');
-
-        // Filter out empty rows
-        //        $csvReader->addFilter(function (array $row) {
-        //            return count($row) > 1 || reset($row) !== null;
-        //        });
 
         if (!is_null($options['delimiter'])) {
             $csvReader->setDelimiter($options['delimiter']);
@@ -131,17 +89,7 @@ abstract class ImportModel extends Model
             $csvReader->setEscape($options['escape']);
         }
 
-        //        if ($options['firstRowTitles'])
-        //            $csvReader->setOffset(1);
-
-        //        if (is_null($options['encoding']) && $csvReader->isActiveStreamFilter()) {
-        //            $csvReader->appendStreamFilter(sprintf(
-        //                '%s%s:%s',
-        //                'igniter.csv.transcode.',
-        //                strtolower($options['encoding']),
-        //                'utf-8'
-        //            ));
-        //        }
+        $csvReader->setHeaderOffset(0);
 
         return $csvReader;
     }
@@ -150,27 +98,24 @@ abstract class ImportModel extends Model
      * Converts a single row of CSV data to the column map.
      * @return array
      */
-    protected function processImportRow($rowData, $matches)
+    protected function processImportRow($rowData, $columns)
     {
         $newRow = [];
 
-        foreach ($matches as $columnIndex => $dbNames) {
-            $value = array_get($rowData, $columnIndex);
-            foreach ((array)$dbNames as $dbName) {
-                $newRow[$dbName] = $value;
-            }
+        foreach ($columns as [$dbName, $fileColumn]) {
+            $newRow[$dbName] = array_get($rowData, $fileColumn);
         }
 
         return $newRow;
     }
 
-    protected function decodeArrayValue($value, $delimiter = '|')
+    protected function decodeArrayValue($value, string $delimiter = '|')
     {
-        if (!str_contains((string) $value, (string) $delimiter)) {
+        if (!str_contains((string)$value, $delimiter)) {
             return [$value];
         }
 
-        $data = preg_split('~(?<!\\\)'.preg_quote((string) $delimiter, '~').'~', (string) $value);
+        $data = preg_split('~(?<!\\\)'.preg_quote($delimiter, '~').'~', (string)$value);
         $newData = [];
 
         foreach ($data as $_value) {
@@ -203,7 +148,7 @@ abstract class ImportModel extends Model
             'Windows-1252',
         ];
 
-        $translated = array_map(fn($option) => lang('igniterlabs.importexport::default.encodings.'.str_slug($option, '_')), $options);
+        $translated = array_map(fn($option): string => lang('igniterlabs.importexport::default.encodings.'.str_slug($option, '_')), $options);
 
         return array_combine($options, $translated);
     }
@@ -213,17 +158,7 @@ abstract class ImportModel extends Model
     //
     public function getResultStats()
     {
-        $this->resultStats['errorCount'] = count($this->resultStats['errors']);
-        $this->resultStats['warningCount'] = count($this->resultStats['warnings']);
-        $this->resultStats['skippedCount'] = count($this->resultStats['skipped']);
-
-        $this->resultStats['hasMessages'] = (
-            $this->resultStats['errorCount'] > 0 ||
-            $this->resultStats['warningCount'] > 0 ||
-            $this->resultStats['skippedCount'] > 0
-        );
-
-        return (object)$this->resultStats;
+        return $this->resultStats;
     }
 
     protected function logUpdated()
@@ -238,16 +173,7 @@ abstract class ImportModel extends Model
 
     protected function logError($rowIndex, $message)
     {
+        $this->resultStats['errorCount']++;
         $this->resultStats['errors'][$rowIndex] = $message;
-    }
-
-    protected function logWarning($rowIndex, $message)
-    {
-        $this->resultStats['warnings'][$rowIndex] = $message;
-    }
-
-    protected function logSkipped($rowIndex, $message)
-    {
-        $this->resultStats['skipped'][$rowIndex] = $message;
     }
 }

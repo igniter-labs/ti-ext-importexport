@@ -1,14 +1,8 @@
-<?php
-
-declare(strict_types=1);
-
-?>
 <div class="row-fluid">
     {!! form_open([
         'id' => 'form-widget',
+        'class' => 'pt-3',
         'role' => 'form',
-        'enctype' => 'multipart/form-data',
-        'method' => 'POST',
     ]) !!}
 
     <div id="importContainer">
@@ -17,4 +11,3 @@ declare(strict_types=1);
 
     {!! form_close() !!}
 </div>
-<?php 

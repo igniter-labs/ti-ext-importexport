@@ -1,8 +1,3 @@
-<?php
-
-declare(strict_types=1);
-
-?>
 <div class="panel panel-light mb-0">
     <div class="table-responsive mb-0">
         <table class="table mb-0">
@@ -38,7 +33,7 @@ declare(strict_types=1);
                             >
                                 <option value="">@lang('admin::lang.text_please_select')</option>
                                 @foreach ($importColumns as $column => $columnName)
-                                    <option value="{{ $column }}">{{ $column }}</option>
+                                    <option value="{{ $column }}" @selected($loop->index === $index)>{{ $column}}</option>
                                 @endforeach
                             </select>
                         </td>
@@ -53,4 +48,3 @@ declare(strict_types=1);
         </table>
     </div>
 </div>
-<?php 

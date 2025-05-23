@@ -11,11 +11,16 @@ use Igniter\System\Classes\ExtensionManager;
  */
 class ImportExportManager
 {
-    protected static $importExportCache;
+    protected array $importExportCache = [];
 
     public function getRecordConfig($type, $name, $default = null)
     {
         return array_get($this->listImportExportsForType($type), $name, $default);
+    }
+
+    public function getRecordLabel($type, $name, $default = null)
+    {
+        return array_get($this->getRecordConfig($type, $name), 'label', $default);
     }
 
     public function listImportExportsForType($type)
@@ -26,30 +31,23 @@ class ImportExportManager
     //
     // Registration
     //
-
     /**
      * Returns a list of the registered import/exports.
-     * @return array
      */
-    public function listImportExports()
+    public function listImportExports(): array
     {
-        if (self::$importExportCache === null) {
-            (new static)->loadImportExports();
+        if (!$this->importExportCache) {
+            $this->loadImportExports();
         }
 
-        return self::$importExportCache;
+        return $this->importExportCache;
     }
 
     /**
      * Loads registered import/exports from extensions
-     * @return void
      */
-    public function loadImportExports()
+    public function loadImportExports(): void
     {
-        if (!self::$importExportCache) {
-            self::$importExportCache = [];
-        }
-
         $registeredResources = resolve(ExtensionManager::class)->getRegistrationMethodValues('registerImportExport');
         foreach ($registeredResources as $extensionCode => $records) {
             $this->registerImportExports($extensionCode, $records);
@@ -59,7 +57,7 @@ class ImportExportManager
     /**
      * Registers the import/exports.
      */
-    public function registerImportExports($extensionCode, array $definitions)
+    public function registerImportExports(string $extensionCode, array $definitions): void
     {
         foreach ($definitions as $type => $definition) {
             if (!in_array($type, ['import', 'export'])) {
@@ -70,7 +68,7 @@ class ImportExportManager
         }
     }
 
-    public function registerImportExportsForType($type, $extensionCode, array $definitions)
+    public function registerImportExportsForType($type, string $extensionCode, array $definitions): void
     {
         $defaultDefinitions = [
             'label' => null,
@@ -82,7 +80,7 @@ class ImportExportManager
         foreach ($definitions as $name => $definition) {
             $name = str_replace('.', '-', $extensionCode.'.'.$name);
 
-            static::$importExportCache[$type][$name] = array_merge($defaultDefinitions, $definition);
+            $this->importExportCache[$type][$name] = array_merge($defaultDefinitions, $definition);
         }
     }
 }

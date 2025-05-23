@@ -1,8 +1,3 @@
-<?php
-
-declare(strict_types=1);
-
-?>
 <div class="container-fluid mt-4">
     <div class="form-fields p-2">
         <div class="form-group section-field span-full">
@@ -54,10 +49,46 @@ declare(strict_types=1);
                 <h5 class="text-muted">@lang('igniterlabs.importexport::default.text_history_title')</h5>
             </div>
         </div>
-        <div id="import-export-history" class="tab-pane fade" role="tabpanel">
-            <div class="panel panel-light">
+        <div id="import-export-history" class="form-group" role="tabpanel">
+            <div class="card card-light p-3">
+                <div class="table-responsive rounded">
+                    <table
+                        id="import-export-history-table"
+                        class="table table-hover mb-0 border-bottom"
+                    >
+                        <thead id="import-export-history-table-head">
+                            <tr>
+                                <th>@lang('igniterlabs.importexport::default.column_history_date')</th>
+                                <th>@lang('igniterlabs.importexport::default.column_history_type')</th>
+                                <th>@lang('igniterlabs.importexport::default.column_history_status')</th>
+                                <th>@lang('igniterlabs.importexport::default.column_history_message')</th>
+                                <th class="text-end"></th>
+                                <th class="text-end">@lang('igniterlabs.importexport::default.column_history_id')</th>
+                            </tr>
+                        </thead>
+                        <tbody id="import-export-history-table-body">
+                            @if ($history)
+                                @foreach ($history as $record)
+                                    <tr>
+                                        <td>{{ day_elapsed($record->created_at) }}</td>
+                                        <td>{{ $record->label }}</td>
+                                        <td>{{ ucfirst($record->status) }}</td>
+                                        <td>{{ html(nl2br($record->error_message)) }}</td>
+                                        <td class="text-end">
+                                            @if($record->download_url)
+                                                <a
+                                                    href="{{ $record->download_url }}"
+                                                >@lang('igniterlabs.importexport::default.button_download')</a>
+                                            @endif
+                                        </td>
+                                        <td class="text-end">{{ $record->id }}</td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<?php 

@@ -1,8 +1,3 @@
-<?php
-
-declare(strict_types=1);
-
-?>
 <div class="form-widget">
     <div class="p-3">
         <div class="d-flex flex-row w-100">
@@ -81,5 +76,3 @@ declare(strict_types=1);
         @endif
     </div>
 </div>
-
-<?php 

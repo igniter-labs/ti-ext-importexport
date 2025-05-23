@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace IgniterLabs\ImportExport\Traits;
 
-use Igniter\Admin\Helpers\AdminHelper;
 use Igniter\Admin\Widgets\Form;
 use Igniter\Admin\Widgets\Toolbar;
 use Igniter\Flame\Exception\FlashException;
 use Igniter\User\Facades\AdminAuth;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
-use Illuminate\Support\Facades\Redirect;
-use League\Csv\Reader as CsvReader;
+use Illuminate\Http\RedirectResponse;
 
 trait ImportExportHelper
 {
@@ -22,57 +20,43 @@ trait ImportExportHelper
 
     protected function getModelForType($type)
     {
-        if (!is_null($this->{$type.'Model'})) {
-            return $this->{$type.'Model'};
-        }
-
         if (!$modelClass = $this->getConfig('record[model]')) {
             throw new FlashException(sprintf(lang('igniterlabs.importexport::default.error_missing_model'), $type));
         }
 
-        return $this->{$type.'Model'} = new $modelClass;
+        return new $modelClass;
     }
 
-    protected function makeListColumns($configFile)
+    protected function makeListColumns($configFile): array
     {
-        $columns = $this->loadConfig($configFile, [], 'columns');
-        if (!is_array($columns)) {
-            return null;
-        }
-
-        $result = [];
-        foreach ($columns as $attribute => $column) {
-            if (is_array($column)) {
-                $result[$attribute] = array_get($column, 'label', $attribute);
-            } else {
-                $result[$attribute] = $column ?: $attribute;
-            }
-        }
-
-        return $result;
+        return $this->loadConfig($configFile, [], 'columns') ?? [];
     }
 
-    protected function checkPermissions()
+    protected function checkPermissions(): ?RedirectResponse
     {
         $permissions = (array)$this->getConfig('record[permissions]');
 
-        if ($permissions && !AdminAuth::getUser()->hasPermission($permissions)) {
-            return Redirect::back(302, [], AdminHelper::url('dashboard'));
-        }
+        return $permissions && !AdminAuth::getUser()->hasPermission($permissions)
+            ? $this->controller->redirect('igniterlabs/importexport/import_export')
+            : null;
     }
 
     protected function getRedirectUrl()
     {
         $redirect = $this->getConfig('redirect');
 
-        if (!is_null($redirect)) {
-            return $redirect ? AdminHelper::url($redirect) : 'javascript:;';
-        }
-
-        return $this->controller->refresh();
+        return $redirect ? $this->controller->redirect($redirect) : $this->controller->refresh();
     }
 
-    protected function makePrimaryFormWidgetForType($model, $type)
+    protected function loadRecordConfig($type, $recordName)
+    {
+        $config = $this->getConfig();
+        $config['record'] = resolve(ImportExportManager::class)->getRecordConfig($type, $recordName);
+
+        $this->setConfig($config);
+    }
+
+    protected function makePrimaryFormWidgetForType($model, string $type)
     {
         $configFile = $this->getConfig('configFile');
         $modelConfig = $this->loadConfig($configFile, ['form'], 'form');
@@ -91,10 +75,6 @@ trait ImportExportHelper
             $this->controller->{$type.'FormExtendFields'}($widget, $fields);
         });
 
-        $widget->bindEvent('form.beforeRefresh', function($holder): void {
-            $holder->data = [];
-        });
-
         $widget->bindToController();
 
         if (isset($modelConfig['toolbar']) && isset($this->controller->widgets['toolbar'])) {
@@ -109,15 +89,7 @@ trait ImportExportHelper
         return $widget;
     }
 
-    protected function loadRecordConfig($type, $recordName)
-    {
-        $config = $this->getConfig();
-        $config['record'] = resolve(ImportExportManager::class)->getRecordConfig($type, $recordName);
-
-        $this->setConfig($config);
-    }
-
-    protected function makeSecondaryFormWidgetForType($model, $type)
+    protected function makeSecondaryFormWidgetForType($model, string $type)
     {
         if (
             (!$configFile = $this->getConfig('record[configFile]')) ||
@@ -129,7 +101,7 @@ trait ImportExportHelper
         $widgetConfig['fields'] = $fields;
         $widgetConfig['model'] = $model;
         $widgetConfig['alias'] = $type.'SecondaryForm';
-        $widgetConfig['arrayName'] = ucfirst((string) $type).'Secondary';
+        $widgetConfig['arrayName'] = ucfirst($type).'Secondary';
         $widgetConfig['cssClass'] = $type.'-secondary-form';
 
         $widget = $this->makeWidget(Form::class, $widgetConfig);
@@ -137,73 +109,5 @@ trait ImportExportHelper
         $widget->bindToController();
 
         return $widget;
-    }
-
-    protected function processExportColumnsFromPost()
-    {
-        $result = [];
-        $definitions = $this->getExportColumns();
-
-        $columns = post('export_columns', []);
-        foreach ($columns as $column) {
-            $result[$column] = array_get($definitions, $column, '???');
-        }
-
-        return $result;
-    }
-
-    protected function getFormatOptionsFromPost()
-    {
-        $options['delimiter'] = post('delimiter');
-        $options['enclosure'] = post('enclosure');
-        $options['escape'] = post('escape');
-        $options['encoding'] = post('encoding');
-
-        return $options;
-    }
-
-    protected function createCsvReader($path)
-    {
-        $reader = CsvReader::createFromPath($path, 'r');
-        $options = $this->getFormatOptionsFromPost();
-
-        if ($options['delimiter'] !== null) {
-            $reader->setDelimiter($options['delimiter']);
-        }
-
-        if ($options['enclosure'] !== null) {
-            $reader->setEnclosure($options['enclosure']);
-        }
-
-        if ($options['escape'] !== null) {
-            $reader->setEscape($options['escape']);
-        }
-
-        //        if (!is_null($options['encoding']) && $reader->isActiveStreamFilter()) {
-        //            $reader->appendStreamFilter(sprintf(
-        //                '%s%s:%s',
-        //                'igniter.csv.transcode.',
-        //                strtolower($options['encoding']),
-        //                'utf-8'
-        //            ));
-        //        }
-
-        return $reader;
-    }
-
-    protected function getImportMatchColumns()
-    {
-        $matches = post('match_columns', []);
-        $columns = array_filter(post('import_columns', []));
-        if (!$matches || !$columns) {
-            throw new FlashException('Please select columns to import');
-        }
-
-        $result = [];
-        foreach ($matches as $index => $column) {
-            $result[$index] = array_get($columns, $index, $column);
-        }
-
-        return $result;
     }
 }

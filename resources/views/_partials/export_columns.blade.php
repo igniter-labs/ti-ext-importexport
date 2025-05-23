@@ -1,8 +1,3 @@
-<?php
-
-declare(strict_types=1);
-
-?>
 @php
     $fieldOptions = []; //$field->options();
     $checkedValues = (array)$field->value;
@@ -25,16 +20,11 @@ declare(strict_types=1);
                     @php $checkboxId = 'checkbox_'.$field->getId().'_'.$loop->index; @endphp
                     <div class="form-check mb-2">
                         <input
-                            type="hidden"
-                            name="{{ $field->arrayName }}export_columns[]"
-                            value="{{ $key }}"
-                        />
-                        <input
                             type="checkbox"
                             id="{{ $checkboxId }}"
                             class="form-check-input"
-                            name="{{ $field->getName() }}visible_columns[]"
-                            value="1"
+                            name="{{ $field->arrayName }}export_columns[]"
+                            value="{{ $key }}"
                             checked="checked"
                         />
                         <label class="form-check-label" for="{{ $checkboxId }}">
@@ -49,4 +39,3 @@ declare(strict_types=1);
     @endif
 
 </div>
-<?php 

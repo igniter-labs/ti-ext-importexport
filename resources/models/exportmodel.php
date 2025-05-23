@@ -23,6 +23,7 @@ return [
                 'label' => 'lang:igniterlabs.importexport::default.label_offset',
                 'type' => 'number',
                 'span' => 'left',
+                'default' => '0',
                 'comment' => 'lang:igniterlabs.importexport::default.help_offset',
             ],
             'limit' => [

@@ -6,6 +6,8 @@ namespace IgniterLabs\ImportExport;
 
 use Igniter\System\Classes\BaseExtension;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
+use IgniterLabs\ImportExport\Models\MenuExport;
+use IgniterLabs\ImportExport\Models\MenuImport;
 use Override;
 
 /**
@@ -16,6 +18,28 @@ class Extension extends BaseExtension
     public array $singletons = [
         ImportExportManager::class,
     ];
+
+    public function registerImportExport(): array
+    {
+        return [
+            'import' => [
+                'menus' => [
+                    'label' => 'Import Menu Items',
+                    'model' => MenuImport::class,
+                    'configFile' => 'igniterlabs.importexport::/models/menuimport',
+                    'permissions' => ['Admin.Menus'],
+                ],
+            ],
+            'export' => [
+                'menus' => [
+                    'label' => 'Export Menu Items',
+                    'model' => MenuExport::class,
+                    'configFile' => 'igniterlabs.importexport::/models/menuexport',
+                    'permissions' => ['Admin.Menus'],
+                ],
+            ],
+        ];
+    }
 
     #[Override]
     public function registerPermissions(): array
