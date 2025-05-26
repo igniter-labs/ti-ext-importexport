@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace IgniterLabs\ImportExport\Http\Actions;
 
-use Igniter\Admin\Classes\BaseWidget;
 use Igniter\Admin\Facades\Template;
 use Igniter\Admin\Traits\ValidatesForm;
 use Igniter\Admin\Widgets\Form;
-use Igniter\Flame\Database\Model;
+use Igniter\Admin\Widgets\Toolbar;
 use Igniter\Flame\Exception\FlashException;
 use Igniter\Flame\Support\Facades\File;
 use Igniter\System\Classes\ControllerAction;
@@ -24,34 +23,31 @@ class ImportController extends ControllerAction
     use ImportExportHelper;
     use ValidatesForm;
 
-    /**
-     * @var Model Import model
-     */
-    public $importModel;
+    public ?ImportModel $importModel = null;
 
     /**
-     * @var array Import column configuration.
+     * Import column configuration.
      */
-    public $importColumns;
+    public ?array $importColumns = null;
 
     /**
-     * @var BaseWidget Reference to the toolbar widget objects.
+     * Reference to the toolbar widget objects.
      */
-    protected $importToolbarWidget;
+    protected ?Toolbar $importToolbarWidget = null;
 
     /**
-     * @var Form Reference to the widget used for uploading import file.
+     * Reference to the widget used for uploading import file.
      */
-    protected $importPrimaryFormWidget;
+    protected ?Form $importPrimaryFormWidget = null;
 
     /**
-     * @var Form Reference to the widget used for specifying import options.
+     * Reference to the widget used for specifying import options.
      */
-    protected $importSecondaryFormWidget;
+    protected ?Form $importSecondaryFormWidget = null;
 
     protected array $requiredProperties = ['importConfig'];
 
-    protected $requiredConfig = ['configFile'];
+    protected array $requiredConfig = ['configFile'];
 
     /**
      * Behavior constructor
@@ -184,18 +180,18 @@ class ImportController extends ControllerAction
             'import_columns.*' => ['required', 'string'],
         ]);
 
-        throw_unless(
-            /** @var History|null $history */
-            $history = History::query()->where('uuid', $historyUuid)->where('code', $recordName)->first(),
-            new FlashException(lang('igniterlabs.importexport::default.error_invalid_import_file')),
-        );
+        /** @var History|null $history */
+        $history = History::query()->where('uuid', $historyUuid)->where('code', $recordName)->first();
+        throw_unless($history, new FlashException(
+            lang('igniterlabs.importexport::default.error_invalid_import_file'),
+        ));
 
-        $model = $this->getImportModel();
+        $importModel = $this->getImportModel();
 
         $history->update(['status' => 'processing', 'attempted_data' => $validated]);
 
         if ($optionData = array_get($validated, 'ImportSecondary')) {
-            $model->fill($optionData);
+            $importModel->fill($optionData);
         }
 
         throw_unless(
@@ -204,10 +200,10 @@ class ImportController extends ControllerAction
         );
 
         $importOptions = array_except($validated, ['ImportSecondary', 'match_columns', 'import_columns']);
-        $model->import($importColumns, $importOptions, $history->getCsvPath());
+        $importModel->import($importColumns, $importOptions, $history->getCsvPath());
 
         $history->markCompleted([
-            'error_message' => $this->buildImportResultMessage($model->getResultStats()),
+            'error_message' => $this->buildImportResultMessage($importModel->getResultStats()),
         ]);
 
         File::delete($history->getCsvPath());
@@ -215,21 +211,18 @@ class ImportController extends ControllerAction
         return $this->getRedirectUrl();
     }
 
-    /**
-     * @return ImportModel
-     */
-    public function getImportModel()
+    public function getImportModel(): ImportModel
     {
         return $this->importModel ??= new ($this->getModelForType('import'));
     }
 
     protected function initImportForms()
     {
-        $model = $this->getImportModel();
+        $importModel = $this->getImportModel();
 
-        $this->importPrimaryFormWidget = $this->makePrimaryFormWidgetForType($model, 'import');
+        $this->importPrimaryFormWidget = $this->makePrimaryFormWidgetForType($importModel, 'import');
 
-        $this->importSecondaryFormWidget = $this->makeSecondaryFormWidgetForType($model, 'import');
+        $this->importSecondaryFormWidget = $this->makeSecondaryFormWidgetForType($importModel, 'import');
     }
 
     protected function prepareImportVars(History $history)

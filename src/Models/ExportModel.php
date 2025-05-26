@@ -38,9 +38,8 @@ abstract class ExportModel extends Model
 
     /**
      * Converts a data collection to a CSV file.
-     * @return string
      */
-    protected function processExportData($columns, $results, $options)
+    protected function processExportData($columns, $results, $options): CsvWriter
     {
         $columns = $this->exportExtendColumns($columns);
 
@@ -56,7 +55,7 @@ abstract class ExportModel extends Model
         return $columns;
     }
 
-    protected function prepareCsvWriter($options, $columns, $results)
+    protected function prepareCsvWriter($options, $columns, $results): CsvWriter
     {
         $options = array_merge([
             'delimiter' => null,
@@ -91,7 +90,7 @@ abstract class ExportModel extends Model
         return $csvWriter;
     }
 
-    protected function processExportRow($columns, $record)
+    protected function processExportRow($columns, $record): array
     {
         $results = [];
         foreach ($columns as $column => $label) {
@@ -104,9 +103,8 @@ abstract class ExportModel extends Model
     /**
      * Implodes a single dimension array using pipes (|)
      * Multi dimensional arrays are not allowed.
-     * @return string
      */
-    protected function encodeArrayValue($data, string $delimiter = '|')
+    protected function encodeArrayValue($data, string $delimiter = '|'): string
     {
         $newData = [];
         foreach ($data as $value) {

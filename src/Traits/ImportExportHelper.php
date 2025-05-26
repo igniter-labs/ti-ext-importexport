@@ -9,6 +9,8 @@ use Igniter\Admin\Widgets\Toolbar;
 use Igniter\Flame\Exception\FlashException;
 use Igniter\User\Facades\AdminAuth;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
+use IgniterLabs\ImportExport\Models\ExportModel;
+use IgniterLabs\ImportExport\Models\ImportModel;
 use Illuminate\Http\RedirectResponse;
 
 trait ImportExportHelper
@@ -18,7 +20,7 @@ trait ImportExportHelper
         return $this->controller->makePartial($partial, $params + $this->vars, false);
     }
 
-    protected function getModelForType($type)
+    protected function getModelForType($type): ImportModel|ExportModel
     {
         if (!$modelClass = $this->getConfig('record[model]')) {
             throw new FlashException(sprintf(lang('igniterlabs.importexport::default.error_missing_model'), $type));

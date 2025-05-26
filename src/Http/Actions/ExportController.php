@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace IgniterLabs\ImportExport\Http\Actions;
 
 use Exception;
-use Igniter\Admin\Classes\BaseWidget;
 use Igniter\Admin\Facades\Template;
 use Igniter\Admin\Traits\ValidatesForm;
 use Igniter\Admin\Widgets\Form;
-use Igniter\Flame\Database\Model;
+use Igniter\Admin\Widgets\Toolbar;
 use Igniter\Flame\Exception\FlashException;
 use Igniter\Flame\Support\Facades\File;
 use Igniter\System\Classes\ControllerAction;
@@ -26,30 +25,27 @@ class ExportController extends ControllerAction
     use ImportExportHelper;
     use ValidatesForm;
 
-    /**
-     * @var Model Export model
-     */
-    public $exportModel;
+    public ?ExportModel $exportModel = null;
 
     /**
-     * @var array Export column configuration.
+     * Export column configuration.
      */
-    public $exportColumns;
+    public ?array $exportColumns = null;
 
     /**
-     * @var string File name used for export output.
+     * File name used for export output.
      */
-    protected $exportFileName = 'export.csv';
+    protected string $exportFileName = 'export.csv';
 
     /**
-     * @var BaseWidget Reference to the toolbar widget objects.
+     * Reference to the toolbar widget objects.
      */
-    protected $exportToolbarWidget;
+    protected ?Toolbar $exportToolbarWidget = null;
 
     /**
-     * @var Form Reference to the widget used for standard export options.
+     * Reference to the widget used for standard export options.
      */
-    protected $exportPrimaryFormWidget;
+    protected ?Form $exportPrimaryFormWidget = null;
 
     /**
      * @var Form Reference to the widget used for custom export options.
@@ -58,7 +54,7 @@ class ExportController extends ControllerAction
 
     protected array $requiredProperties = ['exportConfig'];
 
-    protected $requiredConfig = ['configFile'];
+    protected array $requiredConfig = ['configFile'];
 
     /**
      * Behavior constructor
@@ -108,6 +104,7 @@ class ExportController extends ControllerAction
             // Validate the export name
             $this->getExportModel();
 
+            /** @var History|null $history */
             $history = History::query()
                 ->where('type', 'export')
                 ->where('code', $recordName)
@@ -189,16 +186,16 @@ class ExportController extends ControllerAction
         ]);
 
         try {
-            $model = $this->getExportModel();
+            $exportModel = $this->getExportModel();
 
             if ($secondaryData = array_get($validated, 'ExportSecondary')) {
-                $model->fill($secondaryData);
+                $exportModel->fill($secondaryData);
             }
 
             $exportColumns = $this->processExportColumnsFromRequest($validated);
             $exportOptions = array_except($validated, ['ExportSecondary', 'export_columns', 'visible_columns']);
 
-            $csvWriter = $model->export($exportColumns, $exportOptions);
+            $csvWriter = $exportModel->export($exportColumns, $exportOptions);
 
             $csvPath = $history->getCsvPath();
             if (!File::exists($directory = dirname((string)$csvPath))) {
@@ -219,21 +216,18 @@ class ExportController extends ControllerAction
         }
     }
 
-    /**
-     * @return ExportModel
-     */
-    public function getExportModel()
+    public function getExportModel(): ExportModel
     {
         return $this->exportModel ??= new ($this->getModelForType('export'));
     }
 
     protected function initExportForms()
     {
-        $model = $this->getExportModel();
+        $exportModel = $this->getExportModel();
 
-        $this->exportPrimaryFormWidget = $this->makePrimaryFormWidgetForType($model, 'export');
+        $this->exportPrimaryFormWidget = $this->makePrimaryFormWidgetForType($exportModel, 'export');
 
-        $this->exportSecondaryFormWidget = $this->makeSecondaryFormWidgetForType($model, 'export');
+        $this->exportSecondaryFormWidget = $this->makeSecondaryFormWidgetForType($exportModel, 'export');
 
         $stepSectionField = $this->exportPrimaryFormWidget->getField('step_secondary');
         if (!$this->exportSecondaryFormWidget && $stepSectionField) {
