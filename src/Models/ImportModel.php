@@ -35,16 +35,16 @@ abstract class ImportModel extends Model
      *    ],
      *    [...]
      */
-    abstract public function importData($results);
+    abstract public function importData(array $results): void;
 
     /**
      * Import data based on column names matching header indexes in the CSV.
      */
-    public function import($columns, $options = [], ?string $importCsvFile = null)
+    public function import($columns, $options = [], ?string $importCsvFile = null): void
     {
         $data = $this->processImportData($importCsvFile, $columns, $options);
 
-        return $this->importData($data);
+        $this->importData($data);
     }
 
     /**
