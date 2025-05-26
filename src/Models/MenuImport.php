@@ -35,7 +35,7 @@ class MenuImport extends ImportModel
     protected $categoryNameCache = [];
 
     #[Override]
-    public function importData($results): void
+    public function importData(array $results): void
     {
         foreach ($results as $row => $data) {
             try {

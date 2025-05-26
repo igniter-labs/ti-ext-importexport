@@ -35,23 +35,23 @@ abstract class ImportModel extends Model
      *    ],
      *    [...]
      */
-    abstract public function importData($results);
+    abstract public function importData(array $results): void;
 
     /**
      * Import data based on column names matching header indexes in the CSV.
      */
-    public function import($columns, $options = [], ?string $importCsvFile = null)
+    public function import($columns, $options = [], ?string $importCsvFile = null): void
     {
         $data = $this->processImportData($importCsvFile, $columns, $options);
 
-        return $this->importData($data);
+        $this->importData($data);
     }
 
     /**
      * Converts column index to database column map to an array containing
      * database column names and values pulled from the CSV file.
      */
-    protected function processImportData(string $filePath, $columns, $options)
+    protected function processImportData(string $filePath, $columns, $options): array
     {
         $csvReader = $this->prepareCsvReader($options, $filePath);
 
@@ -65,7 +65,7 @@ abstract class ImportModel extends Model
         return $result;
     }
 
-    protected function prepareCsvReader($options, string $filePath)
+    protected function prepareCsvReader($options, string $filePath): CsvReader
     {
         $defaultOptions = [
             'delimiter' => null,
@@ -96,9 +96,8 @@ abstract class ImportModel extends Model
 
     /**
      * Converts a single row of CSV data to the column map.
-     * @return array
      */
-    protected function processImportRow($rowData, $columns)
+    protected function processImportRow($rowData, $columns): array
     {
         $newRow = [];
 
@@ -109,7 +108,7 @@ abstract class ImportModel extends Model
         return $newRow;
     }
 
-    protected function decodeArrayValue($value, string $delimiter = '|')
+    protected function decodeArrayValue($value, string $delimiter = '|'): array
     {
         if (!str_contains((string)$value, $delimiter)) {
             return [$value];
@@ -125,7 +124,7 @@ abstract class ImportModel extends Model
         return $newData;
     }
 
-    public function getEncodingOptions()
+    public function getEncodingOptions(): array
     {
         $options = [
             'utf-8',
@@ -156,22 +155,22 @@ abstract class ImportModel extends Model
     //
     // Result logging
     //
-    public function getResultStats()
+    public function getResultStats(): array
     {
         return $this->resultStats;
     }
 
-    protected function logUpdated()
+    protected function logUpdated(): void
     {
         $this->resultStats['updated']++;
     }
 
-    protected function logCreated()
+    protected function logCreated(): void
     {
         $this->resultStats['created']++;
     }
 
-    protected function logError($rowIndex, $message)
+    protected function logError($rowIndex, $message): void
     {
         $this->resultStats['errorCount']++;
         $this->resultStats['errors'][$rowIndex] = $message;
