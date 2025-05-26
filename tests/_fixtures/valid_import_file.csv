@@ -1,0 +1,14 @@
+﻿ID,Name,Price,Description,"Minimum Quantity",Category,Status
+1,Puff-Puff,4.9900,"Traditional Nigerian donut ball, rolled in sugar",3,,1
+2,"SCOTCH EGG",2.0000,"Boiled egg wrapped in a ground meat mixture, coated in breadcrumbs, and deep-fried.",1,,1
+3,"ATA RICE",12.0000,"Small pieces of beef, goat, stipe, and tendon sautéed in crushed green Jamaican pepper.",1,,1
+4,"RICE AND DODO",11.9900,"(plantains) w/chicken, fish, beef or goat",1,,1
+5,"Special Shrimp Deluxe",12.9900,"Fresh shrimp sautéed in blended mixture of tomatoes, onion, peppers over choice of rice",1,,1
+6,"Whole catfish with rice and vegetables",13.9900,"Whole catfish slow cooked in tomatoes, pepper and onion sauce with seasoning to taste",1,,1
+7,"African Salad",8.9900,"With baked beans, egg, tuna, onion, tomatoes , green peas and carrot with your choice of dressing.",1,,1
+8,"Seafood Salad",5.9900,"With shrimp, egg and imitation crab meat",1,Specials,1
+9,EBA,11.9900,"Grated cassava",1,,1
+10,AMALA,11.9900,"Yam flour",1,Specials|,1
+11,"YAM PORRIDGE",9.9900,"in tomatoes sauce",1,Appetizer|Salads|Seafoods|New Category,1
+12,"Boiled Plantain",9.9900,"w/spinach soup",1,,1
+13,,34.6043,,1,,1

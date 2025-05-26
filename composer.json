@@ -1,31 +1,79 @@
 {
-  "name": "igniterlabs/ti-ext-importexport",
-  "type": "tastyigniter-extension",
-  "description": "Import/Export Menu Items, Orders, Customers from/into any CSV or Microsoft Excel file to TastyIgniter.",
-  "keywords": [
-    "tastyigniter",
-    "import",
-    "export"
-  ],
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Igniter Labs Team"
+    "name": "igniterlabs/ti-ext-importexport",
+    "type": "tastyigniter-package",
+    "description": "Import/Export Menu Items, Orders, Customers from/into any CSV or Microsoft Excel file to TastyIgniter.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Igniter Labs Team"
+        }
+    ],
+    "keywords": [
+        "tastyigniter",
+        "import",
+        "export"
+    ],
+    "require": {
+        "tastyigniter/core": "^v4.0",
+        "league/csv": "~9.1"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.2",
+        "larastan/larastan": "^3.0",
+        "sampoyigi/testbench": "dev-main as 1.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "rector/rector": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "IgniterLabs\\ImportExport\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IgniterLabs\\ImportExport\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "tastyigniter-extension": {
+            "code": "igniterlabs.importexport",
+            "name": "Import & Export Tool",
+            "icon": {
+                "class": "fas fa-file-import",
+                "backgroundColor": "#147EFB",
+                "color": "#FFFFFF"
+            },
+            "homepage": "https://tastyigniter.com/marketplace/item/igniterlabs-importexport"
+        },
+        "branch-alias": {
+            "dev-master": "4.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "composer/installers": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "test:lint": "vendor/bin/pint --test --ansi",
+        "test:lint-fix": "vendor/bin/pint --ansi",
+        "test:refactor": "vendor/bin/rector process --dry-run --ansi",
+        "test:refactor-fix": "vendor/bin/rector process --ansi",
+        "test:static": "vendor/bin/phpstan analyse --memory-limit=1056M --ansi",
+        "test:static-fix": "vendor/bin/phpstan --generate-baseline --memory-limit=1056M --ansi",
+        "test:pest": "vendor/bin/pest",
+        "test:coverage": "vendor/bin/pest --coverage --exactly=100 --compact",
+        "test:type-coverage": "vendor/bin/pest --type-coverage --min=100",
+        "test": [
+            "@test:lint",
+            "@test:refactor",
+            "@test:static",
+            "@test:coverage"
+        ]
     }
-  ],
-  "require": {
-    "league/csv": "~9.1"
-  },
-  "extra": {
-    "tastyigniter-extension": {
-      "code": "igniterlabs.importexport",
-      "name": "Import & Export Tool",
-      "icon": {
-        "class": "fas fa-file-import",
-        "backgroundColor": "#147EFB",
-        "color": "#FFFFFF"
-      },
-      "homepage": "https://tastyigniter.com/marketplace/item/igniterlabs-importexport"
-    }
-  }
 }
