@@ -57,7 +57,7 @@ class MenuExport extends ExportModel
         return $query->get()->toArray();
     }
 
-    public function getCategoriesAttribute()
+    public function getCategoriesAttribute(): string
     {
         return $this->encodeArrayValue($this->menu_categories?->pluck('name')->all() ?? []);
     }
