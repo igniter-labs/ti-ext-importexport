@@ -16,6 +16,8 @@ In the admin area, you can import or export records. Navigate to the _Tools > Im
 
 ## Usage
 
+This section explains how to integrate the Import/Export extension into your own extension if you need to create custom import/export types. The Import/Export extension provides a simple API for managing import and export operations.
+
 ### Defining import types
 
 You can define import types by creating an import definition file and a model class that extends `IgniterLabs\ImportExport\Models\ImportModel`. This class should implement the `importData` method to handle the import logic for inserting/updating data into the database. The base class handles file uploads and data processing.
@@ -134,7 +136,7 @@ This file should be placed in the `resources/models` directory of your extension
 
 ### Registering import/export types
 
-You can register your custom import and export types in the `registerImportExportTypes` method of your [Extension class](https://tastyigniter.com/docs/extend/extension#extension-class). Here is an example:
+You can register your custom import and export types in the `registerImportExportTypes` method of your [Extension class](https://tastyigniter.com/docs/extend/extensions#extension-class). Here is an example:
 
 ```php
 public function registerImportExport(): array
