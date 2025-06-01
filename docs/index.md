@@ -22,7 +22,7 @@ In the admin area, you can import or export records. Navigate to the _Tools > Im
 
 ## Usage
 
-This section explains how to integrate the Import/Export extension into your own extension if you need to create custom import/export types. The Import/Export extension provides a simple API for managing import and export operations.
+This section covers how to integrate the Import/Export extension into your own extension if you need to create custom import/export types. The Import/Export extension provides a simple API for managing import and export operations.
 
 ### Defining import types
 
