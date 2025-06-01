@@ -12,6 +12,12 @@ You can install the extension via composer using the following command:
 composer require igniterlabs/ti-ext-importexport -W
 ```
 
+Run the database migrations to create the required tables:
+  
+```bash
+php artisan igniter:up
+```
+
 ## Getting started
 
 In the admin area, you can import or export records. Navigate to the _Tools > Import/Export_ admin pages.
