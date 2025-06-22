@@ -11,8 +11,8 @@ This extension allows you to import or export TastyIgniter records, such as menu
 
 ## Features
 
-- Export Menu Items into a CSV file.
-- Import Menu Items in CSV format into TastyIgniter.
+- Export data into a CSV file.
+- Import data in CSV format into TastyIgniter.
 
 ## Documentation
 
@@ -28,7 +28,7 @@ If you encounter a bug in this extension, please report it using the [Issue Trac
 
 ## Contributing
 
-Contributions are welcome! Please read [TastyIgniter's contributing guide](https://tastyigniter.com/docs/contribution-guide).
+Contributions are welcome! Please read [TastyIgniter's contributing guide](https://tastyigniter.com/docs/resources/contribution-guide).
 
 ## Security vulnerabilities
 
@@ -36,4 +36,4 @@ For reporting security vulnerabilities, please see [our security policy](https:/
 
 ## License
 
-TastyIgniter User extension is open-source software licensed under the [MIT license](https://github.com/igniter-labs/ti-ext-importexport/blob/master/LICENSE.md).
+TastyIgniter ImportExport extension is open-source software licensed under the [MIT license](https://github.com/igniter-labs/ti-ext-importexport/blob/master/LICENSE.md).

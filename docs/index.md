@@ -1,9 +1,21 @@
+---
+title: "Import/Export"
+section: "extensions"
+sortOrder: 999
+---
+
 ## Installation
 
 You can install the extension via composer using the following command:
 
 ```bash
 composer require igniterlabs/ti-ext-importexport -W
+```
+
+Run the database migrations to create the required tables:
+  
+```bash
+php artisan igniter:up
 ```
 
 ## Getting started
@@ -15,6 +27,8 @@ In the admin area, you can import or export records. Navigate to the _Tools > Im
 - You can also define custom import/export types, see the [Usage](#usage) section below for more details.
 
 ## Usage
+
+This section covers how to integrate the Import/Export extension into your own extension if you need to create custom import/export types. The Import/Export extension provides a simple API for managing import and export operations.
 
 ### Defining import types
 
@@ -120,6 +134,7 @@ The `$columns` parameter specifies which columns to include in the export. The `
 
 Here's an example of an export definition file `customexport.php` that registers the custom export type:
 
+
 ```php
 return [
     'columns' => [
@@ -134,7 +149,7 @@ This file should be placed in the `resources/models` directory of your extension
 
 ### Registering import/export types
 
-You can register your custom import and export types in the `registerImportExportTypes` method of your [Extension class](https://tastyigniter.com/docs/extend/extension#extension-class). Here is an example:
+You can register your custom import and export types in the `registerImportExportTypes` method of your [Extension class](https://tastyigniter.com/docs/extend/extensions#extension-class). Here is an example:
 
 ```php
 public function registerImportExport(): array
