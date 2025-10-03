@@ -272,7 +272,7 @@ class ImportController extends ControllerAction
 
         return collect(array_get($request, 'match_columns', []))
             ->filter(fn($fileColumn): bool => in_array($fileColumn, $definitions))
-            ->mapWithKeys(fn($fileColumn, $index) => [$index => [array_get($dbColumns, $index), $fileColumn]])
+            ->mapWithKeys(fn($fileColumn, $index): array => [$index => [array_get($dbColumns, $index), $fileColumn]])
             ->filter()
             ->all();
     }
