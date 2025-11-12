@@ -270,7 +270,7 @@ class ExportController extends ControllerAction
         $definitions = $this->getExportColumns();
 
         return collect(array_get($request, 'export_columns', []))
-            ->mapWithKeys(fn($exportColumn) => [$exportColumn => array_get($definitions, $exportColumn, '???')])
+            ->mapWithKeys(fn($exportColumn): array => [$exportColumn => array_get($definitions, $exportColumn, '???')])
             ->all();
     }
 
