@@ -1,4 +1,4 @@
-name: Import Export CI Pipeline
+name: CI Pipeline
 
 on: [ push, workflow_dispatch ]
 
@@ -10,9 +10,3 @@ jobs:
     uses: tastyigniter/workflows/.github/workflows/php-tests.yml@main
     with:
       php-version: ${{ matrix.php }}
-
-  auto-merge-release:
-    needs: [ php-tests ]
-    uses: tastyigniter/workflows/.github/workflows/auto-merge-release.yml@main
-    secrets:
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
