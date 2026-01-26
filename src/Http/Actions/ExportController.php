@@ -259,7 +259,7 @@ class ExportController extends ControllerAction
                 new FlashException(lang('igniterlabs.importexport::default.error_empty_export_columns')),
             );
 
-            $this->exportColumns = collect($columns)->map(fn($label): string => lang($label))->all();
+            $this->exportColumns = collect($columns)->map(fn(string $label): string => lang($label))->all();
         }
 
         return $this->exportColumns;

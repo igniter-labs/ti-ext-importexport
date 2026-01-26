@@ -249,7 +249,7 @@ class ImportController extends ControllerAction
                 new FlashException(lang('igniterlabs.importexport::default.error_empty_import_columns')),
             );
 
-            $this->importColumns = collect($columns)->map(fn($label): string => lang($label))->all();
+            $this->importColumns = collect($columns)->map(fn(string $label): string => lang($label))->all();
         }
 
         return $this->importColumns;
