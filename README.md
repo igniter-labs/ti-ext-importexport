@@ -18,13 +18,9 @@ This extension allows you to import or export TastyIgniter records, such as menu
 
 More documentation can be found on [here](https://github.com/igniter-labs/ti-ext-importexport/blob/master/docs/index.md).
 
-## Changelog
-
-Please see [CHANGELOG](https://github.com/igniter-labs/ti-ext-importexport/blob/master/CHANGELOG.md) for more information on what has changed recently.
-
 ## Reporting issues
 
-If you encounter a bug in this extension, please report it using the [Issue Tracker](https://github.com/igniter-labs/ti-ext-importexport/issues) on GitHub.
+If you encounter a bug in this extension, please report it using the [Issue Tracker](https://github.com/tastyigniter/TastyIgniter/issues) on GitHub.
 
 ## Contributing
 
