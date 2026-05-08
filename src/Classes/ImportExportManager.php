@@ -60,7 +60,7 @@ class ImportExportManager
     public function registerImportExports(string $extensionCode, array $definitions): void
     {
         foreach ($definitions as $type => $definition) {
-            if (!in_array($type, ['import', 'export'])) {
+            if (!in_array($type, ['import', 'export'], true)) {
                 continue;
             }
 
