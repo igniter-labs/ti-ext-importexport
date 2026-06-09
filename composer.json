@@ -1,7 +1,7 @@
 {
     "name": "igniterlabs/ti-ext-importexport",
     "type": "tastyigniter-package",
-    "description": "Import/Export Menu Items, Orders, Customers from/into any CSV or Microsoft Excel file to TastyIgniter.",
+    "description": "Import/Export Menu Items, Orders, Customers from/into any CSV or Microsoft Excel file into TastyIgniter.",
     "license": "MIT",
     "authors": [
         {
