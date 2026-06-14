@@ -11,12 +11,29 @@ This extension allows you to import or export TastyIgniter records, such as menu
 
 ## Features
 
-- Export data into a CSV file.
-- Import data in CSV format into TastyIgniter.
+### Import & export
+
+- Import and export TastyIgniter records as CSV files from the admin area (**Tools > Import/Export**).
+- Built-in support for **menu items**, including categories, pricing, and status.
+- Choose which columns to include on each import or export.
+- Map CSV column headers to database fields with a guided column-matching step.
+- Update existing records on import (for example, refresh menu items by ID) or create new ones.
+
+### CSV handling
+
+- Configure delimiter, enclosure, and escape characters for non-standard CSV files.
+- Support for multiple file encodings, including UTF-8, ISO-8859, and Windows-1252.
+- Export a subset of records using **offset** and **limit** options.
+
+### Extensibility
+
+- Register custom import and export types from your own extensions via `registerImportExport()`.
+- Define column schemas, import options, and permissions for each record type.
+- Extend `ImportModel` and `ExportModel` base classes that handle file I/O, CSV parsing, and statistics.
 
 ## Documentation
 
-More documentation can be found on [here](https://github.com/igniter-labs/ti-ext-importexport/blob/master/docs/index.md).
+More documentation can be found on [here](https://tastyigniter.com/docs/extensions/importexport).
 
 ## Reporting issues
 
