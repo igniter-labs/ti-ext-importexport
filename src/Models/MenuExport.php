@@ -42,7 +42,7 @@ class MenuExport extends ExportModel
     #[Override]
     public function exportData(array $columns, array $options = []): array
     {
-        $query = self::make()->with([
+        $query = self::query()->with([
             'menu_categories',
         ]);
 
