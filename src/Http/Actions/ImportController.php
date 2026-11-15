@@ -13,6 +13,7 @@ use Igniter\Flame\Support\Facades\File;
 use Igniter\System\Classes\ControllerAction;
 use IgniterLabs\ImportExport\Classes\Sources\ImportSource;
 use IgniterLabs\ImportExport\Http\Controllers\ImportExport;
+use IgniterLabs\ImportExport\Jobs\ProcessImportJob;
 use IgniterLabs\ImportExport\Models\History;
 use IgniterLabs\ImportExport\Models\ImportModel;
 use IgniterLabs\ImportExport\Traits\ImportExportHelper;
@@ -86,6 +87,12 @@ class ImportController extends ControllerAction
             return $this->getRedirectUrl();
         }
 
+        if ($history->status !== 'pending') {
+            flash()->warning(lang('igniterlabs.importexport::default.error_import_already_queued'));
+
+            return $this->getRedirectUrl();
+        }
+
         $pageTitle = lang($this->getConfig('record[title]', 'igniterlabs.importexport::default.text_import_title'));
         Template::setTitle($pageTitle);
         Template::setHeading($pageTitle);
@@ -150,9 +157,7 @@ class ImportController extends ControllerAction
             ]);
 
             $csvPath = $history->getCsvPath();
-            if (!File::exists($directory = dirname((string)$csvPath))) {
-                File::makeDirectory($directory, 0755, true);
-            }
+            File::ensureDirectoryExists(dirname($csvPath));
 
             $uploadedFile = request()->file('import_file');
             File::put($csvPath, File::get($uploadedFile->getRealPath()));
@@ -198,35 +203,18 @@ class ImportController extends ControllerAction
             'import_columns.*' => ['nullable', 'string', Rule::in(array_keys($this->getImportColumns()))],
         ]);
 
-        /** @var History|null $history */
-        $history = History::query()->where('uuid', $historyUuid)->where('code', $recordName)->first();
-        throw_unless($history, new FlashException(
-            lang('igniterlabs.importexport::default.error_invalid_import_file'),
-        ));
-
-        $importModel = $this->getImportModel();
-
-        $history->update(['status' => 'processing', 'attempted_data' => $validated]);
-
-        if ($optionData = array_get($validated, 'ImportSecondary')) {
-            $importModel->fill($optionData);
-        }
+        $history = $this->findImportHistory($recordName, $historyUuid);
 
         throw_unless(
             $importColumns = $this->processImportColumnsFromRequest($validated),
             new FlashException(lang('igniterlabs.importexport::default.error_empty_import_columns')),
         );
 
-        $importOptions = array_except($validated, ['ImportSecondary', 'match_columns', 'import_columns']);
-        $importModel->import($importColumns, $importOptions, $history->getCsvPath());
-
-        $history->markCompleted([
-            'error_message' => $this->buildImportResultMessage($importModel->getResultStats()),
+        return $this->queueImport($history, [
+            'options' => array_get($validated, 'ImportSecondary') ?: [],
+            'columns' => array_values($importColumns),
+            'csv' => array_only($validated, ['delimiter', 'enclosure', 'escape']),
         ]);
-
-        File::delete($history->getCsvPath());
-
-        return $this->getRedirectUrl();
     }
 
     protected function processSourceImport(string $recordName, string $historyUuid)
@@ -235,23 +223,29 @@ class ImportController extends ControllerAction
             'ImportSecondary' => ['nullable', 'array'],
         ]);
 
-        $history = $this->findImportHistory($recordName, $historyUuid);
+        return $this->queueImport($this->findImportHistory($recordName, $historyUuid), [
+            'options' => array_get($validated, 'ImportSecondary') ?: [],
+        ]);
+    }
 
-        $importModel = $this->getImportModel();
+    /**
+     * Queue the import to run in the background. Progress is shown on the history page
+     * and the admin is notified when it completes or fails.
+     */
+    protected function queueImport(History $history, array $attemptedData)
+    {
+        throw_if($history->status !== 'pending', new FlashException(lang('igniterlabs.importexport::default.error_import_already_queued')));
 
-        $history->update(['status' => 'processing', 'attempted_data' => $validated]);
-
-        if ($optionData = array_get($validated, 'ImportSecondary')) {
-            $importModel->fill($optionData);
-        }
-
-        $importModel->importFromSource($this->getImportSource(), $this->getImportSourceMethod(), $history->getCsvPath());
-
-        $history->markCompleted([
-            'error_message' => $this->buildImportResultMessage($importModel->getResultStats()),
+        $history->update([
+            'status' => History::STATUS_QUEUED,
+            'attempted_data' => $attemptedData,
+            'processed_rows' => 0,
+            'total_rows' => null,
         ]);
 
-        File::delete($history->getCsvPath());
+        ProcessImportJob::dispatch($history->getKey());
+
+        flash()->success(lang('igniterlabs.importexport::default.alert_import_queued'))->important();
 
         return $this->getRedirectUrl();
     }
@@ -448,22 +442,4 @@ class ImportController extends ControllerAction
      * @return void
      */
     public function importFormExtendFields($host, $fields) {}
-
-    protected function buildImportResultMessage(array $importResults): string
-    {
-        $importResults = (object)$importResults;
-
-        $resultMessage = implode(PHP_EOL, array_filter([
-            sprintf(lang('igniterlabs.importexport::default.text_import_created'), $importResults->created),
-            sprintf(lang('igniterlabs.importexport::default.text_import_updated'), $importResults->updated),
-            sprintf(lang('igniterlabs.importexport::default.text_import_errors'), $importResults->errorCount),
-        ]));
-
-        if ($importResults->errorCount) {
-            $resultMessage .= PHP_EOL;
-            $resultMessage .= collect($importResults->errors)->map(fn($message, $row): string => sprintf(lang('igniterlabs.importexport::default.text_import_row'), $row, $message))->implode(PHP_EOL);
-        }
-
-        return $resultMessage;
-    }
 }

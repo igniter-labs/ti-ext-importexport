@@ -117,6 +117,19 @@ class Extension extends BaseExtension
     }
 
     #[Override]
+    public function registerMailTemplates(): array
+    {
+        return [
+            'igniterlabs.importexport::mail.import_completed' => [
+                'label' => 'lang:igniterlabs.importexport::default.text_mail_import_completed',
+            ],
+            'igniterlabs.importexport::mail.import_failed' => [
+                'label' => 'lang:igniterlabs.importexport::default.text_mail_import_failed',
+            ],
+        ];
+    }
+
+    #[Override]
     public function registerPermissions(): array
     {
         return [

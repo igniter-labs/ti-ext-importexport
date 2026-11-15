@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IgniterLabs\ImportExport\Models;
 
+use Closure;
 use Igniter\Flame\Database\Model;
 use IgniterLabs\ImportExport\Classes\Sources\ImportSource;
 use League\Csv\Reader as CsvReader;
@@ -39,13 +40,55 @@ abstract class ImportModel extends Model
     abstract public function importData(array $results): void;
 
     /**
+     * Number of rows imported between progress updates.
+     */
+    protected int $progressChunkSize = 25;
+
+    protected ?Closure $progressCallback = null;
+
+    /**
+     * Register a callback receiving ($processedRows, $totalRows) as the import progresses.
+     */
+    public function onProgress(Closure $callback): static
+    {
+        $this->progressCallback = $callback;
+
+        return $this;
+    }
+
+    /**
      * Import data based on column names matching header indexes in the CSV.
      */
     public function import($columns, $options = [], ?string $importCsvFile = null): void
     {
         $data = $this->processImportData($importCsvFile, $columns, $options);
 
-        $this->importData($data);
+        $this->importInChunks($data);
+    }
+
+    /**
+     * Imports the rows in chunks, reporting progress after each chunk. Row keys are
+     * preserved so errors still reference the original row numbers.
+     */
+    protected function importInChunks(array $rows): void
+    {
+        $total = count($rows);
+        $processed = 0;
+
+        $this->reportProgress($processed, $total);
+
+        foreach (array_chunk($rows, max(1, $this->progressChunkSize), true) as $chunk) {
+            $this->importData($chunk);
+            $processed += count($chunk);
+            $this->reportProgress($processed, $total);
+        }
+    }
+
+    protected function reportProgress(int $processed, int $total): void
+    {
+        if ($this->progressCallback instanceof Closure) {
+            ($this->progressCallback)($processed, $total);
+        }
     }
 
     /**
@@ -53,7 +96,7 @@ abstract class ImportModel extends Model
      */
     public function importFromSource(ImportSource $source, string $method, string $path): void
     {
-        $this->importData($source->parse($method, $path));
+        $this->importInChunks($source->parse($method, $path));
     }
 
     /**

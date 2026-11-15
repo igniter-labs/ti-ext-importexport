@@ -9,9 +9,11 @@ use Igniter\Flame\Support\Facades\File;
 use Igniter\User\Models\User;
 use Igniter\User\Models\UserRole;
 use IgniterLabs\ImportExport\Classes\ImportExportManager;
+use IgniterLabs\ImportExport\Jobs\ProcessImportJob;
 use IgniterLabs\ImportExport\Models\History;
 use IgniterLabs\ImportExport\Models\MenuImport;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Queue;
 
 it('loads import records form page', function(): void {
     $history = History::factory()->create([
@@ -519,3 +521,76 @@ it('restricts customer and location imports to users with the matching permissio
     'locations' => ['igniterlabs-importexport-locations'],
     'platform locations' => ['igniterlabs-importexport-flipdish_locations'],
 ]);
+
+it('queues the import and shows progress on the history page', function(): void {
+    Queue::fake();
+
+    $history = History::factory()->create(['code' => 'igniterlabs-importexport-ubereats_menus']);
+    File::put($history->getCsvPath(), File::get(__DIR__.'/../../_fixtures/platforms/ubereats_menu.json'));
+
+    actingAsSuperUser()
+        ->post(route('igniterlabs.importexport.import_export', ['slug' => 'import/igniterlabs-importexport-ubereats_menus/'.$history->uuid]), [
+            'ImportSecondary' => ['update_existing' => '1'],
+        ], [
+            'X-Requested-With' => 'XMLHttpRequest',
+            'X-IGNITER-REQUEST-HANDLER' => 'onImport',
+        ]);
+
+    Queue::assertPushed(ProcessImportJob::class, fn(ProcessImportJob $job): bool => $job->historyId === $history->getKey());
+    expect($history->refresh()->status)->toBe(History::STATUS_QUEUED)
+        ->and($history->attempted_data)->toBe(['options' => ['update_existing' => '1']])
+        ->and(flash()->messages()->first()->message)->toBe(lang('igniterlabs.importexport::default.alert_import_queued'));
+
+    File::delete($history->getCsvPath());
+});
+
+it('refreshes the history with import progress', function(): void {
+    History::factory()->create([
+        'type' => 'import',
+        'code' => 'igniterlabs-importexport-menus',
+        'status' => History::STATUS_PROCESSING,
+        'total_rows' => 40,
+        'processed_rows' => 10,
+    ]);
+
+    actingAsSuperUser()
+        ->post(admin_url('igniterlabs/importexport/import_export'), [], [
+            'X-Requested-With' => 'XMLHttpRequest',
+            'X-IGNITER-REQUEST-HANDLER' => 'onRefreshHistory',
+        ])
+        ->assertJsonStructure(['#import-export-history-table-body'])
+        ->assertSee('10 of 40 rows')
+        ->assertSee('width: 25%', false)
+        ->assertSee('data-import-in-progress');
+});
+
+it('polls the history page while an import is in progress', function(): void {
+    History::factory()->create(['type' => 'import', 'code' => 'igniterlabs-importexport-menus', 'status' => History::STATUS_QUEUED]);
+
+    actingAsSuperUser()
+        ->get(admin_url('igniterlabs/importexport/import_export'))
+        ->assertSee('data-import-in-progress', false)
+        ->assertSee('onRefreshHistory', false)
+        ->assertSee(lang('igniterlabs.importexport::default.statuses.queued'));
+});
+
+it('does not queue or reopen an import that was already started', function(): void {
+    Queue::fake();
+
+    $history = History::factory()->create(['code' => 'igniterlabs-importexport-ubereats_menus', 'status' => History::STATUS_QUEUED]);
+    File::put($history->getCsvPath(), File::get(__DIR__.'/../../_fixtures/platforms/ubereats_menu.json'));
+
+    actingAsSuperUser()
+        ->post(route('igniterlabs.importexport.import_export', ['slug' => 'import/igniterlabs-importexport-ubereats_menus/'.$history->uuid]), [], [
+            'X-Requested-With' => 'XMLHttpRequest',
+            'X-IGNITER-REQUEST-HANDLER' => 'onImport',
+        ])
+        ->assertSee(lang('igniterlabs.importexport::default.error_import_already_queued'));
+
+    actingAsSuperUser()
+        ->get(route('igniterlabs.importexport.import_export', ['slug' => 'import/igniterlabs-importexport-ubereats_menus/'.$history->uuid]))
+        ->assertRedirectContains('igniterlabs/importexport/import_export');
+
+    Queue::assertNothingPushed();
+    File::delete($history->getCsvPath());
+});

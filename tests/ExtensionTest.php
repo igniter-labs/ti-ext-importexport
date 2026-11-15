@@ -63,6 +63,13 @@ it('registers platform import types for each supported source', function(): void
         ->and($imports['flipdish_locations']['permissions'])->toBe(['Admin.Locations']);
 });
 
+it('registers import mail templates', function(): void {
+    expect(array_keys((new Extension(app()))->registerMailTemplates()))->toBe([
+        'igniterlabs.importexport::mail.import_completed',
+        'igniterlabs.importexport::mail.import_failed',
+    ]);
+});
+
 it('registers permissions', function(): void {
     $extension = new Extension(app());
     $permissions = $extension->registerPermissions();

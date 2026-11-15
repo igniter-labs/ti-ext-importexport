@@ -7,7 +7,9 @@ namespace IgniterLabs\ImportExport\Tests\Models;
 use Exception;
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Menu;
+use IgniterLabs\ImportExport\Classes\Sources\ImportSource;
 use IgniterLabs\ImportExport\Models\MenuImport;
+use IgniterLabs\ImportExport\Models\PlatformMenuImport;
 
 it('imports data and creates new menu item', function(): void {
     $menuImport = mock(MenuImport::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -67,4 +69,35 @@ it('logs error when exception is thrown during import', function(): void {
     ];
 
     $menuImport->importData([0 => $data]);
+});
+
+it('reports progress after each chunk of imported rows', function(): void {
+    $source = new class extends ImportSource
+    {
+        public array $rows = [];
+
+        protected array $formats = ['parseMenu' => 'json'];
+
+        public function label(): string
+        {
+            return 'Test';
+        }
+
+        public function parseMenu(string $path): array
+        {
+            return $this->rows;
+        }
+    };
+    $source->rows = collect(range(1, 60))->map(fn(int $i): array => ['menu_name' => 'Chunked '.$i, 'menu_price' => 1])->all();
+
+    $progress = [];
+    $import = (new PlatformMenuImport(['import_options' => false]))
+        ->onProgress(function(int $processed, int $total) use (&$progress): void {
+            $progress[] = [$processed, $total];
+        });
+
+    $import->importFromSource($source, 'parseMenu', 'unused.json');
+
+    expect($progress)->toBe([[0, 60], [25, 60], [50, 60], [60, 60]])
+        ->and($import->getResultStats()['created'])->toBe(60);
 });

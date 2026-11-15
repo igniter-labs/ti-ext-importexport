@@ -67,6 +67,24 @@ return [
     'error_missing_csv_headers' => 'The CSV file has no header row, or it contains blank or duplicate column names. Please upload a CSV file with a unique name for each column in the first row.',
     'error_duplicate_import_columns' => 'Each database field can only be matched to one file column. Duplicate fields: %s',
 
+    'alert_import_queued' => 'Your import has started in the background. Its progress is shown below, and you will receive an email when it finishes.',
+    'error_import_already_queued' => 'This import has already been started.',
+    'text_import_failed' => 'The import failed: %s',
+    'text_import_progress_rows' => '%s of %s rows',
+    'text_mail_import_completed' => 'Import completed (sent to the admin who started it)',
+    'text_mail_import_failed' => 'Import failed (sent to the admin who started it)',
+    'notify_import_completed_title' => 'Import completed',
+    'notify_import_completed' => '%s has finished importing.',
+    'notify_import_failed_title' => 'Import failed',
+    'notify_import_failed' => '%s could not be completed.',
+    'statuses' => [
+        'pending' => 'Pending',
+        'queued' => 'Queued',
+        'processing' => 'Processing',
+        'completed' => 'Completed',
+        'failed' => 'Failed',
+    ],
+
     'alert_export_success' => 'File export process completed! You can download the exported file from the history section.',
 
     'help_offset' => 'Number of records to skip before exporting. Use 0 value to start from the first record, 100 to start exporting from the 101th record',

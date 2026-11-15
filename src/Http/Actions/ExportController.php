@@ -199,9 +199,7 @@ class ExportController extends ControllerAction
             $csvWriter = $exportModel->export($exportColumns, $exportOptions);
 
             $csvPath = $history->getCsvPath();
-            if (!File::exists($directory = dirname((string)$csvPath))) {
-                File::makeDirectory($directory, 0755, true);
-            }
+            File::ensureDirectoryExists(dirname($csvPath));
 
             File::put($csvPath, $csvWriter->toString());
 

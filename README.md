@@ -19,6 +19,7 @@ This extension allows you to import or export TastyIgniter records, such as menu
 - Choose which columns to include on each import or export.
 - Update existing records on import (for example, refresh menu items by name or customers by email) or create new ones.
 - Assign imported menu items to one or more locations.
+- Imports run in the background with live progress on the history page, and an email and admin notification when they finish or fail.
 
 ### Migrate from other platforms
 

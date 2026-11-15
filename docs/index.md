@@ -26,6 +26,20 @@ In the admin area, you can import or export records. Navigate to the _Tools > Im
 - To export data, you can select the type of data you want to export, and then click the export button. The system will generate a CSV file containing the exported data.
 - You can also define custom import/export types, see the [Usage](#usage) section below for more details.
 
+### Background imports
+
+Imports run in the background as a queued job, so large files don't time out. After you click **Import Records**, the import is queued and you return to the Import/Export page. While an import is queued or running, the history table refreshes every few seconds and shows the progress (for example _120 of 500 rows_).
+
+When the import finishes or fails, the admin who started it gets a notification in the admin notifications menu and an email. Edit the emails under _Design > Mail templates_: **Import completed** and **Import failed**.
+
+Imports need a running queue worker, for example:
+
+```bash
+php artisan queue:work
+```
+
+With the `sync` queue driver, imports run immediately during the request, as before.
+
 ### Importing CSV files with your own headers
 
 The CSV file only needs a header row with a unique name for each column; the headers don't have to match TastyIgniter field names. On the column-matching step, choose the TastyIgniter field for each file column, or leave it as _Do not import_. Headers that match a field name or label (ignoring case, spaces, dashes and underscores) are pre-selected. Each field can only be matched to one file column.
