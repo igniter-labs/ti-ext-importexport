@@ -1,0 +1,8 @@
+ID,Type,SKU,Name,Published,"Is featured?","Short description",Description,"Sale price","Regular price",Categories,Images,Parent,"Attribute 1 name","Attribute 1 value(s)","Attribute 2 name","Attribute 2 value(s)"
+101,simple,GB-01,Garlic Bread,1,0,"Crispy garlic bread","<p>Long description</p>",,3.95,"Food > Starters, Sides",https://example.com/a.jpg,,,,,
+102,variable,PZ-01,Pepperoni Pizza,1,0,,"<strong>Spicy</strong> pepperoni",,,"Food > Pizzas",,,Size,"Small, Large",Crust,"Thin, Deep"
+103,variation,PZ-01-S,Pepperoni Pizza - Small,1,0,,,,9.00,,,id:102,Size,Small,Crust,Thin
+104,variation,PZ-01-L,Pepperoni Pizza - Large,1,0,,,,12.50,,,id:102,Size,Large,Crust,Deep
+105,simple,DR-01,Old Lemonade,-1,0,,,,2.00,Drinks,,,,,,
+106,grouped,GR-01,Meal Deal,1,0,,,,,Deals,,,,,,
+107,"simple, downloadable",DR-02,Water,0,0,,,1.00,,"Drinks\, Soft",,,,,,

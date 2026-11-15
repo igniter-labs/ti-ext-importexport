@@ -8,6 +8,7 @@ use Exception;
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Menu;
 use Igniter\Flame\Database\Model;
+use Igniter\Local\Models\Location;
 use Illuminate\Support\Facades\Validator;
 use Override;
 
@@ -22,6 +23,7 @@ use Override;
  * @property bool $menu_status
  * @property int $menu_priority
  * @property bool $update_existing
+ * @property array|null $assign_locations
  * @property string|null $created_at
  * @property string|null $updated_at
  * @mixin Model
@@ -66,6 +68,8 @@ class MenuImport extends ImportModel
                 if ($encodedCategoryNames && ($categoryIds = $this->getCategoryIdsForMenuItem($encodedCategoryNames))) {
                     $menuItem->categories()->sync($categoryIds, false);
                 }
+
+                $this->assignLocations($menuItem);
             } catch (Exception $ex) {
                 $this->logError($row, $ex->getMessage());
             }
@@ -83,8 +87,25 @@ class MenuImport extends ImportModel
 
     protected function getCategoryIdsForMenuItem($encodedCategoryNames): array
     {
+        return $this->resolveCategoryIds($this->decodeArrayValue($encodedCategoryNames));
+    }
+
+    protected function assignLocations(Menu $menuItem): void
+    {
+        $locationIds = array_filter(array_map(intval(...), (array)$this->assign_locations));
+        if ($locationIds !== []) {
+            $menuItem->getLocationableRelationObject()->syncWithoutDetaching($locationIds);
+        }
+    }
+
+    public function getAssignLocationsOptions(): array
+    {
+        return Location::getDropdownOptions()->all();
+    }
+
+    protected function resolveCategoryIds(array $categoryNames): array
+    {
         $ids = [];
-        $categoryNames = $this->decodeArrayValue($encodedCategoryNames);
         foreach ($categoryNames as $name) {
             if (strlen($name = trim((string)$name)) < 1) {
                 continue;

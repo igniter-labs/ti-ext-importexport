@@ -36,7 +36,7 @@
                 <input
                     type="file"
                     name="import_file"
-                    accept="text/csv"
+                    accept=".csv,.json,.txt,text/csv,application/json"
                     onchange="var file = this.files[0]
                     $('.btn-file-input-value').val(file.name)
                     $('.btn-file-upload').removeClass('hide')

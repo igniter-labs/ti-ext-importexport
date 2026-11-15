@@ -1,0 +1,17 @@
+{
+  "menus": [{"id": "menu-1", "title": {"translations": {"en_us": "All Day"}}, "category_ids": ["cat-1", "cat-2"]}],
+  "categories": [
+    {"id": "cat-1", "title": {"translations": {"en_us": "Burgers"}}, "entities": [{"id": "item-1", "type": "ITEM"}, {"id": "item-2", "type": "ITEM"}]},
+    {"id": "cat-2", "title": {"translations": {"fr": "Boissons"}}, "entities": [{"id": "item-3", "type": "ITEM"}, {"id": "missing", "type": "ITEM"}]}
+  ],
+  "items": [
+    {"id": "item-1", "title": {"translations": {"en_us": "Cheeseburger"}}, "description": {"translations": {"en_us": "Beef, cheddar"}}, "price_info": {"price": 1099}, "modifier_group_ids": {"ids": ["mg-1"]}},
+    {"id": "item-2", "title": {"translations": {"en_gb": "Veggie Burger"}}, "price_info": {"price": 950}, "suspension_info": {"suspension": {"suspend_until": 4102444800}}},
+    {"id": "item-3", "title": {"translations": {"fr": "Limonade"}}, "price_info": {"price": 300}},
+    {"id": "mod-1", "title": {"translations": {"en_us": "Bacon"}}, "price_info": {"price": 150}},
+    {"id": "mod-2", "title": {"translations": {"en_us": "Fried Egg"}}, "price_info": {"price": 100}}
+  ],
+  "modifier_groups": [
+    {"id": "mg-1", "title": {"translations": {"en_us": "Add-ons"}}, "quantity_info": {"quantity": {"min_permitted": 0, "max_permitted": 2}}, "modifier_options": [{"id": "mod-1", "type": "ITEM"}, {"id": "mod-2", "type": "ITEM"}, {"id": "nope", "type": "ITEM"}]}
+  ]
+}

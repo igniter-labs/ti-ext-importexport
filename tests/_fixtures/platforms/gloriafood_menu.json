@@ -1,0 +1,41 @@
+{
+  "id": 1001,
+  "restaurant_id": 2002,
+  "currency": "GBP",
+  "categories": [
+    {
+      "id": 1,
+      "name": "Pizzas",
+      "description": "Stone baked",
+      "hidden": false,
+      "groups": [
+        {"id": 50, "name": "Extra Toppings", "required": false, "force_min": 0, "force_max": 0, "options": [
+          {"id": 501, "name": "Mushrooms", "price": 0.8},
+          {"id": 502, "name": "Olives", "price": 0.9}
+        ]}
+      ],
+      "items": [
+        {
+          "id": 11, "name": "Margherita", "description": "<p>Tomato &amp; mozzarella</p>", "price": 8.5, "hidden": false,
+          "sizes": [
+            {"id": 111, "name": "Small", "price": 8.5, "default": true, "groups": []},
+            {"id": 112, "name": "Large", "price": 11.0, "default": false, "groups": [
+              {"id": 60, "name": "Crust", "required": true, "force_min": 0, "force_max": 1, "options": [
+                {"id": 601, "name": "Thin", "price": 0},
+                {"id": 602, "name": "Stuffed", "price": 1.5}
+              ]}
+            ]}
+          ],
+          "groups": []
+        },
+        {"id": 12, "name": "Secret Special", "description": "", "price": 12, "hidden": true, "sizes": [], "groups": []}
+      ]
+    },
+    {
+      "id": 2, "name": "Drinks", "hidden": false, "groups": [],
+      "items": [
+        {"id": 21, "name": "Cola", "description": null, "price": 1.5, "sizes": [], "groups": []}
+      ]
+    }
+  ]
+}

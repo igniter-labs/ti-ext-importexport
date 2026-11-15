@@ -1,0 +1,24 @@
+{
+  "Data": {
+    "MenuId": 777,
+    "MenuSections": [
+      {"MenuSectionId": 1, "Name": "Wraps", "IsAvailable": true, "IsHiddenFromUsers": false, "MenuItems": [
+        {"MenuItemId": 10, "Name": "Falafel Wrap", "Description": "With hummus", "Price": 0, "IsAvailable": true, "IsHiddenFromUsers": false, "MenuItemOptionSets": [
+          {"Name": "Size", "IsMasterOptionSet": true, "MinSelectCount": 1, "MaxSelectCount": 1, "MenuItemOptionSetItems": [
+            {"Name": "Regular", "Price": 7.0, "IsAvailable": true},
+            {"Name": "Large", "Price": 9.0, "IsAvailable": true},
+            {"Name": "Gone", "Price": 1.0, "IsAvailable": false}
+          ]},
+          {"Name": "Sauces", "IsMasterOptionSet": false, "MinSelectCount": 0, "MaxSelectCount": 2, "MenuItemOptionSetItems": [
+            {"Name": "Garlic", "Price": 0.5},
+            {"Name": "Chilli", "Price": 0.5}
+          ]}
+        ]},
+        {"MenuItemId": 11, "Name": "Hidden Wrap", "Price": 6.5, "IsAvailable": true, "IsHiddenFromUsers": true, "MenuItemOptionSets": []}
+      ]},
+      {"MenuSectionId": 2, "Name": "Seasonal", "IsAvailable": false, "MenuItems": [
+        {"MenuItemId": 20, "Name": "Pumpkin Soup", "Price": 5.0, "MenuItemOptionSets": []}
+      ]}
+    ]
+  }
+}

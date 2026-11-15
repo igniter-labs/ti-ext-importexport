@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IgniterLabs\ImportExport\Models;
 
 use Igniter\Flame\Database\Model;
+use Igniter\System\Models\Country;
 use League\Csv\Writer as CsvWriter;
 use SplTempFileObject;
 
@@ -98,6 +99,18 @@ abstract class ExportModel extends Model
         }
 
         return $results;
+    }
+
+    protected ?array $countryCodes = null;
+
+    /**
+     * Returns the two-letter ISO code for a country ID.
+     */
+    protected function countryCode(mixed $countryId): ?string
+    {
+        $this->countryCodes ??= Country::query()->pluck('iso_code_2', 'country_id')->all();
+
+        return $this->countryCodes[$countryId] ?? null;
     }
 
     /**

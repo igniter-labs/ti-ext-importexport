@@ -26,6 +26,41 @@ In the admin area, you can import or export records. Navigate to the _Tools > Im
 - To export data, you can select the type of data you want to export, and then click the export button. The system will generate a CSV file containing the exported data.
 - You can also define custom import/export types, see the [Usage](#usage) section below for more details.
 
+### Importing CSV files with your own headers
+
+The CSV file only needs a header row with a unique name for each column; the headers don't have to match TastyIgniter field names. On the column-matching step, choose the TastyIgniter field for each file column, or leave it as _Do not import_. Headers that match a field name or label (ignoring case, spaces, dashes and underscores) are pre-selected. Each field can only be matched to one file column.
+
+The built-in CSV import types are:
+
+- **Import Menu Items**: name, price, description, minimum quantity, categories (separate multiple categories with `|`) and status. Optionally assign the imported items to locations.
+- **Import Customers**: matched by email. Includes first/last name (or a full name that is split on the first space), telephone, newsletter, status, customer group (by name) and one address per row. Imported customers have no password and receive no emails; they can use _Forgot password_ to set one.
+- **Import Locations**: matched by name. Includes contact details, address, country (ISO code or name), latitude/longitude and status. Locations without coordinates are geocoded automatically. The default location is never changed.
+
+The built-in export types are **Export Menu Items**, **Export Customers** (one row per customer, with their default address or else their first address) and **Export Locations**. Customer and location exports use the same columns as their imports, so an exported file can be edited and imported back with every column matched automatically.
+
+Status and newsletter columns accept values such as `1/0`, `yes/no`, `true/false` and `active/inactive`.
+
+### Migrating from another platform
+
+Choose one of the _Import ... from ..._ types and upload the file exported from your current platform. TastyIgniter reads the file and shows a summary of what it found before you import.
+
+| Platform | Menu items | Customers | Locations |
+|---|---|---|---|
+| GloriaFood | Menu JSON (Fetch Menu API) | Clients CSV export | Accepted orders JSON (restaurant details) |
+| WooCommerce | **Products > Export** CSV | **Analytics > Customers > Download** CSV | Use the CSV location import |
+| Uber Eats | Menu JSON from the Menu API | Not available | Store JSON from the Store API |
+| Just Eat | Menu JSON | Not available | Restaurant JSON |
+| Flipdish | Menu JSON (Portal or API) | **Customers** CSV export | Stores JSON |
+
+Notes:
+
+- Sizes and variations become a required option group. The item price is set to the cheapest choice, and each choice adds the price difference.
+- Existing menu options are reused when the name and values match, otherwise a new option is created. Existing options are never changed.
+- Uber Eats prices are converted from cents.
+- WooCommerce products with several variation attributes get one option group per attribute. Price differences are applied to the first attribute only.
+- Hidden, unavailable, draft and suspended items are imported as disabled.
+- Images and opening hours are not imported. Add them in the admin area after importing.
+
 ## Usage
 
 This section covers how to integrate the Import/Export extension into your own extension if you need to create custom import/export types. The Import/Export extension provides a simple API for managing import and export operations.

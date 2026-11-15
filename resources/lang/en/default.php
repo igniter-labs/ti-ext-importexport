@@ -40,6 +40,7 @@ return [
     'label_db_columns' => 'Database fields',
     'label_file_columns' => 'File Columns',
     'label_import_ignore' => 'Import/Ignore',
+    'text_do_not_import' => '-- Do not import --',
 
     'column_history_id' => 'ID',
     'column_history_type' => 'Type',
@@ -63,7 +64,8 @@ return [
     'error_export_not_found' => 'The export was not found',
     'error_file_not_found' => 'The export file was not found',
     'error_invalid_import_file' => 'The import file is invalid. Please upload a valid CSV file.',
-    'error_missing_csv_headers' => 'The CSV file has invalid headers. Please upload a valid CSV file.',
+    'error_missing_csv_headers' => 'The CSV file has no header row, or it contains blank or duplicate column names. Please upload a CSV file with a unique name for each column in the first row.',
+    'error_duplicate_import_columns' => 'Each database field can only be matched to one file column. Duplicate fields: %s',
 
     'alert_export_success' => 'File export process completed! You can download the exported file from the history section.',
 
@@ -71,6 +73,52 @@ return [
     'help_limit' => 'Number of records to export. If no value is given all records are exported.',
     'help_delimiter' => 'The character used to separate each field',
     'help_enclosure' => 'The character used to enclose each field',
+
+    'label_update_existing_customers' => 'Update existing customers (matched by email)',
+    'label_update_existing_locations' => 'Update existing locations (matched by name)',
+
+    'error_customer_exists' => 'A customer with the email %s already exists.',
+    'error_location_exists' => 'A location named %s already exists.',
+
+    'label_update_existing_menus' => 'Update existing menu items (matched by name)',
+    'label_import_options' => 'Import option groups (sizes, extras, modifiers)',
+    'label_assign_locations' => 'Assign imported menu items to locations',
+    'help_assign_locations' => 'Leave empty to keep the menu item location settings unchanged.',
+
+    'text_tab_title_import_preview' => 'Check the file before importing',
+    'text_import_preview' => 'The %s file was read successfully and contains:',
+    'text_import_preview_samples' => 'First records:',
+    'preview' => [
+        'records' => 'Records',
+        'categories' => 'Categories',
+        'option_groups' => 'Option groups',
+        'addresses' => 'Addresses',
+    ],
+
+    'error_invalid_source_file' => 'The %s export file could not be read: %s',
+    'error_unsupported_source' => '%s does not support this import type.',
+    'error_invalid_file_type' => 'You must upload a %s export file with one of these extensions: %s',
+
+    'columns' => [
+        'email' => 'Email',
+        'first_name' => 'First Name',
+        'last_name' => 'Last Name',
+        'full_name' => 'Full Name',
+        'telephone' => 'Telephone',
+        'newsletter' => 'Newsletter',
+        'status' => 'Status',
+        'customer_group' => 'Customer Group',
+        'address_1' => 'Address 1',
+        'address_2' => 'Address 2',
+        'city' => 'City',
+        'state' => 'State',
+        'postcode' => 'Postcode',
+        'country' => 'Country',
+        'location_name' => 'Location Name',
+        'description' => 'Description',
+        'latitude' => 'Latitude',
+        'longitude' => 'Longitude',
+    ],
 
     'encodings' => [
         'utf_8' => 'UTF-8',

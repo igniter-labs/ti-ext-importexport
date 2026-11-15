@@ -58,9 +58,9 @@ trait ImportExportHelper
         $this->setConfig($config);
     }
 
-    protected function makePrimaryFormWidgetForType($model, string $type)
+    protected function makePrimaryFormWidgetForType($model, string $type, ?string $configFile = null)
     {
-        $configFile = $this->getConfig('configFile');
+        $configFile ??= $this->getConfig('configFile');
         $modelConfig = $this->loadConfig($configFile, ['form'], 'form');
         $widgetConfig = array_except($modelConfig, 'toolbar');
         $widgetConfig['model'] = $model;

@@ -16,5 +16,10 @@ return [
             'type' => 'switch',
             'default' => true,
         ],
+        'assign_locations' => [
+            'label' => 'lang:igniterlabs.importexport::default.label_assign_locations',
+            'type' => 'selectlist',
+            'comment' => 'lang:igniterlabs.importexport::default.help_assign_locations',
+        ],
     ],
 ];

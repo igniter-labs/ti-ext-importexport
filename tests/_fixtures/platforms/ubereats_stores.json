@@ -1,0 +1,7 @@
+{
+  "stores": [
+    {"store_id": "s-1", "name": "Uber Camden", "status": "active", "contact_emails": ["camden@example.com"], "contact": {"phone_number": "+442000000001"}, "location": {"address": "100 Camden High St", "address_2": "Unit 2", "city": "London", "state": "", "postal_code": "NW1 0LU", "country": "GB", "latitude": 51.5390, "longitude": -0.1426}},
+    {"store_id": "s-2", "name": "Uber Closed", "status": "inactive", "location": {"city": "London"}},
+    {"store_id": "s-3"}
+  ]
+}

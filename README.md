@@ -14,10 +14,19 @@ This extension allows you to import or export TastyIgniter records, such as menu
 ### Import & export
 
 - Import and export TastyIgniter records as CSV files from the admin area (**Tools > Import/Export**).
-- Built-in support for **menu items**, including categories, pricing, and status.
+- Built-in imports and exports for **menu items**, **customers** (with addresses) and **locations**. Exported customer and location files can be imported again without remapping columns.
+- Import CSV files with any column headers: map each file column to a TastyIgniter field, with matching headers pre-selected.
 - Choose which columns to include on each import or export.
-- Map CSV column headers to database fields with a guided column-matching step.
-- Update existing records on import (for example, refresh menu items by ID) or create new ones.
+- Update existing records on import (for example, refresh menu items by name or customers by email) or create new ones.
+- Assign imported menu items to one or more locations.
+
+### Migrate from other platforms
+
+- Import from the export files of **GloriaFood**, **WooCommerce**, **Uber Eats**, **Just Eat** and **Flipdish**. No API keys needed.
+- Menu items, categories and option groups (sizes, extras, modifiers) with per-item prices.
+- Customers and their addresses (GloriaFood, WooCommerce, Flipdish).
+- Locations and store details (GloriaFood, Uber Eats, Just Eat, Flipdish).
+- Preview what was found in the file before importing.
 
 ### CSV handling
 
