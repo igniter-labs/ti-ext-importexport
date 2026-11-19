@@ -29,12 +29,6 @@ This extension allows you to import or export TastyIgniter records, such as menu
 - Locations and store details (GloriaFood, Uber Eats, Just Eat, Flipdish).
 - Preview what was found in the file before importing.
 
-### CSV handling
-
-- Configure delimiter, enclosure, and escape characters for non-standard CSV files.
-- Support for multiple file encodings, including UTF-8, ISO-8859, and Windows-1252.
-- Export a subset of records using **offset** and **limit** options.
-
 ### Extensibility
 
 - Register custom import and export types from your own extensions via `registerImportExport()`.
