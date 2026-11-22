@@ -1,0 +1,6 @@
+{
+  "restaurants": [
+    {"id": "123456", "name": "Spice House", "email": "spice@example.com", "phoneNumber": "0161 000 0000", "description": "<b>Award</b> winning", "address": {"firstLine": "5 Curry Mile", "city": "Manchester", "postalCode": "M14 5LH", "country": "GB", "location": {"type": "Point", "coordinates": [-2.2236, 53.4520]}}},
+    {"id": "654321", "name": "Spice Express", "address": {"lines": ["9 Oxford Rd", "Floor 1"], "city": "Manchester", "postalCode": "M1 7ED", "latitude": 53.47, "longitude": -2.24}}
+  ]
+}

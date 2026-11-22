@@ -1,0 +1,3 @@
+Store,Email,Phone,Street,City,Post Code,Country,Lat,Lng,Open
+Canary Wharf,cw@example.com,0201,10 Bank St,London,E14 5JP,United Kingdom,51.5049,-0.0195,yes
+Shoreditch,,0202,1 Old St,London,EC1V 9HL,GB,,,no

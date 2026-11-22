@@ -1,0 +1,6 @@
+{
+  "Data": [
+    {"StoreId": 1, "Name": "Flip Dublin", "EmailAddress": "dublin@example.com", "PhoneNumber": "+35310000000", "IsArchived": false, "Address": {"Line1": "1 Grafton St", "City": "Dublin", "Postcode": "D02 X285", "CountryCode": "IE", "Coordinates": {"Latitude": 53.3419, "Longitude": -6.2597}}},
+    {"StoreId": 2, "Name": "Flip Cork", "IsArchived": true, "Coordinates": {"Latitude": 51.8985, "Longitude": -8.4756}, "Address": {"DisplayCode": "Patrick St", "Country": "Ireland"}}
+  ]
+}

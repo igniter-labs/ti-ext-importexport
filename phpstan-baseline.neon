@@ -1,2 +1,7 @@
 parameters:
 	ignoreErrors:
+		-
+			message: '#^Relation ''menu_categories'' is not found in IgniterLabs\\ImportExport\\Models\\MenuExport model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: src/Models/MenuExport.php

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IgniterLabs\ImportExport\Http\Actions;
 
 use Exception;
+use Igniter\Admin\Classes\FormField;
 use Igniter\Admin\Facades\Template;
 use Igniter\Admin\Traits\ValidatesForm;
 use Igniter\Admin\Widgets\Form;
@@ -198,9 +199,7 @@ class ExportController extends ControllerAction
             $csvWriter = $exportModel->export($exportColumns, $exportOptions);
 
             $csvPath = $history->getCsvPath();
-            if (!File::exists($directory = dirname((string)$csvPath))) {
-                File::makeDirectory($directory, 0755, true);
-            }
+            File::ensureDirectoryExists(dirname($csvPath));
 
             File::put($csvPath, $csvWriter->toString());
 
@@ -230,7 +229,7 @@ class ExportController extends ControllerAction
         $this->exportSecondaryFormWidget = $this->makeSecondaryFormWidgetForType($exportModel, 'export');
 
         $stepSectionField = $this->exportPrimaryFormWidget->getField('step_secondary');
-        if (!$this->exportSecondaryFormWidget && $stepSectionField) {
+        if (!$this->exportSecondaryFormWidget && $stepSectionField instanceof FormField) {
             $stepSectionField->hidden = true;
         }
 

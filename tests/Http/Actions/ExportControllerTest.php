@@ -179,3 +179,26 @@ it('downloads exported file', function(): void {
         ->get(route('igniterlabs.importexport.import_export', ['slug' => 'download/igniterlabs-importexport-menus/'.$history->uuid]))
         ->assertDownload();
 });
+
+it('exports customers and locations to csv', function(string $code, array $columns, string $header): void {
+    actingAsSuperUser()
+        ->post(route('igniterlabs.importexport.import_export', ['slug' => 'export/'.$code]), [
+            'delimiter' => ',',
+            'enclosure' => '"',
+            'escape' => '\\',
+            'export_columns' => $columns,
+        ], [
+            'X-Requested-With' => 'XMLHttpRequest',
+            'X-IGNITER-REQUEST-HANDLER' => 'onExport',
+        ]);
+
+    $history = History::query()->where('code', $code)->where('status', 'completed')->latest('id')->first();
+
+    expect($history)->not->toBeNull()
+        ->and(File::get($history->getCsvPath()))->toContain($header);
+
+    File::delete($history->getCsvPath());
+})->with([
+    'customers' => ['igniterlabs-importexport-customers', ['email', 'first_name', 'country'], 'Email,"First Name",Country'],
+    'locations' => ['igniterlabs-importexport-locations', ['location_name', 'location_postcode'], '"Location Name",Postcode'],
+]);

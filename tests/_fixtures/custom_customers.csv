@@ -1,0 +1,4 @@
+E-mail Address,Name,Phone,Group,Street,Town,Zip,Country,Subscribed
+jane@example.com,Jane Doe,0123456789,Default,1 High Street,London,E1 6AN,GB,yes
+JOHN@example.com,John,0987,Unknown Group,,,,,no
+,No Email,000,,,,,,

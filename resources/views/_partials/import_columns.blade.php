@@ -31,9 +31,12 @@
                                 name="import_columns[{{ $index }}]"
                                 class="form-select"
                             >
-                                <option value="">@lang('admin::lang.text_please_select')</option>
+                                <option value="">@lang('igniterlabs.importexport::default.text_do_not_import')</option>
                                 @foreach ($importColumns as $column => $columnName)
-                                    <option value="{{ $column }}" @selected($loop->index === $index)>{{ $column}}</option>
+                                    <option
+                                        value="{{ $column }}"
+                                        @selected(($importFileColumnMatches[$index] ?? null) === $column)
+                                    >{{ $columnName }}</option>
                                 @endforeach
                             </select>
                         </td>

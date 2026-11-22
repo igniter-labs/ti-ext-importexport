@@ -1,0 +1,27 @@
+{
+  "restaurantId": "123456",
+  "currency": "GBP",
+  "menus": [
+    {"menuGroupId": "main", "categories": [
+      {"id": "c1", "name": "Curries", "itemIds": ["i1", "i2"]},
+      {"id": "c2", "name": "Sides", "itemIds": ["i3", "unknown"]}
+    ]}
+  ],
+  "items": [
+    {"id": "i1", "name": "Chicken Tikka Masala", "description": "Mild and creamy", "type": "menuItem", "variations": [
+      {"id": "v1", "name": "Regular", "basePrice": 9.95, "modifierGroupsIds": ["mg1"]},
+      {"id": "v2", "name": "Large", "basePrice": 12.45, "modifierGroupsIds": ["mg1", "mg2"]}
+    ]},
+    {"id": "i2", "name": "Lamb Bhuna", "isAvailable": false, "variations": [{"id": "v3", "name": "", "basePrice": 10.5, "modifierGroupsIds": []}]},
+    {"id": "i3", "name": "Pilau Rice", "basePrice": 3.25, "modifierGroupsIds": ["mg2"]}
+  ],
+  "modifierGroups": [
+    {"id": "mg1", "name": "Spice Level", "minChoices": 1, "maxChoices": 1, "modifiers": ["m1", "m2"]},
+    {"id": "mg2", "name": "Extras", "minChoices": 0, "maxChoices": 3, "modifiers": [{"id": "m3"}, {"name": "Raita", "additionPrice": 1.2}, "missing"]}
+  ],
+  "modifiers": [
+    {"id": "m1", "name": "Mild", "additionPrice": 0},
+    {"id": "m2", "name": "Hot", "additionPrice": 0.5},
+    {"id": "m3", "name": "Poppadom", "additionPrice": 0.75}
+  ]
+}

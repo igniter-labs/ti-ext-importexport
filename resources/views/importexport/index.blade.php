@@ -67,24 +67,7 @@
                             </tr>
                         </thead>
                         <tbody id="import-export-history-table-body">
-                            @if ($history)
-                                @foreach ($history as $record)
-                                    <tr>
-                                        <td>{{ day_elapsed($record->created_at) }}</td>
-                                        <td>{{ $record->label }}</td>
-                                        <td>{{ ucfirst($record->status) }}</td>
-                                        <td>{{ html(nl2br($record->error_message)) }}</td>
-                                        <td class="text-end">
-                                            @if($record->download_url)
-                                                <a
-                                                    href="{{ $record->download_url }}"
-                                                >@lang('igniterlabs.importexport::default.button_download')</a>
-                                            @endif
-                                        </td>
-                                        <td class="text-end">{{ $record->id }}</td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                            @include('igniterlabs.importexport::_partials.history_rows')
                         </tbody>
                     </table>
                 </div>
@@ -92,3 +75,25 @@
         </div>
     </div>
 </div>
+<script>
+    window.addEventListener('load', function () {
+        // Refresh the history while imports are queued or running, stop once none are
+        var interval = {{ (int)$historyPollInterval }},
+            timer = null,
+            poll = function () {
+                if (!document.querySelector('#import-export-history-table-body [data-import-in-progress]')) {
+                    timer = null
+                    return
+                }
+
+                timer = setTimeout(function () {
+                    $.request('onRefreshHistory', {
+                        data: {page: new URLSearchParams(window.location.search).get('page') || 1},
+                        progressBar: false,
+                    }).always(poll)
+                }, interval)
+            }
+
+        poll()
+    })
+</script>

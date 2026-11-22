@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace IgniterLabs\ImportExport\Models;
 
+use Closure;
 use Igniter\Flame\Database\Model;
+use IgniterLabs\ImportExport\Classes\Sources\ImportSource;
 use League\Csv\Reader as CsvReader;
 use League\Csv\Statement as CsvStatement;
 
@@ -38,13 +40,63 @@ abstract class ImportModel extends Model
     abstract public function importData(array $results): void;
 
     /**
+     * Number of rows imported between progress updates.
+     */
+    protected int $progressChunkSize = 25;
+
+    protected ?Closure $progressCallback = null;
+
+    /**
+     * Register a callback receiving ($processedRows, $totalRows) as the import progresses.
+     */
+    public function onProgress(Closure $callback): static
+    {
+        $this->progressCallback = $callback;
+
+        return $this;
+    }
+
+    /**
      * Import data based on column names matching header indexes in the CSV.
      */
     public function import($columns, $options = [], ?string $importCsvFile = null): void
     {
         $data = $this->processImportData($importCsvFile, $columns, $options);
 
-        $this->importData($data);
+        $this->importInChunks($data);
+    }
+
+    /**
+     * Imports the rows in chunks, reporting progress after each chunk. Row keys are
+     * preserved so errors still reference the original row numbers.
+     */
+    protected function importInChunks(array $rows): void
+    {
+        $total = count($rows);
+        $processed = 0;
+
+        $this->reportProgress($processed, $total);
+
+        foreach (array_chunk($rows, max(1, $this->progressChunkSize), true) as $chunk) {
+            $this->importData($chunk);
+            $processed += count($chunk);
+            $this->reportProgress($processed, $total);
+        }
+    }
+
+    protected function reportProgress(int $processed, int $total): void
+    {
+        if ($this->progressCallback instanceof Closure) {
+            ($this->progressCallback)($processed, $total);
+        }
+    }
+
+    /**
+     * Import data parsed from another platform's export file.
+     */
+    public function importFromSource(ImportSource $source, string $method, string $path): void
+    {
+        $this->importInChunks($source->parse($method, $path));
     }
 
     /**
@@ -97,12 +149,12 @@ abstract class ImportModel extends Model
     /**
      * Converts a single row of CSV data to the column map.
      */
-    protected function processImportRow($rowData, $columns): array
+    protected function processImportRow(array $rowData, $columns): array
     {
         $newRow = [];
 
         foreach ($columns as [$dbName, $fileColumn]) {
-            $newRow[$dbName] = array_get($rowData, $fileColumn);
+            $newRow[$dbName] = $rowData[$fileColumn] ?? null;
         }
 
         return $newRow;
@@ -122,6 +174,24 @@ abstract class ImportModel extends Model
         }
 
         return $newData;
+    }
+
+    /**
+     * Converts common truthy/falsy spreadsheet values (yes/no, active/inactive, 1/0...) to a boolean.
+     */
+    protected function castBoolean(mixed $value): ?bool
+    {
+        if (is_bool($value) || is_null($value)) {
+            return $value;
+        }
+
+        $value = strtolower(trim((string)$value));
+
+        return match (true) {
+            in_array($value, ['1', 'true', 'yes', 'y', 'on', 'active', 'enabled', 'published'], true) => true,
+            in_array($value, ['0', 'false', 'no', 'n', 'off', 'inactive', 'disabled', 'unpublished', 'draft', '-1'], true) => false,
+            default => null,
+        };
     }
 
     public function getEncodingOptions(): array
